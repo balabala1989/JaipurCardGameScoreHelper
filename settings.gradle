@@ -1,0 +1,2 @@
+rootProject.name='Jaipur - Card Game - Score Helper'
+include ':app'
