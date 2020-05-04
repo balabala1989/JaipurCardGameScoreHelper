@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_new_game"
-        android:name="com.boardgames.jaipur.ui.home.NewGameFragment"
+        android:name="com.boardgames.jaipur.ui.newgame.NewGameFragment"
         android:label="@string/menu_new_game"
         tools:layout="@layout/fragment_new_game">
 
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/nav_home_second"
-        android:name="com.boardgames.jaipur.ui.home.HomeSecondFragment"
+        android:name="com.boardgames.jaipur.ui.newgame.HomeSecondFragment"
         android:label="@string/home_second"
         tools:layout="@layout/fragment_home_second">
         <action
@@ -30,14 +30,20 @@
     </fragment>
 
     <fragment
+        android:id="@+id/nav_players_management"
+        android:name="com.boardgames.jaipur.ui.playersmanagement.PlayersManagementFragment"
+        android:label="@string/menu_players_management"
+        tools:layout="@layout/fragment_players_management" />
+
+    <fragment
         android:id="@+id/nav_stats"
-        android:name="com.boardgames.jaipur.ui.gallery.GalleryFragment"
+        android:name="com.boardgames.jaipur.ui.statistics.StatisticsFragment"
         android:label="@string/menu_stats"
         tools:layout="@layout/fragment_stats" />
 
     <fragment
         android:id="@+id/nav_game_history"
-        android:name="com.boardgames.jaipur.ui.slideshow.SlideshowFragment"
+        android:name="com.boardgames.jaipur.ui.gamehistory.GameHistoryFragment"
         android:label="@string/menu_game_history"
         tools:layout="@layout/fragment_game_history" />
 </navigation>

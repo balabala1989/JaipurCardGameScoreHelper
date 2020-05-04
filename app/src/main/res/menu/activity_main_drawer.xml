@@ -9,6 +9,10 @@
             android:icon="@drawable/plus"
             android:title="@string/menu_new_game" />
         <item
+            android:id="@+id/nav_players_management"
+            android:icon="@drawable/players"
+            android:title="@string/menu_players_management" />
+        <item
             android:id="@+id/nav_stats"
             android:icon="@android:drawable/ic_menu_sort_by_size"
             android:title="@string/menu_stats" />

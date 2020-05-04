@@ -1,4 +1,4 @@
-package com.boardgames.jaipur.ui.gallery;
+package com.boardgames.jaipur.ui.statistics;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.boardgames.jaipur.R;
 
-public class GalleryFragment extends Fragment {
+public class StatisticsFragment extends Fragment {
 
-    private GalleryViewModel galleryViewModel;
+    private StatisticsViewModel statisticsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        galleryViewModel =
-                ViewModelProviders.of(this).get(GalleryViewModel.class);
+        statisticsViewModel =
+                ViewModelProviders.of(this).get(StatisticsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_stats, container, false);
         final TextView textView = root.findViewById(R.id.text_gallery);
-        galleryViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        statisticsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

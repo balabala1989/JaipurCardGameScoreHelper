@@ -1,4 +1,4 @@
-package com.boardgames.jaipur.ui.slideshow;
+package com.boardgames.jaipur.ui.newgame;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.boardgames.jaipur.R;
 
-public class SlideshowFragment extends Fragment {
+public class NewGameFragment extends Fragment {
 
-    private SlideshowViewModel slideshowViewModel;
+    private NewGameViewModel newGameViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        slideshowViewModel =
-                ViewModelProviders.of(this).get(SlideshowViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_game_history, container, false);
-        final TextView textView = root.findViewById(R.id.text_slideshow);
-        slideshowViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        newGameViewModel =
+                ViewModelProviders.of(this).get(NewGameViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_new_game, container, false);
+        final TextView textView = root.findViewById(R.id.text_home);
+        newGameViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
