@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_new_game">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="com.boardgames.jaipur.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home">
+        android:id="@+id/nav_new_game"
+        android:name="com.boardgames.jaipur.ui.newgame.NewGameFragment"
+        android:label="@string/menu_new_game"
+        tools:layout="@layout/fragment_new_game">
 
         <action
             android:id="@+id/action_HomeFragment_to_HomeSecondFragment"
@@ -17,12 +17,12 @@
     </fragment>
     <fragment
         android:id="@+id/nav_home_second"
-        android:name="com.boardgames.jaipur.ui.home.HomeSecondFragment"
+        android:name="com.boardgames.jaipur.ui.newgame.HomeSecondFragment"
         android:label="@string/home_second"
         tools:layout="@layout/fragment_home_second">
         <action
             android:id="@+id/action_HomeSecondFragment_to_HomeFragment"
-            app:destination="@id/nav_home" />
+            app:destination="@id/nav_new_game" />
 
         <argument
             android:name="myArg"
@@ -30,14 +30,32 @@
     </fragment>
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.boardgames.jaipur.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_players_management"
+        android:name="com.boardgames.jaipur.ui.playersmanagement.PlayersManagementFragment"
+        android:label="@string/menu_players_management"
+        tools:layout="@layout/fragment_players_management" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.boardgames.jaipur.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_stats"
+        android:name="com.boardgames.jaipur.ui.statistics.StatisticsFragment"
+        android:label="@string/menu_stats"
+        tools:layout="@layout/fragment_stats" />
+
+    <fragment
+        android:id="@+id/nav_game_history"
+        android:name="com.boardgames.jaipur.ui.gamehistory.GameHistoryFragment"
+        android:label="@string/menu_game_history"
+        tools:layout="@layout/fragment_game_history" />
+
+    <fragment
+        android:id="@+id/nav_feedback_support"
+        android:name="com.boardgames.jaipur.ui.feedbacksupport.FeedbackSupportFragment"
+        android:label="@string/menu_feedback_support"
+        tools:layout="@layout/fragment_feedback_support" />
+
+    <fragment
+        android:id="@+id/nav_rate_me"
+        android:name="com.boardgames.jaipur.ui.rateme.RateMeFragment"
+        android:label="@string/menu_rate_me"
+        tools:layout="@layout/fragment_rate_me" />
 </navigation>

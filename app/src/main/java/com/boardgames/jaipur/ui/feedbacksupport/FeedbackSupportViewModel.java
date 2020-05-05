@@ -1,16 +1,15 @@
-package com.boardgames.jaipur.ui.slideshow;
+package com.boardgames.jaipur.ui.feedbacksupport;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class SlideshowViewModel extends ViewModel {
-
+public class FeedbackSupportViewModel extends ViewModel {
     private MutableLiveData<String> mText;
 
-    public SlideshowViewModel() {
+    public FeedbackSupportViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is slideshow fragment");
+        mText.setValue("This is support management fragment");
     }
 
     public LiveData<String> getText() {
