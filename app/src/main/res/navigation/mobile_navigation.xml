@@ -46,4 +46,16 @@
         android:name="com.boardgames.jaipur.ui.gamehistory.GameHistoryFragment"
         android:label="@string/menu_game_history"
         tools:layout="@layout/fragment_game_history" />
+
+    <fragment
+        android:id="@+id/nav_feedback_support"
+        android:name="com.boardgames.jaipur.ui.feedbacksupport.FeedbackSupportFragment"
+        android:label="@string/menu_feedback_support"
+        tools:layout="@layout/fragment_feedback_support" />
+
+    <fragment
+        android:id="@+id/nav_rate_me"
+        android:name="com.boardgames.jaipur.ui.rateme.RateMeFragment"
+        android:label="@string/menu_rate_me"
+        tools:layout="@layout/fragment_rate_me" />
 </navigation>
