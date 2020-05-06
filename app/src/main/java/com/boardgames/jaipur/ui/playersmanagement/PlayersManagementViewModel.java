@@ -18,19 +18,14 @@ public class PlayersManagementViewModel extends AndroidViewModel {
 
     private LiveData<List<Player>> allPlayers;
 
-    private MutableLiveData<String> mText;
-
     public PlayersManagementViewModel(Application application) {
         super(application);
         playerRepository = new PlayerRepository(application);
         allPlayers = playerRepository.getAllPlayers();
-
-        mText = new MutableLiveData<>();
-        mText.setValue("This is players management fragment");
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    LiveData<List<Player>> getAllPlayers() {
+        return allPlayers;
     }
 
     public void insert(Player player) {
