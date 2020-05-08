@@ -33,7 +33,7 @@ public class PlayersManagementFragment extends Fragment {
         playersManagementViewModel =
                 new ViewModelProvider(this).get(PlayersManagementViewModel.class);
         View root = inflater.inflate(R.layout.fragment_players_management, container, false);
-        RecyclerView playerRecyclerView = root.findViewById(R.layout.recyclerview_players_list);
+        RecyclerView playerRecyclerView = root.findViewById(R.id.playersRecyclerView);
         final PlayerListAdapater adapater = new PlayerListAdapater(getContext());
         playerRecyclerView.setAdapter(adapater);
         playerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

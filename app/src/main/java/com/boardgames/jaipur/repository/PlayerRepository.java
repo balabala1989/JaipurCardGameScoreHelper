@@ -17,7 +17,7 @@ public class PlayerRepository {
 
     public PlayerRepository(Application application) {
         PlayerRoomDatabase playerRoomDatabase = PlayerRoomDatabase.getDatabase(application);
-        playerDao = playerRoomDatabase.playerDao;
+        playerDao = playerRoomDatabase.playerDao();
         allPlayers = playerDao.getAllPlayers();
     }
 

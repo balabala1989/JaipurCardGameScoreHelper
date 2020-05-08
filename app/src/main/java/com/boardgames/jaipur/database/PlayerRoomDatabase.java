@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
 @Database(entities = {Player.class}, version = 1, exportSchema = false)
 public abstract class PlayerRoomDatabase extends RoomDatabase {
 
-    public PlayerDao playerDao;
+    public abstract PlayerDao playerDao();
 
     private static volatile PlayerRoomDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
@@ -28,22 +28,18 @@ public abstract class PlayerRoomDatabase extends RoomDatabase {
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
             databaseWriterExecutor.execute(() -> {
-                PlayerDao playerDao = INSTANCE.playerDao;
+                PlayerDao playerDao = INSTANCE.playerDao();
                 playerDao.deleteAllPlayers();
 
-                Player player = new Player();
-                player.setPlayerName("Test player 1");
-                player.setPlayerAvatar("Test Location 2");
-                player.setTimeCreated(System.currentTimeMillis()/100);
-                player.setTimeUpdated(System.currentTimeMillis()/100);
-                playerDao.insertPlayer(player);
-
-                player = null;
-                player.setPlayerName("Test player 2");
-                player.setPlayerAvatar("Test Location 2");
-                player.setTimeCreated(System.currentTimeMillis()/100);
-                player.setTimeUpdated(System.currentTimeMillis()/100);
-                playerDao.insertPlayer(player);
+                for (int i = 0; i < 4; i++) {
+                    Player player = new Player();
+                    player.setPlayerName("Test player " + (i+1));
+                    player.setPlayerAvatar("Test Location " + (i+1));
+                    player.setTimeCreated(System.currentTimeMillis() / 100);
+                    player.setTimeUpdated(System.currentTimeMillis() / 100);
+                    playerDao.insertPlayer(player);
+                    player = null;
+                }
             });
         }
     };
