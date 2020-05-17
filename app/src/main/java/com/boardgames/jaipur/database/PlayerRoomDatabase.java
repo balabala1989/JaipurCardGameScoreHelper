@@ -31,10 +31,10 @@ public abstract class PlayerRoomDatabase extends RoomDatabase {
                 PlayerDao playerDao = INSTANCE.playerDao();
                 playerDao.deleteAllPlayers();
 
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < 15; i++) {
                     Player player = new Player();
                     player.setPlayerName("Test player " + (i+1));
-                    player.setPlayerAvatar("Test Location " + (i+1));
+                    player.setPlayerAvatar("");
                     player.setTimeCreated(System.currentTimeMillis() / 100);
                     player.setTimeUpdated(System.currentTimeMillis() / 100);
                     playerDao.insertPlayer(player);

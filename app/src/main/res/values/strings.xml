@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Jaipur - Card Game - Score Helper</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="header_add_player_activity">New Player</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Jaipur: Card Game \n Score Helper</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
@@ -14,5 +14,22 @@
     <string name="menu_feedback_support">Support</string>
     <string name="menu_rate_me">Rate Me</string>
 
+    <string name="float_button_desc">Add Player</string>
+    <string name="editText_add_player_hint">Player Name</string>
+    <string name="textView_add_player_avatar">Profile</string>
+    <string name="textView_add_player_notice">Click Image to change the profile</string>
+    <string name="error_player_not_added">No New Player Added because it is empty.</string>
+
     <string name="home_second">Home Second</string>
+    <string name="title_activity_add_player">New Player</string>
+    <string name="imageview_add_player_camera">Take Photo</string>
+    <string name="imageview_add_player_gallery">Choose from Gallery</string>
+    <string name="alertdialog_title">Add Profile Photo</string>
+    <string name="button_cancel">Cancel</string>
+
+
+
+
+    <string name="color_activity_actionbar">#007869</string>
+
 </resources>
