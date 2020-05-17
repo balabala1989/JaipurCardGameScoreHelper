@@ -6,4 +6,6 @@
     <dimen name="nav_header_height">90dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="nav_header_horizontal_spacing">8dp</dimen>
+
+    <dimen name="gridview_image_margin_spacing">10dp</dimen>
 </resources>
