@@ -5,33 +5,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
-import com.boardgames.jaipur.BuildConfig;
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.utils.CheckForPermissionsState;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.DexterError;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.PermissionRequestErrorListener;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.yalantis.ucrop.UCrop;
 
-import android.Manifest;
 import android.app.AlertDialog;
-import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,9 +31,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.List;
 
 public class AddPlayerActivity extends AppCompatActivity {
 
@@ -52,7 +38,7 @@ public class AddPlayerActivity extends AppCompatActivity {
     public static final int PICK_PICTURE_FOR_PROFILE_FROM_CAMERA = 3113;
     public static final int PICK_PICTURE_FOR_PROFILE_FROM_GALLERY = 7112;
     private AlertDialog dialog;
-    private String imageAbsolutePath;
+    private String imageFilename;
     private final int MAX_CROP_SIZE = 100;
     private boolean permissionsGranted = false;
     @Override
@@ -86,17 +72,9 @@ public class AddPlayerActivity extends AppCompatActivity {
                 cameraImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        File imageFile = getImageFile();
-                        imageAbsolutePath = imageFile.getAbsolutePath();
-                        Uri uri;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            uri = FileProvider.getUriForFile(AddPlayerActivity.this, BuildConfig.APPLICATION_ID + ".provider", imageFile);
-                        }
-                        else {
-                            uri = Uri.fromFile(imageFile);
-                        }
+                        imageFilename = System.currentTimeMillis() + ".jpg";
                         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,uri);
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,getImageFile(imageFilename));
                         startActivityForResult(takePictureIntent,PICK_PICTURE_FOR_PROFILE_FROM_CAMERA);
                     }
                 });
@@ -158,18 +136,14 @@ public class AddPlayerActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_PICTURE_FOR_PROFILE_FROM_CAMERA && resultCode == RESULT_OK) {
             if (data != null) {
-                Uri sourceUri = Uri.parse(imageAbsolutePath);
-                Uri destinationUri = Uri.fromFile(getImageFile());
-                openCropActivity(sourceUri, destinationUri);
-
+                Uri sourceUri = getImageFile(imageFilename);
+                cropImage(sourceUri);
             }
         }
         else if (requestCode == PICK_PICTURE_FOR_PROFILE_FROM_GALLERY && resultCode == RESULT_OK) {
             if (data != null) {
                Uri sourceUri = data.getData();
-               File imageFile = getImageFile();
-               Uri destinationUri = Uri.fromFile(imageFile);
-               openCropActivity(sourceUri, destinationUri);
+               cropImage(sourceUri);
             }
         }
         else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
@@ -181,19 +155,43 @@ public class AddPlayerActivity extends AppCompatActivity {
         }
     }
 
-    private File getImageFile() {
-        String fileName = "JPEG" + System.currentTimeMillis();
-        File[] externalStorageVolumes = ContextCompat.getExternalFilesDirs(getApplicationContext(), null);
-        File primaryStorageVolume = externalStorageVolumes[0];
-        File imageFile = new File(primaryStorageVolume, fileName + ".jpg");
-        return imageFile;
+    private Uri getImageFile(String fileName) {
+        File primaryStorageVolume = new File(getExternalFilesDir(null), "images");
+        if (!primaryStorageVolume.exists())
+            primaryStorageVolume.mkdir();
+        File imageFile = new File(primaryStorageVolume, fileName);
+        return FileProvider.getUriForFile(AddPlayerActivity.this, getPackageName() + ".provider", imageFile);
     }
 
-    private void openCropActivity(Uri sourceUri, Uri destinationUri) {
+    private void cropImage(Uri sourceUri) {
+        Uri destinationUri = Uri.fromFile(new File(getExternalFilesDir(null), queryName(getContentResolver(), sourceUri)));
+        UCrop.Options options = new UCrop.Options();
+        options.setCompressionQuality(80);
+        options.setToolbarColor(ContextCompat.getColor(this, R.color.colorAccent));
+        options.setStatusBarColor(ContextCompat.getColor(this, R.color.colorAccent));
+        options.setActiveControlsWidgetColor(ContextCompat.getColor(this, R.color.colorAccent));
+        options.withAspectRatio(1, 1);
+        options.withMaxResultSize(100, 100);
         UCrop.of(sourceUri, destinationUri)
-                .withMaxResultSize(MAX_CROP_SIZE,MAX_CROP_SIZE)
-                .withAspectRatio(5f, 5f)
-                .start(AddPlayerActivity.this);
+                .withOptions(options)
+                .start(this);
+    }
+
+    private static String queryName(ContentResolver resolver, Uri uri) {
+        Cursor returnCursor =
+                resolver.query(uri, null, null, null, null);
+        assert returnCursor != null;
+        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+        returnCursor.moveToFirst();
+        String name = returnCursor.getString(nameIndex);
+        returnCursor.close();
+        return name;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        permissionsGranted = CheckForPermissionsState.requestStorageCameraPermissions(AddPlayerActivity.this);
     }
 
 
