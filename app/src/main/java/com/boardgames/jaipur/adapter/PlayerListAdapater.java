@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.entities.Player;
+import com.boardgames.jaipur.utils.CheckForPermissionsState;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -44,10 +45,12 @@ public class PlayerListAdapater extends RecyclerView.Adapter<PlayerListAdapater.
     private final LayoutInflater inflater;
     private List<Player> playersList;
     private Context contextObj;
+    private boolean isPermissionGranted;
 
     public PlayerListAdapater(Context context) {
         inflater = LayoutInflater.from(context);
         contextObj = context;
+        isPermissionGranted = CheckForPermissionsState.requestStorageCameraPermissions(context);
     }
 
     @NonNull
@@ -64,7 +67,7 @@ public class PlayerListAdapater extends RecyclerView.Adapter<PlayerListAdapater.
 
             //Bitmap imageMap = BitmapFactory.decodeFile(player.getPlayerAvatar());
             holder.playerItemTextView.setText(player.getPlayerName());
-            if (player.getPlayerAvatar() != null && player.getPlayerAvatar().equals("")) {
+            if (player.getPlayerAvatar() != null && player.getPlayerAvatar().equals("") || !isPermissionGranted) {
                 Glide.with(contextObj).load(R.drawable.default_player_avatar).into(holder.playerItemImageView);
             }
             else {

@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.adapter.PlayerListAdapater;
 import com.boardgames.jaipur.entities.Player;
+import com.boardgames.jaipur.utils.CheckForPermissionsState;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -42,24 +43,6 @@ public class PlayersManagementFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) &&
-                    shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-
-            }
-            else {
-                requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
-                        REQUEST_PERMISSIONS);
-            }
-
-        }
-        else {
-
-        }
-
-
         playersManagementViewModel =
                 new ViewModelProvider(this).get(PlayersManagementViewModel.class);
         View root = inflater.inflate(R.layout.fragment_players_management, container, false);
@@ -83,25 +66,6 @@ public class PlayersManagementFragment extends Fragment {
             }
         });
         return root;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        switch (requestCode) {
-            case REQUEST_PERMISSIONS: {
-                for (int i = 0; i < grantResults.length; i++) {
-                    if (grantResults.length > 0 && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-
-                    }
-                    else {
-                        Toast.makeText(getContext(), "The app was not allowed to read or write to your storage. " +
-                                "Hence, it cannot function properly. Please consider granting it this permission", Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-        }
     }
 
     @Override
