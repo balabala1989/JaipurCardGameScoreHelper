@@ -3,8 +3,8 @@
     <external-files-path
         name="external"
         path="images"/>
-    <files-path
-        name="internal"
-        path="images"/>
+   <external-cache-path
+       name="externalCache"
+       path="jaipurImages"/>
 
 </paths>

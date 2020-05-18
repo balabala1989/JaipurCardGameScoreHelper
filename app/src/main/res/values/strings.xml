@@ -22,12 +22,12 @@
 
     <string name="home_second">Home Second</string>
     <string name="title_activity_add_player">New Player</string>
+    <string name="title_activity_image_pick_crop">Image Picker</string>
     <string name="imageview_add_player_camera">Take Photo</string>
     <string name="imageview_add_player_gallery">Choose from Gallery</string>
-    <string name="alertdialog_title">Add Profile Photo</string>
+    <string name="alertdialog_title_add_profile_photo">Add Profile Photo</string>
     <string name="button_cancel">Cancel</string>
-
-
+    <string name="image_picker_issue">Error!! Unable to set profile picture...</string>
 
 
     <string name="color_activity_actionbar">#007869</string>
