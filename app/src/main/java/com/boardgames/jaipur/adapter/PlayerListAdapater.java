@@ -65,15 +65,13 @@ public class PlayerListAdapater extends RecyclerView.Adapter<PlayerListAdapater.
         if(playersList != null) {
             Player player = playersList.get(position);
 
-            //Bitmap imageMap = BitmapFactory.decodeFile(player.getPlayerAvatar());
             holder.playerItemTextView.setText(player.getPlayerName());
             if (player.getPlayerAvatar() != null && player.getPlayerAvatar().equals("") || !isPermissionGranted) {
                 Glide.with(contextObj).load(R.drawable.default_player_avatar).into(holder.playerItemImageView);
             }
             else {
-                Glide.with(contextObj).load(Uri.fromFile(new File(player.getPlayerAvatar()))).diskCacheStrategy(DiskCacheStrategy.DATA)
-                        .skipMemoryCache(true)
-                        .into(holder.playerItemImageView);
+                Bitmap imageMap = BitmapFactory.decodeFile(player.getPlayerAvatar());
+                Glide.with(contextObj).load(imageMap).into(holder.playerItemImageView);
             }
 
 

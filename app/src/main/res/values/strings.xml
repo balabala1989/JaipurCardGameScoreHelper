@@ -19,6 +19,7 @@
     <string name="textView_add_player_avatar">Profile</string>
     <string name="textView_add_player_notice">Click Image to change the profile</string>
     <string name="error_player_not_added">No New Player Added because it is empty.</string>
+    <string name="error_player_not_saved">Error while saving Player!!! Please try again. Apologies for the inconvenience caused.</string>
 
     <string name="home_second">Home Second</string>
     <string name="title_activity_add_player">New Player</string>
@@ -28,6 +29,7 @@
     <string name="alertdialog_title_add_profile_photo">Add Profile Photo</string>
     <string name="button_cancel">Cancel</string>
     <string name="image_picker_issue">Error!! Unable to set profile picture...</string>
+    <string name="edittext_playername_error">Player Name cannot be blank</string>
 
 
     <string name="color_activity_actionbar">#007869</string>

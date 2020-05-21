@@ -2,7 +2,7 @@
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
     <external-files-path
         name="external"
-        path="images"/>
+        path="profileImages"/>
    <external-cache-path
        name="externalCache"
        path="jaipurImages"/>

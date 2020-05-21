@@ -16,7 +16,7 @@ import java.util.List;
 public interface PlayerDao {
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    public void insertPlayer(Player player);
+    public long insertPlayer(Player player);
 
     @Update
     public void updatePlayer(Player player);
@@ -27,6 +27,12 @@ public interface PlayerDao {
     @Query("SELECT * from players ORDER BY name ASC")
     public LiveData<List<Player>> getAllPlayers();
 
+    @Query("SELECT * FROM players WHERE id = :playerId")
+    LiveData<Player> getPlayer(long playerId);
+
     @Query("DELETE from players")
     public void deleteAllPlayers();
+
+    @Query("UPDATE players SET player_avatar = :playerAvatar, time_updated = :timeUpdated WHERE id = :playerId")
+    public int updatePlayerAvatar(long playerId, long timeUpdated, String playerAvatar);
 }

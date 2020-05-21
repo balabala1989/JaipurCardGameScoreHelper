@@ -230,17 +230,6 @@ public class ImagePickAndCrop extends AppCompatActivity {
                 .start(this);
     }
 
-    /*private static String queryName(ContentResolver resolver, Uri uri) {
-        Cursor returnCursor =
-                resolver.query(uri, null, null, null, null);
-        assert returnCursor != null;
-        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-        returnCursor.moveToFirst();
-        String name = returnCursor.getString(nameIndex);
-        returnCursor.close();
-        return name;
-    }*/
-
     public static void clearCache(Context context) {
         File primaryStorageVolume = new File(context.getExternalCacheDir(), "jaipurImages");
         if (primaryStorageVolume.exists() && primaryStorageVolume.isDirectory()) {

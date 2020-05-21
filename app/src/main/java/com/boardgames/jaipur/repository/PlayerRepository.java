@@ -13,22 +13,34 @@ import java.util.List;
 public class PlayerRepository {
 
     private PlayerDao playerDao;
-    private LiveData<List<Player>> allPlayers;
 
     public PlayerRepository(Application application) {
         PlayerRoomDatabase playerRoomDatabase = PlayerRoomDatabase.getDatabase(application);
         playerDao = playerRoomDatabase.playerDao();
-        allPlayers = playerDao.getAllPlayers();
     }
 
     public LiveData<List<Player>> getAllPlayers() {
-        return allPlayers;
+        return playerDao.getAllPlayers();
     }
 
-    public void insert(final Player player) {
+    public LiveData<Player> getPlayer(long playerId) {
+        return playerDao.getPlayer(playerId);
+    }
+
+    public long updatePlayerAvatar(long playerId, String playerAvatar) {
+        final long[] updateStatus = {0};
         PlayerRoomDatabase.databaseWriterExecutor.execute(() -> {
-            playerDao.insertPlayer(player);
+            updateStatus[0] = playerDao.updatePlayerAvatar(playerId, System.currentTimeMillis()/100, playerAvatar);
         });
+        return updateStatus[0];
+    }
+
+    public long insert(final Player player) {
+        final long[] updateStatus = {0};
+        PlayerRoomDatabase.databaseWriterExecutor.execute(() -> {
+            updateStatus[0] = playerDao.insertPlayer(player);
+        });
+        return  updateStatus[0];
     }
 
     public void update(final Player player) {

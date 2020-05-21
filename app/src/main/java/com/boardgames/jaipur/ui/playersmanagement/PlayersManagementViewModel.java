@@ -28,8 +28,8 @@ public class PlayersManagementViewModel extends AndroidViewModel {
         return allPlayers;
     }
 
-    public void insert(Player player) {
-        playerRepository.insert(player);
+    public long insert(Player player) {
+        return playerRepository.insert(player);
     }
 
     public void update(Player player) {
@@ -38,5 +38,9 @@ public class PlayersManagementViewModel extends AndroidViewModel {
 
     public void delete(Player player) {
         playerRepository.delete(player);
+    }
+
+    public void updatePlayerAvatar(long playerId, String playerAvatar) {
+        playerRepository.updatePlayerAvatar(playerId, playerAvatar);
     }
 }
