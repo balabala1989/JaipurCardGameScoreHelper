@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.boardgames.jaipur.R;
+import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.CheckForPermissionsState;
 import com.yalantis.ucrop.UCrop;
 
@@ -41,8 +42,6 @@ public class ImagePickAndCrop extends AppCompatActivity {
     public static final String INTENT_SET_BITMAP_MAX_WIDTH_HEIGHT = "set_bitmap_max_width_height";
     public static final String INTENT_BITMAP_MAX_WIDTH = "max_width";
     public static final String INTENT_BITMAP_MAX_HEIGHT = "max_height";
-    public static final int FROM_CAMERA = 3113;
-    public static final int FROM_GALLERY = 7112;
 
     private boolean lockAspectRatio = false, setBitmapMaxWidthHeight = false;
     private int ASPECT_RATIO_X = 16, ASPECT_RATIO_Y = 9, bitmapMaxWidth = 1000, bitmapMaxHeight = 1000;
@@ -53,7 +52,6 @@ public class ImagePickAndCrop extends AppCompatActivity {
 
     public interface PickerOptionListener {
         void onCameraSelected();
-
         void onGallerySelected();
     }
 
@@ -82,7 +80,7 @@ public class ImagePickAndCrop extends AppCompatActivity {
         bitmapMaxHeight = intent.getIntExtra(INTENT_BITMAP_MAX_HEIGHT, bitmapMaxHeight);
 
         int requestCode = intent.getIntExtra(INTENT_IMAGE_PICKER_OPTION, -1);
-        if (requestCode == FROM_CAMERA) {
+        if (requestCode == ApplicationConstants.PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_REQUEST_FOR_CAMERA_CAPTURE) {
             takeCameraImage();
         } else {
             chooseImageFromGallery();
@@ -129,7 +127,7 @@ public class ImagePickAndCrop extends AppCompatActivity {
             fileName = System.currentTimeMillis() + ".jpg";
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,getImageFile(fileName));
-            startActivityForResult(takePictureIntent,FROM_CAMERA);
+            startActivityForResult(takePictureIntent,ApplicationConstants.PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_REQUEST_FOR_CAMERA_CAPTURE);
         }
         else {
             CheckForPermissionsState.deniedPermission(ImagePickAndCrop.this);
@@ -140,7 +138,7 @@ public class ImagePickAndCrop extends AppCompatActivity {
         dialog.dismiss();
         if (CheckForPermissionsState.requestStorageCameraPermissions(ImagePickAndCrop.this)) {
             Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(galleryIntent, FROM_GALLERY);
+            startActivityForResult(galleryIntent, ApplicationConstants.PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_REQUEST_FOR_GALLERY_CAPTURE);
         }
         else {
             CheckForPermissionsState.deniedPermission(ImagePickAndCrop.this);
@@ -151,14 +149,14 @@ public class ImagePickAndCrop extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case FROM_CAMERA:
+            case ApplicationConstants.PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_REQUEST_FOR_CAMERA_CAPTURE:
                 if (resultCode == RESULT_OK)
                     cropImage(getImageFile(fileName));
                 else
                     handleResultCancelled();
             break;
 
-            case FROM_GALLERY:
+            case ApplicationConstants.PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_REQUEST_FOR_GALLERY_CAPTURE:
                 if (resultCode == RESULT_OK) {
                     Uri imageUri = data.getData();
                     cropImage(imageUri);
@@ -200,7 +198,7 @@ public class ImagePickAndCrop extends AppCompatActivity {
 
     private void handleResultOK(Uri imageUri) {
         Intent intent = new Intent();
-        intent.putExtra("path", imageUri);
+        intent.putExtra(ApplicationConstants.PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_URI_PATH_REPLY, imageUri);
         setResult(Activity.RESULT_OK, intent);
         finish();
     }

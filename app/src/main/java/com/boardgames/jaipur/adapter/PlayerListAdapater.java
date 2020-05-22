@@ -33,7 +33,6 @@ public class PlayerListAdapater extends RecyclerView.Adapter<PlayerListAdapater.
     class PlayerViewHolder extends RecyclerView.ViewHolder {
         private final TextView playerItemTextView;
         private final ImageView playerItemImageView;
-        public static final int THUMBNAIL_SIZE = 96;
 
         private PlayerViewHolder(View view) {
             super(view);
@@ -66,6 +65,7 @@ public class PlayerListAdapater extends RecyclerView.Adapter<PlayerListAdapater.
             Player player = playersList.get(position);
 
             holder.playerItemTextView.setText(player.getPlayerName());
+            //TODO add image on clicker and pass necessary parameters for player activity
             if (player.getPlayerAvatar() != null && player.getPlayerAvatar().equals("") || !isPermissionGranted) {
                 Glide.with(contextObj).load(R.drawable.default_player_avatar).into(holder.playerItemImageView);
             }
@@ -73,10 +73,9 @@ public class PlayerListAdapater extends RecyclerView.Adapter<PlayerListAdapater.
                 Bitmap imageMap = BitmapFactory.decodeFile(player.getPlayerAvatar());
                 Glide.with(contextObj).load(imageMap).into(holder.playerItemImageView);
             }
-
-
         }
         else {
+            //TODO Need to handle code in case no player is avaialble
             holder.playerItemTextView.setText("No Players Found....");
         }
 

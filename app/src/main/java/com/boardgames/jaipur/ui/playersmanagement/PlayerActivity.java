@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.entities.Player;
 import com.boardgames.jaipur.ui.utils.ImagePickAndCrop;
+import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.CheckForPermissionsState;
 import com.bumptech.glide.Glide;
 
@@ -24,20 +25,16 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-public class AddPlayerActivity extends AppCompatActivity {
+public class PlayerActivity extends AppCompatActivity {
 
-    public static final String PROFILE_IMAGE_URI_REPLY = "com.boardgames.jaipur.ui.playersmanagement.addplayeractivity.PROFILE_URI";
-    public static final String PLAYER_NAME_REPLY = "com.boardgames.jaipur.ui.playersmanagement.addplayeractivity.PLAYER_NAME";
     private boolean isPermissionGranted = false;
-    private final int REQUEST_IMAGE = 100;
-    private Player newPlayer;
-    private String playerAvatarAbsolutePath;
     private Uri profileSelectedUri = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //TODO refactor the code for both add and update player
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_player);
+        setContentView(R.layout.activity_player);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.string.color_activity_actionbar))));
@@ -48,9 +45,9 @@ public class AddPlayerActivity extends AppCompatActivity {
         playerAvatarImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isPermissionGranted = CheckForPermissionsState.requestStorageCameraPermissions(AddPlayerActivity.this);
+                isPermissionGranted = CheckForPermissionsState.requestStorageCameraPermissions(PlayerActivity.this);
                 if (isPermissionGranted)
-                    ImagePickAndCrop.showOptions(AddPlayerActivity.this,
+                    ImagePickAndCrop.showOptions(PlayerActivity.this,
                             new ImagePickAndCrop.PickerOptionListener() {
                         @Override
                         public void onCameraSelected() {
@@ -64,7 +61,7 @@ public class AddPlayerActivity extends AppCompatActivity {
                     },
                             getString(R.string.alertdialog_title_add_profile_photo));
                 else
-                    CheckForPermissionsState.deniedPermission(AddPlayerActivity.this);
+                    CheckForPermissionsState.deniedPermission(PlayerActivity.this);
             }
         });
 
@@ -93,8 +90,8 @@ public class AddPlayerActivity extends AppCompatActivity {
                     nameEditText.requestFocus();
                     return super.onOptionsItemSelected(item);
                 }
-                replyTent.putExtra(PLAYER_NAME_REPLY, nameEditText.getText().toString());
-                replyTent.putExtra(PROFILE_IMAGE_URI_REPLY,profileSelectedUri);
+                replyTent.putExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PLAYER_NAME_REPLY, nameEditText.getText().toString());
+                replyTent.putExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PROFILE_IMAGE_URI_REPLY,profileSelectedUri);
                 setResult(RESULT_OK, replyTent);
                 finish();
                 return true;
@@ -108,8 +105,8 @@ public class AddPlayerActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         ImageView playerAvatarImageView = (ImageView) findViewById(R.id.playerAvatarImageView);
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE && resultCode == RESULT_OK) {
-            Uri imageUri = data.getParcelableExtra("path");
+        if (requestCode == ApplicationConstants.PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_REQUEST_IMAGE && resultCode == RESULT_OK) {
+            Uri imageUri = data.getParcelableExtra(ApplicationConstants.PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_URI_PATH_REPLY);
             if (imageUri != null) {
                 profileSelectedUri = imageUri;
                 Glide.with(this).load(imageUri).into(playerAvatarImageView);
@@ -123,16 +120,16 @@ public class AddPlayerActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        isPermissionGranted = CheckForPermissionsState.requestStorageCameraPermissions(AddPlayerActivity.this);
+        isPermissionGranted = CheckForPermissionsState.requestStorageCameraPermissions(PlayerActivity.this);
     }
 
     private void launchCameraIntent() {
-        Intent intent = new Intent(AddPlayerActivity.this, ImagePickAndCrop.class);
-        intent.putExtra(ImagePickAndCrop.INTENT_IMAGE_PICKER_OPTION, ImagePickAndCrop.FROM_CAMERA);
+        Intent intent = new Intent(PlayerActivity.this, ImagePickAndCrop.class);
+        intent.putExtra(ImagePickAndCrop.INTENT_IMAGE_PICKER_OPTION, ApplicationConstants.PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_REQUEST_FOR_CAMERA_CAPTURE);
 
         // setting aspect ratio
         intent.putExtra(ImagePickAndCrop.INTENT_LOCK_ASPECT_RATIO, true);
-        intent.putExtra(ImagePickAndCrop.INTENT_ASPECT_RATIO_X, 1); // 16x9, 1x1, 3:4, 3:2
+        intent.putExtra(ImagePickAndCrop.INTENT_ASPECT_RATIO_X, 1);
         intent.putExtra(ImagePickAndCrop.INTENT_ASPECT_RATIO_Y, 1);
 
         // setting maximum bitmap width and height
@@ -140,18 +137,18 @@ public class AddPlayerActivity extends AppCompatActivity {
         intent.putExtra(ImagePickAndCrop.INTENT_BITMAP_MAX_WIDTH, 1000);
         intent.putExtra(ImagePickAndCrop.INTENT_BITMAP_MAX_HEIGHT, 1000);
 
-        startActivityForResult(intent, REQUEST_IMAGE);
+        startActivityForResult(intent, ApplicationConstants.PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_REQUEST_IMAGE);
     }
 
     private void launchGalleryIntent() {
-        Intent intent = new Intent(AddPlayerActivity.this, ImagePickAndCrop.class);
-        intent.putExtra(ImagePickAndCrop.INTENT_IMAGE_PICKER_OPTION, ImagePickAndCrop.FROM_GALLERY);
+        Intent intent = new Intent(PlayerActivity.this, ImagePickAndCrop.class);
+        intent.putExtra(ImagePickAndCrop.INTENT_IMAGE_PICKER_OPTION, ApplicationConstants.PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_REQUEST_FOR_GALLERY_CAPTURE);
 
         // setting aspect ratio
         intent.putExtra(ImagePickAndCrop.INTENT_LOCK_ASPECT_RATIO, true);
-        intent.putExtra(ImagePickAndCrop.INTENT_ASPECT_RATIO_X, 1); // 16x9, 1x1, 3:4, 3:2
+        intent.putExtra(ImagePickAndCrop.INTENT_ASPECT_RATIO_X, 1);
         intent.putExtra(ImagePickAndCrop.INTENT_ASPECT_RATIO_Y, 1);
-        startActivityForResult(intent, REQUEST_IMAGE);
+        startActivityForResult(intent, ApplicationConstants.PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_REQUEST_IMAGE);
     }
 
     private SpannableStringBuilder getErrorMessageWithColor() {
@@ -160,7 +157,7 @@ public class AddPlayerActivity extends AppCompatActivity {
         int errorColor;
 
         if (version >= 23) {
-            errorColor = ContextCompat.getColor(AddPlayerActivity.this, R.color.errorColor);
+            errorColor = ContextCompat.getColor(PlayerActivity.this, R.color.errorColor);
         } else {
             errorColor = getResources().getColor(R.color.errorColor);
         }

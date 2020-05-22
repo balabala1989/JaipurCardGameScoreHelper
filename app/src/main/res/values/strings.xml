@@ -30,6 +30,8 @@
     <string name="button_cancel">Cancel</string>
     <string name="image_picker_issue">Error!! Unable to set profile picture...</string>
     <string name="edittext_playername_error">Player Name cannot be blank</string>
+    <string name="playeractivity_external_path">profileImages</string>
+    <string name="imagepickandcropactivity_cache_path">jaipurImages</string>
 
 
     <string name="color_activity_actionbar">#007869</string>

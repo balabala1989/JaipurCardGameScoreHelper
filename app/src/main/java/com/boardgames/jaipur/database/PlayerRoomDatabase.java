@@ -10,6 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.boardgames.jaipur.dao.PlayerDao;
 import com.boardgames.jaipur.entities.Player;
+import com.boardgames.jaipur.utils.ApplicationConstants;
 
 import java.time.Instant;
 import java.util.concurrent.ExecutorService;
@@ -21,8 +22,7 @@ public abstract class PlayerRoomDatabase extends RoomDatabase {
     public abstract PlayerDao playerDao();
 
     private static volatile PlayerRoomDatabase INSTANCE;
-    private static final int NUMBER_OF_THREADS = 4;
-    public static final ExecutorService databaseWriterExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+    public static final ExecutorService databaseWriterExecutor = Executors.newFixedThreadPool(ApplicationConstants.PLAYER_DATABASE_NUMBER_OF_EXECUTABLE_THREADS);
     private static RoomDatabase.Callback playerRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
@@ -49,8 +49,11 @@ public abstract class PlayerRoomDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (PlayerRoomDatabase.class) {
                 if (INSTANCE == null) {
+                    //TODO Need to delete the call back before publishing the app
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             PlayerRoomDatabase.class, "player_database").addCallback(playerRoomDatabaseCallback).build();
+                    /*INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                            PlayerRoomDatabase.class, "player_database").build(); */
                 }
             }
 

@@ -24,21 +24,18 @@ import android.widget.Toast;
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.adapter.PlayerListAdapater;
 import com.boardgames.jaipur.entities.Player;
+import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
 public class PlayersManagementFragment extends Fragment {
 
-    private static final int REQUEST_PERMISSIONS = 100;
     private PlayersManagementViewModel playersManagementViewModel;
-    private final int NUMBER_OF_COLUMNS = 3;
-    public static final int ADD_PLAYER_ACTIVITY_REQUEST_CODE = 1;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -51,14 +48,14 @@ public class PlayersManagementFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AddPlayerActivity.class);
-                startActivityForResult(intent,ADD_PLAYER_ACTIVITY_REQUEST_CODE);
+                Intent intent = new Intent(getActivity(), PlayerActivity.class);
+                startActivityForResult(intent,ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_CODE);
             }
         });
         RecyclerView playerRecyclerView = root.findViewById(R.id.playersRecyclerView);
         final PlayerListAdapater adapater = new PlayerListAdapater(getContext());
         playerRecyclerView.setAdapter(adapater);
-        playerRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS));
+        playerRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_GRIDLAYOUT_NUMBER_OF_COLUMNS));
         playersManagementViewModel.getAllPlayers().observe(this, new Observer<List<Player>>() {
             @Override
             public void onChanged(List<Player> players) {
@@ -71,10 +68,10 @@ public class PlayersManagementFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ADD_PLAYER_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             if (data != null) {
-                Uri imageUri = data.getParcelableExtra(AddPlayerActivity.PROFILE_IMAGE_URI_REPLY);
-                String playerName = data.getStringExtra(AddPlayerActivity.PLAYER_NAME_REPLY);
+                Uri imageUri = data.getParcelableExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PROFILE_IMAGE_URI_REPLY);
+                String playerName = data.getStringExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PLAYER_NAME_REPLY);
                 handleResultOKResponse(imageUri, playerName);
                 return;
             }
@@ -84,10 +81,14 @@ public class PlayersManagementFragment extends Fragment {
 
     private void handleResultOKResponse(Uri uri, String playerName) {
         Player newPlayer = new Player();
-        File imageFile;
         try {
-            imageFile = getAvatarAbsolutePath(uri);
-            newPlayer.setPlayerAvatar(imageFile.getAbsolutePath());
+            if (uri != null) {
+                File imageFile = getAvatarAbsolutePath(uri);
+                newPlayer.setPlayerAvatar(imageFile.getAbsolutePath());
+            }
+            else {
+                newPlayer.setPlayerAvatar("");
+            }
             newPlayer.setPlayerName(playerName);
             newPlayer.setTimeCreated(System.currentTimeMillis()/100);
             newPlayer.setTimeUpdated(System.currentTimeMillis()/100);
@@ -110,7 +111,7 @@ public class PlayersManagementFragment extends Fragment {
         options.inJustDecodeBounds = false;
         Bitmap image = BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(uri), null, options);
 
-        File storageDir = new File (getContext().getExternalFilesDir(null), "profileImages");
+        File storageDir = new File (getContext().getExternalFilesDir(null), getString(R.string.playeractivity_external_path));
         if (!storageDir.exists()) {storageDir.mkdir();}
         File imageFile = new File(storageDir, System.currentTimeMillis() + ".jpg");
         imageFile.createNewFile();
