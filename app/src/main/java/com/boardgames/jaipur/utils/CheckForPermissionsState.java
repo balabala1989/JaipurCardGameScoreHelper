@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.provider.Settings;
 import android.widget.Toast;
 
+import com.boardgames.jaipur.ui.utils.ImagePickAndCrop;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -81,5 +82,12 @@ public class CheckForPermissionsState {
         });
         builder.show();
         return permissionsGranted;
+    }
+
+    public static void deniedPermission(Context context) {
+        Toast.makeText(context,
+                "This app requires permissions for using this feature. Please provide permissions in Settings!!!!! ",
+                Toast.LENGTH_LONG)
+                .show();
     }
 }
