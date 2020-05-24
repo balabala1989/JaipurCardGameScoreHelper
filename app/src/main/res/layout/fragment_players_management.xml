@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:contentDescription="@string/float_button_desc"
+        android:contentDescription="@string/playeractivity_title_for_add_player"
         android:src="@drawable/ic_add_black_24dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
