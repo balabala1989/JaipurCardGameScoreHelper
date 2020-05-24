@@ -1,6 +1,7 @@
 package com.boardgames.jaipur.ui.playersmanagement;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -11,24 +12,36 @@ import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.CheckForPermissionsState;
 import com.bumptech.glide.Glide;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class PlayerActivity extends AppCompatActivity {
 
     private boolean isPermissionGranted = false;
     private Uri profileSelectedUri = null;
+    private int requestType;
+    private Player updatePlayer;
+    private boolean isProfileImageChanged = false;
+    private boolean isDeleteConfirmed;
+    AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +49,22 @@ public class PlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 
+        Intent receivedIntent = getIntent();
+        String activityTitle;
+
+        if (receivedIntent == null) {
+            Toast.makeText(getApplicationContext(), getString(R.string.player_update_issue), Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        requestType = receivedIntent.getIntExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_TYPE, -1);
+        activityTitle = requestType == ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_FOR_NEW_PLAYER ?
+                getString(R.string.playeractivity_title_for_add_player) :
+                getString(R.string.playeractivity_title_for_edit_player);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.string.color_activity_actionbar))));
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(R.string.title_activity_add_player);
+        actionBar.setTitle(activityTitle);
 
         ImageView playerAvatarImageView = (ImageView) findViewById(R.id.playerAvatarImageView);
         playerAvatarImageView.setOnClickListener(new View.OnClickListener() {
@@ -65,42 +90,79 @@ public class PlayerActivity extends AppCompatActivity {
             }
         });
 
+        if (requestType == ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_FOR_UPDATE_PLAYER)
+            handleUpdatePlayerRequest(receivedIntent);
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_add_player_menu, menu);
+        if (requestType == ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_FOR_NEW_PLAYER)
+            getMenuInflater().inflate(R.menu.activity_player_add_menu, menu);
+        else
+            getMenuInflater().inflate(R.menu.activity_player_update_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent replyTent = new Intent();
-        switch(item.getItemId()) {
-            case android.R.id.home: {
-                setResult(RESULT_CANCELED, replyTent);
-                finish();
-                return true;
-            }
+        replyTent.putExtra(ApplicationConstants.PLAYERACTIVITY_REQUEST_TYPE_REPLY, requestType);
 
-            case R.id.addPlayerSaveButton: {
-                EditText nameEditText = (EditText) findViewById(R.id.playerNameEditText);
-                if (nameEditText.getText().toString().trim().equalsIgnoreCase("")) {
-                    nameEditText.setError(getErrorMessageWithColor());
-                    nameEditText.requestFocus();
-                    return super.onOptionsItemSelected(item);
-                }
-                replyTent.putExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PLAYER_NAME_REPLY, nameEditText.getText().toString());
-                replyTent.putExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PROFILE_IMAGE_URI_REPLY,profileSelectedUri);
-                setResult(RESULT_OK, replyTent);
-                finish();
-                return true;
-            }
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {
+            setResult(RESULT_CANCELED, replyTent);
+            finish();
+            return true;
         }
+
+        replyTent.putExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS, updatePlayer);
+        if (item.getItemId() == R.id.updatePlayerDeleteButton) {
+            alertUserForDeleteOperation(replyTent);
+            return super.onOptionsItemSelected(item);
+        }
+
+        EditText nameEditText = (EditText) findViewById(R.id.playerNameEditText);
+        if (nameEditText.getText().toString().trim().equalsIgnoreCase("")) {
+            nameEditText.setError(getErrorMessageWithColor());
+            nameEditText.requestFocus();
+            return super.onOptionsItemSelected(item);
+        }
+
+        replyTent.putExtra(ApplicationConstants.PLAYERACTIVITY_DELETE_OPERATION_REQUESTED, false);
+        replyTent.putExtra(ApplicationConstants.PLAYERACTIVITY_UPDATE_OPERATION_PROFILE_IMAGE_CHANGED, isProfileImageChanged);
+        replyTent.putExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PLAYER_NAME_REPLY, nameEditText.getText().toString());
+        replyTent.putExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PROFILE_IMAGE_URI_REPLY,profileSelectedUri);
+
+        setResult(RESULT_OK, replyTent);
+        finish();
+        return true;
     }
 
+    private void alertUserForDeleteOperation(Intent replyIntent) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.alertdialog_confirmation_title));
+        builder.setMessage(getString(R.string.alertdialog_confirmation_message));
+
+        builder.setPositiveButton(getString(R.string.alertdialog_confirmation_positive_button), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                replyIntent.putExtra(ApplicationConstants.PLAYERACTIVITY_DELETE_OPERATION_REQUESTED, true);
+                setResult(RESULT_OK, replyIntent);
+                finish();
+            }
+        });
+
+        builder.setNegativeButton(getString(R.string.alertdialog_confirmation_negative_button), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+               dialog.dismiss();
+            }
+        });
+
+        dialog = builder.create();
+        dialog.show();
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         ImageView playerAvatarImageView = (ImageView) findViewById(R.id.playerAvatarImageView);
@@ -108,6 +170,7 @@ public class PlayerActivity extends AppCompatActivity {
         if (requestCode == ApplicationConstants.PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_REQUEST_IMAGE && resultCode == RESULT_OK) {
             Uri imageUri = data.getParcelableExtra(ApplicationConstants.PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_URI_PATH_REPLY);
             if (imageUri != null) {
+                isProfileImageChanged = requestType == ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_FOR_UPDATE_PLAYER ? true : false;
                 profileSelectedUri = imageUri;
                 Glide.with(this).load(imageUri).into(playerAvatarImageView);
                 return;
@@ -166,4 +229,27 @@ public class PlayerActivity extends AppCompatActivity {
         spannableStringBuilder.setSpan(foregroundColorSpan, 0, errorMessage.length(), 0);
         return spannableStringBuilder;
     }
+
+   private void handleUpdatePlayerRequest(Intent receivedIntent) {
+       updatePlayer = (Player) receivedIntent.getSerializableExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS);
+       ImageView playerAvatarImageView = (ImageView) findViewById(R.id.playerAvatarImageView);
+       EditText playerNameEditText = (EditText) findViewById(R.id.playerNameEditText);
+       Bitmap imageMap;
+
+        playerNameEditText.setText(updatePlayer.getPlayerName());
+        if (updatePlayer.getPlayerAvatar() == null || updatePlayer.getPlayerAvatar().equalsIgnoreCase("")) {
+            imageMap = BitmapFactory.decodeResource(getResources(),R.drawable.default_player_avatar);
+        }
+        else {
+            imageMap = BitmapFactory.decodeFile(updatePlayer.getPlayerAvatar());
+        }
+
+       Display display = getWindowManager().getDefaultDisplay();
+       Point size = new Point();
+       display.getSize(size);
+       int width = (size.x/2) < (size.y/2) ? size.x/2 : size.y/2;
+      Glide.with(this).load(imageMap).override(width, width).into(playerAvatarImageView);
+    }
+
+
 }

@@ -14,12 +14,21 @@
     <string name="menu_feedback_support">Support</string>
     <string name="menu_rate_me">Rate Me</string>
 
-    <string name="float_button_desc">Add Player</string>
+    <string name="playeractivity_title_for_add_player">Add Player</string>
+    <string name="playeractivity_title_for_edit_player">Edit Player</string>
     <string name="editText_add_player_hint">Player Name</string>
     <string name="textView_add_player_avatar">Profile</string>
     <string name="textView_add_player_notice">Click Image to change the profile</string>
+    <string name="success_player_added">New Player Added successfully!!!</string>
+    <string name="success_player_updated">Player Updated successfully!!!</string>
+    <string name="success_player_deleted">Player Removed successfully!!!</string>
     <string name="error_player_not_added">No New Player Added because it is empty.</string>
     <string name="error_player_not_saved">Error while saving Player!!! Please try again. Apologies for the inconvenience caused.</string>
+
+    <string name="alertdialog_confirmation_title">Confirm</string>
+    <string name="alertdialog_confirmation_message">Are you sure to delete this player?</string>
+    <string name="alertdialog_confirmation_positive_button">Yes</string>
+    <string name="alertdialog_confirmation_negative_button">No</string>
 
     <string name="home_second">Home Second</string>
     <string name="title_activity_add_player">New Player</string>
@@ -29,6 +38,7 @@
     <string name="alertdialog_title_add_profile_photo">Add Profile Photo</string>
     <string name="button_cancel">Cancel</string>
     <string name="image_picker_issue">Error!! Unable to set profile picture...</string>
+    <string name="player_update_issue">Error!! Unable to update the player profile now...</string>
     <string name="edittext_playername_error">Player Name cannot be blank</string>
     <string name="playeractivity_external_path">profileImages</string>
     <string name="imagepickandcropactivity_cache_path">jaipurImages</string>

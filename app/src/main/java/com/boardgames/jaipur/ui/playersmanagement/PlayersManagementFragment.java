@@ -37,6 +37,7 @@ public class PlayersManagementFragment extends Fragment {
 
     private PlayersManagementViewModel playersManagementViewModel;
 
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -49,11 +50,14 @@ public class PlayersManagementFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), PlayerActivity.class);
+                intent.putExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_TYPE,
+                        ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_FOR_NEW_PLAYER);
+                intent.putExtra(ApplicationConstants.PLAYERACTIVITY_TITLE, getString(R.string.playeractivity_title_for_add_player));
                 startActivityForResult(intent,ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_CODE);
             }
         });
         RecyclerView playerRecyclerView = root.findViewById(R.id.playersRecyclerView);
-        final PlayerListAdapater adapater = new PlayerListAdapater(getContext());
+        final PlayerListAdapater adapater = new PlayerListAdapater(this);
         playerRecyclerView.setAdapter(adapater);
         playerRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_GRIDLAYOUT_NUMBER_OF_COLUMNS));
         playersManagementViewModel.getAllPlayers().observe(this, new Observer<List<Player>>() {
@@ -70,16 +74,33 @@ public class PlayersManagementFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             if (data != null) {
-                Uri imageUri = data.getParcelableExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PROFILE_IMAGE_URI_REPLY);
-                String playerName = data.getStringExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PLAYER_NAME_REPLY);
-                handleResultOKResponse(imageUri, playerName);
-                return;
+                int requestType = data.getIntExtra(ApplicationConstants.PLAYERACTIVITY_REQUEST_TYPE_REPLY, -1);
+
+                //New Player response processing
+                if (requestType == ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_FOR_NEW_PLAYER) {
+                    handleResultOKResponseForNewPlayer(data);
+                    return;
+                }
+                //Update/Delete response processing
+                else if (requestType == ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_FOR_UPDATE_PLAYER) {
+                    boolean deleteOperation = data.getBooleanExtra(ApplicationConstants.PLAYERACTIVITY_DELETE_OPERATION_REQUESTED, false);
+                    if (deleteOperation) {
+                        handleResultOKResponseForDeletePlayer(data);
+                        return;
+                    }
+                    else {
+                        handleResultOKResponseForUpdatePlayer(data);
+                        return;
+                    }
+                }
             }
         }
         Toast.makeText(getContext(), R.string.error_player_not_added, Toast.LENGTH_LONG).show();
     }
 
-    private void handleResultOKResponse(Uri uri, String playerName) {
+    private void handleResultOKResponseForNewPlayer(Intent dataIntent) {
+        Uri uri = dataIntent.getParcelableExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PROFILE_IMAGE_URI_REPLY);
+        String playerName = dataIntent.getStringExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PLAYER_NAME_REPLY);
         Player newPlayer = new Player();
         try {
             if (uri != null) {
@@ -92,13 +113,73 @@ public class PlayersManagementFragment extends Fragment {
             newPlayer.setPlayerName(playerName);
             newPlayer.setTimeCreated(System.currentTimeMillis()/100);
             newPlayer.setTimeUpdated(System.currentTimeMillis()/100);
+            playersManagementViewModel.insert(newPlayer);
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(getContext(), R.string.error_player_not_saved, Toast.LENGTH_LONG).show();
             return;
         }
 
-        playersManagementViewModel.insert(newPlayer);
+
+        Toast.makeText(getContext(), R.string.success_player_added, Toast.LENGTH_LONG).show();
+    }
+
+    private void handleResultOKResponseForDeletePlayer(Intent dataIntent) {
+        Player player = (Player) dataIntent.getSerializableExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS);
+
+        if (player == null){
+            Toast.makeText(getContext(), R.string.error_player_not_added, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        try {
+            playersManagementViewModel.delete(player);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), R.string.error_player_not_saved, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Toast.makeText(getContext(), R.string.success_player_deleted, Toast.LENGTH_LONG).show();
+    }
+
+    private void handleResultOKResponseForUpdatePlayer(Intent dataIntent) {
+        boolean isProfileChanged = dataIntent.getBooleanExtra(ApplicationConstants.PLAYERACTIVITY_UPDATE_OPERATION_PROFILE_IMAGE_CHANGED, false);
+        Player player = (Player) dataIntent.getSerializableExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS);
+
+        if (isProfileChanged) {
+            Uri uri = dataIntent.getParcelableExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PROFILE_IMAGE_URI_REPLY);
+            if (uri != null) {
+                File imageFile;
+                try {
+                    imageFile = getAvatarAbsolutePath(uri);
+                    player.setPlayerAvatar(imageFile.getAbsolutePath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getContext(), R.string.error_player_not_saved, Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+            }
+            else {
+                player.setPlayerAvatar("");
+            }
+        }
+
+        player.setPlayerName(dataIntent.getStringExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PLAYER_NAME_REPLY));
+        player.setTimeUpdated(System.currentTimeMillis()/100);
+
+        try {
+            playersManagementViewModel.update(player);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), R.string.error_player_not_saved, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Toast.makeText(getContext(), R.string.success_player_updated, Toast.LENGTH_LONG).show();
     }
 
     private File getAvatarAbsolutePath(Uri uri) throws IOException {
