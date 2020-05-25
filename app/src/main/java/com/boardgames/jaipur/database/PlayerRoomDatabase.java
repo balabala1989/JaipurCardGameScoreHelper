@@ -31,7 +31,7 @@ public abstract class PlayerRoomDatabase extends RoomDatabase {
                 PlayerDao playerDao = INSTANCE.playerDao();
                 playerDao.deleteAllPlayers();
 
-                for (int i = 0; i < 15; i++) {
+                /*for (int i = 0; i < 3; i++) {
                     Player player = new Player();
                     player.setPlayerName("Test player " + (i+1));
                     player.setPlayerAvatar("");
@@ -39,7 +39,7 @@ public abstract class PlayerRoomDatabase extends RoomDatabase {
                     player.setTimeUpdated(System.currentTimeMillis() / 100);
                     playerDao.insertPlayer(player);
                     player = null;
-                }
+                }*/
             });
         }
     };

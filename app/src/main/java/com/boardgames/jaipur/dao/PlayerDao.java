@@ -6,6 +6,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.boardgames.jaipur.entities.Player;
@@ -24,12 +25,13 @@ public interface PlayerDao {
     @Delete
     public void deletePlayer(Player player);
 
-    @Query("SELECT * from players ORDER BY name ASC")
+   @Query("SELECT * from players ORDER BY name ASC")
     public LiveData<List<Player>> getAllPlayers();
 
     @Query("SELECT * FROM players WHERE id = :playerId")
     LiveData<Player> getPlayer(long playerId);
 
+    @Transaction
     @Query("DELETE from players")
     public void deleteAllPlayers();
 
