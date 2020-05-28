@@ -21,6 +21,7 @@ import com.boardgames.jaipur.ui.playersmanagement.PlayerActivity;
 import com.boardgames.jaipur.ui.playersmanagement.PlayersManagementFragment;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.CheckForPermissionsState;
+import com.boardgames.jaipur.utils.PlayerUtils;
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -103,7 +104,10 @@ public class PlayerListAdapater extends RecyclerView.Adapter<RecyclerView.ViewHo
                         }
                         else if (parentFragment instanceof NewGameFragment) {
                             NewGameFragment newGameFragment = (NewGameFragment) parentFragment;
-                            newGameFragment.handleProfileImageClick(player);
+                            if (!(PlayerUtils.isPlayerOneSelected && PlayerUtils.isPlayerTwoSelected)) {
+                                newGameFragment.handleProfileImageClick(player);
+                            }
+
                         }
                     }
                 });

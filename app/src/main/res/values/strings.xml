@@ -44,6 +44,8 @@
     <string name="imagepickandcropactivity_cache_path">jaipurImages</string>
     <string name="empty_players_found">No Players Found!!!!</string>
 
+    <string name="new_game_fragment_select_player_textView">Select Player</string>
+    <string name="new_game_fragment_vs_textView">VS</string>
 
     <string name="color_activity_actionbar">#007869</string>
 

@@ -2,10 +2,13 @@ package com.boardgames.jaipur.ui.newgame;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +27,7 @@ import com.boardgames.jaipur.entities.Player;
 import com.boardgames.jaipur.ui.playersmanagement.PlayerActivity;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.PlayerUtils;
+import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -31,12 +35,13 @@ import java.util.List;
 public class NewGameFragment extends Fragment {
 
     private NewGameViewModel newGameViewModel;
+    private View root;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         newGameViewModel = new ViewModelProvider(this).get(NewGameViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_new_game, container, false);
+        root = inflater.inflate(R.layout.fragment_new_game, container, false);
         FloatingActionButton addPlayerButton = root.findViewById(R.id.addPlayerButton);
         addPlayerButton.setOnClickListener(new View.OnClickListener() {
 
@@ -80,6 +85,38 @@ public class NewGameFragment extends Fragment {
     }
 
     public void handleProfileImageClick(Player player) {
+        ImageView playerImageView;
+        TextView playerTextView;
+        if (!PlayerUtils.isPlayerOneSelected) {
+            playerImageView = root.findViewById(R.id.playerOneImageView);
+            playerTextView = root.findViewById(R.id.playerOneTextView);
 
+            if (player.getPlayerAvatar() != null && player.getPlayerAvatar().equalsIgnoreCase("")) {
+                Glide.with(getContext()).load(R.drawable.default_player_avatar).into(playerImageView);
+            }
+            else {
+                Bitmap imageMap = BitmapFactory.decodeFile(player.getPlayerAvatar());
+                Glide.with(getContext()).load(imageMap).into(playerImageView);
+            }
+            playerTextView.setText(player.getPlayerName());
+            synchronized (this) {
+                PlayerUtils.isPlayerOneSelected = true;
+            }
+        }
+        else if (!PlayerUtils.isPlayerTwoSelected) {
+            playerImageView = root.findViewById(R.id.playerTwoImageView);
+            playerTextView = root.findViewById(R.id.playerTwoTextView);
+            if (player.getPlayerAvatar() != null && player.getPlayerAvatar().equalsIgnoreCase("")) {
+                Glide.with(getContext()).load(R.drawable.default_player_avatar).into(playerImageView);
+            }
+            else {
+                Bitmap imageMap = BitmapFactory.decodeFile(player.getPlayerAvatar());
+                Glide.with(getContext()).load(imageMap).into(playerImageView);
+            }
+            playerTextView.setText(player.getPlayerName());
+            synchronized (this) {
+                PlayerUtils.isPlayerTwoSelected = true;
+            }
+        }
     }
 }
