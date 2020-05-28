@@ -25,6 +25,7 @@ import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.adapter.PlayerListAdapater;
 import com.boardgames.jaipur.entities.Player;
 import com.boardgames.jaipur.utils.ApplicationConstants;
+import com.boardgames.jaipur.utils.PlayerUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.ByteArrayOutputStream;
@@ -57,7 +58,7 @@ public class PlayersManagementFragment extends Fragment {
             }
         });
         RecyclerView playerRecyclerView = root.findViewById(R.id.playersRecyclerView);
-        final PlayerListAdapater adapater = new PlayerListAdapater(this);
+        final PlayerListAdapater adapater = new PlayerListAdapater(this, root);
         playerRecyclerView.setAdapter(adapater);
         playerRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_GRIDLAYOUT_NUMBER_OF_COLUMNS));
         playersManagementViewModel.getAllPlayers().observe(this, new Observer<List<Player>>() {
@@ -78,7 +79,7 @@ public class PlayersManagementFragment extends Fragment {
 
                 //New Player response processing
                 if (requestType == ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_FOR_NEW_PLAYER) {
-                    handleResultOKResponseForNewPlayer(data);
+                    PlayerUtils.handleResultOKResponseForNewPlayer(getContext(), playersManagementViewModel, data);
                     return;
                 }
                 //Update/Delete response processing
@@ -96,32 +97,6 @@ public class PlayersManagementFragment extends Fragment {
             }
         }
         Toast.makeText(getContext(), R.string.error_player_not_added, Toast.LENGTH_LONG).show();
-    }
-
-    private void handleResultOKResponseForNewPlayer(Intent dataIntent) {
-        Uri uri = dataIntent.getParcelableExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PROFILE_IMAGE_URI_REPLY);
-        String playerName = dataIntent.getStringExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PLAYER_NAME_REPLY);
-        Player newPlayer = new Player();
-        try {
-            if (uri != null) {
-                File imageFile = getAvatarAbsolutePath(uri);
-                newPlayer.setPlayerAvatar(imageFile.getAbsolutePath());
-            }
-            else {
-                newPlayer.setPlayerAvatar("");
-            }
-            newPlayer.setPlayerName(playerName);
-            newPlayer.setTimeCreated(System.currentTimeMillis()/100);
-            newPlayer.setTimeUpdated(System.currentTimeMillis()/100);
-            playersManagementViewModel.insert(newPlayer);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(getContext(), R.string.error_player_not_saved, Toast.LENGTH_LONG).show();
-            return;
-        }
-
-
-        Toast.makeText(getContext(), R.string.success_player_added, Toast.LENGTH_LONG).show();
     }
 
     private void handleResultOKResponseForDeletePlayer(Intent dataIntent) {
@@ -153,7 +128,7 @@ public class PlayersManagementFragment extends Fragment {
             if (uri != null) {
                 File imageFile;
                 try {
-                    imageFile = getAvatarAbsolutePath(uri);
+                    imageFile = PlayerUtils.getAvatarAbsolutePath(getContext(), uri);
                     player.setPlayerAvatar(imageFile.getAbsolutePath());
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -182,50 +157,12 @@ public class PlayersManagementFragment extends Fragment {
         Toast.makeText(getContext(), R.string.success_player_updated, Toast.LENGTH_LONG).show();
     }
 
-    private File getAvatarAbsolutePath(Uri uri) throws IOException {
-        //Reducing the scale and size of the image
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-
-        BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(uri), null, options);
-        options.inSampleSize = calculateInSampleSize(options, 200, 200);
-        options.inJustDecodeBounds = false;
-        Bitmap image = BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(uri), null, options);
-
-        File storageDir = new File (getContext().getExternalFilesDir(null), getString(R.string.playeractivity_external_path));
-        if (!storageDir.exists()) {storageDir.mkdir();}
-        File imageFile = new File(storageDir, System.currentTimeMillis() + ".jpg");
-        imageFile.createNewFile();
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-        byte[] imageByteArray = outputStream.toByteArray();
-        FileOutputStream fileOutputStream = new FileOutputStream(imageFile);
-        fileOutputStream.write(imageByteArray);
-        fileOutputStream.flush();
-        fileOutputStream.close();
-
-        return imageFile;
-    }
-
-    private int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) > reqHeight
-                    && (halfWidth / inSampleSize) > reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-        return inSampleSize;
+    public void handleProfileImageClick(Player player) {
+        Intent updateIntent = new Intent(getContext(), PlayerActivity.class);
+        updateIntent.putExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_TYPE,
+                ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_FOR_UPDATE_PLAYER);
+        updateIntent.putExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS, player);
+        updateIntent.putExtra(ApplicationConstants.PLAYERACTIVITY_TITLE, getString(R.string.playeractivity_title_for_edit_player));
+        startActivityForResult(updateIntent, ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_CODE);
     }
 }

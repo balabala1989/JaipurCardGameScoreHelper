@@ -1,19 +1,36 @@
 package com.boardgames.jaipur.ui.newgame;
 
+import android.app.Application;
+
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class NewGameViewModel extends ViewModel {
+import com.boardgames.jaipur.entities.Player;
+import com.boardgames.jaipur.repository.PlayerRepository;
+
+import java.util.List;
+
+public class NewGameViewModel extends AndroidViewModel {
 
     private MutableLiveData<String> mText;
 
-    public NewGameViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+    private PlayerRepository playerRepository;
+
+    private LiveData<List<Player>> allPlayers;
+
+    public NewGameViewModel(Application application) {
+        super(application);
+        playerRepository = new PlayerRepository(application);
+        allPlayers = playerRepository.getAllPlayers();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public LiveData<List<Player>> getAllPlayers() {
+        return allPlayers;
+    }
+
+    public long insert(Player player) {
+        return playerRepository.insert(player);
     }
 }

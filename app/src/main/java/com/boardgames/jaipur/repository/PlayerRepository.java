@@ -35,6 +35,7 @@ public class PlayerRepository {
         return updateStatus[0];
     }
 
+    //TODO check for the name existence and then insert the value. Duplicate names are being inserted
     public long insert(final Player player) {
         final long[] updateStatus = {0};
         PlayerRoomDatabase.databaseWriterExecutor.execute(() -> {
