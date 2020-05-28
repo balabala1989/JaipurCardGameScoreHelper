@@ -39,8 +39,4 @@ public class PlayersManagementViewModel extends AndroidViewModel {
     public void delete(Player player) {
         playerRepository.delete(player);
     }
-
-    public void updatePlayerAvatar(long playerId, String playerAvatar) {
-        playerRepository.updatePlayerAvatar(playerId, playerAvatar);
-    }
 }
