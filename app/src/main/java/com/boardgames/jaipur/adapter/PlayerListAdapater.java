@@ -16,7 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.entities.Player;
+import com.boardgames.jaipur.ui.newgame.NewGameFragment;
 import com.boardgames.jaipur.ui.playersmanagement.PlayerActivity;
+import com.boardgames.jaipur.ui.playersmanagement.PlayersManagementFragment;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.CheckForPermissionsState;
 import com.bumptech.glide.Glide;
@@ -95,13 +97,14 @@ public class PlayerListAdapater extends RecyclerView.Adapter<RecyclerView.ViewHo
                 viewHolder.playerItemImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent updateIntent = new Intent(parentFragment.getContext(), PlayerActivity.class);
-                        updateIntent.putExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_TYPE,
-                                ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_FOR_UPDATE_PLAYER);
-                        updateIntent.putExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS, player);
-                        updateIntent.putExtra(ApplicationConstants.PLAYERACTIVITY_TITLE, parentFragment.getString(R.string.playeractivity_title_for_edit_player));
-                        parentFragment.startActivityForResult(updateIntent, ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_CODE);
-
+                        if (parentFragment instanceof PlayersManagementFragment) {
+                            PlayersManagementFragment playersManagementFragment = (PlayersManagementFragment) parentFragment;
+                            playersManagementFragment.handleProfileImageClick(player);
+                        }
+                        else if (parentFragment instanceof NewGameFragment) {
+                            NewGameFragment newGameFragment = (NewGameFragment) parentFragment;
+                            newGameFragment.handleProfileImageClick(player);
+                        }
                     }
                 });
                 if (player.getPlayerAvatar() != null && player.getPlayerAvatar().equals("") || !isPermissionGranted) {

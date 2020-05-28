@@ -22,7 +22,7 @@
     <string name="success_player_added">New Player Added successfully!!!</string>
     <string name="success_player_updated">Player Updated successfully!!!</string>
     <string name="success_player_deleted">Player Removed successfully!!!</string>
-    <string name="error_player_not_added">No New Player Added.</string>
+    <string name="error_player_not_added">No Player Added/Updated</string>
     <string name="error_player_not_saved">Error while saving Player!!! Please try again. Apologies for the inconvenience caused.</string>
 
     <string name="alertdialog_confirmation_title">Confirm</string>

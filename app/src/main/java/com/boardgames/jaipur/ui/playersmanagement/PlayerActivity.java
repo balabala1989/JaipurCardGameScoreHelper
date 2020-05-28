@@ -45,7 +45,7 @@ public class PlayerActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //TODO refactor the code for both add and update player
+        //TODO when name is typed, out of click of the text box, the qwerty keyboard still displays. Remove it
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 
