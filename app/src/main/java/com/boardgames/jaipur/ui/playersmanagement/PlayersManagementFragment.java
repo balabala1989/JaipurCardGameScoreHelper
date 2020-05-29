@@ -99,6 +99,7 @@ public class PlayersManagementFragment extends Fragment {
         Toast.makeText(getContext(), R.string.error_player_not_added, Toast.LENGTH_LONG).show();
     }
 
+    //TODO Need to call clearcache once the image is saved in intented location
     private void handleResultOKResponseForDeletePlayer(Intent dataIntent) {
         Player player = (Player) dataIntent.getSerializableExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS);
 

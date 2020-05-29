@@ -6,6 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -36,12 +39,48 @@ public class NewGameFragment extends Fragment {
 
     private NewGameViewModel newGameViewModel;
     private View root;
+    private Player playerOne, playerTwo;
+    private ImageView playerOneImageView, playerTwoImageView;
+    private TextView playerOneTexView, playerTwoTextView;
+    private MenuItem startMenuItem;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         newGameViewModel = new ViewModelProvider(this).get(NewGameViewModel.class);
         root = inflater.inflate(R.layout.fragment_new_game, container, false);
+
+        playerOneImageView = root.findViewById(R.id.playerOneImageView);
+        playerTwoImageView = root.findViewById(R.id.playerTwoImageView);
+        playerOneTexView = root.findViewById(R.id.playerOneTextView);
+        playerTwoTextView = root.findViewById(R.id.playerTwoTextView);
+
+        playerOneImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!PlayerUtils.isPlayerOneSelected)
+                    return;
+                synchronized (this) {
+                    PlayerUtils.isPlayerOneSelected = false;
+                }
+                playerOne = null;
+                handleUnSelectPlayers(playerOneImageView, playerOneTexView);
+            }
+        });
+
+        playerTwoImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!PlayerUtils.isPlayerTwoSelected)
+                    return;
+                synchronized (this) {
+                    PlayerUtils.isPlayerTwoSelected = false;
+                }
+                playerTwo = null;
+                handleUnSelectPlayers(playerTwoImageView, playerTwoTextView);
+            }
+        });
+
         FloatingActionButton addPlayerButton = root.findViewById(R.id.addPlayerButton);
         addPlayerButton.setOnClickListener(new View.OnClickListener() {
 
@@ -64,7 +103,22 @@ public class NewGameFragment extends Fragment {
                 adapater.setPlayersList(players);
             }
         });
+
+        setHasOptionsMenu(true);
         return root;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        menuInflater.inflate(R.menu.activity_new_game_menu, menu);
+        startMenuItem = menu.findItem(R.id.startNewGameButton);
+        startMenuItem.setVisible(false);
+        super.onCreateOptionsMenu(menu, menuInflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -85,38 +139,54 @@ public class NewGameFragment extends Fragment {
     }
 
     public void handleProfileImageClick(Player player) {
-        ImageView playerImageView;
-        TextView playerTextView;
-        if (!PlayerUtils.isPlayerOneSelected) {
-            playerImageView = root.findViewById(R.id.playerOneImageView);
-            playerTextView = root.findViewById(R.id.playerOneTextView);
+       if (!PlayerUtils.isPlayerOneSelected) {
+
+            if (PlayerUtils.isPlayerTwoSelected) {
+                if (playerTwo != null && playerTwo.getId() == player.getId())
+                    return;
+            }
 
             if (player.getPlayerAvatar() != null && player.getPlayerAvatar().equalsIgnoreCase("")) {
-                Glide.with(getContext()).load(R.drawable.default_player_avatar).into(playerImageView);
+                Glide.with(getContext()).load(R.drawable.default_player_avatar).into(playerOneImageView);
             }
             else {
                 Bitmap imageMap = BitmapFactory.decodeFile(player.getPlayerAvatar());
-                Glide.with(getContext()).load(imageMap).into(playerImageView);
+                Glide.with(getContext()).load(imageMap).into(playerOneImageView);
             }
-            playerTextView.setText(player.getPlayerName());
+            playerOneTexView.setText(player.getPlayerName());
             synchronized (this) {
+                playerOne = player;
                 PlayerUtils.isPlayerOneSelected = true;
             }
         }
         else if (!PlayerUtils.isPlayerTwoSelected) {
-            playerImageView = root.findViewById(R.id.playerTwoImageView);
-            playerTextView = root.findViewById(R.id.playerTwoTextView);
-            if (player.getPlayerAvatar() != null && player.getPlayerAvatar().equalsIgnoreCase("")) {
-                Glide.with(getContext()).load(R.drawable.default_player_avatar).into(playerImageView);
+
+            if (PlayerUtils.isPlayerOneSelected) {
+                if (playerOne != null && playerOne.getId() == player.getId())
+                    return;
+            }
+
+           if (player.getPlayerAvatar() != null && player.getPlayerAvatar().equalsIgnoreCase("")) {
+                Glide.with(getContext()).load(R.drawable.default_player_avatar).into(playerTwoImageView);
             }
             else {
                 Bitmap imageMap = BitmapFactory.decodeFile(player.getPlayerAvatar());
-                Glide.with(getContext()).load(imageMap).into(playerImageView);
+                Glide.with(getContext()).load(imageMap).into(playerTwoImageView);
             }
-            playerTextView.setText(player.getPlayerName());
+            playerTwoTextView.setText(player.getPlayerName());
             synchronized (this) {
+                playerTwo = player;
                 PlayerUtils.isPlayerTwoSelected = true;
             }
         }
+
+        if (PlayerUtils.isPlayerOneSelected && PlayerUtils.isPlayerTwoSelected)
+            startMenuItem.setVisible(true);
+    }
+
+    private void handleUnSelectPlayers(ImageView playerImageView, TextView playerTextView) {
+        startMenuItem.setVisible(false);
+        Glide.with(getContext()).load(R.drawable.player_question).into(playerImageView);
+        playerTextView.setText(getString(R.string.new_game_fragment_select_player_textView));
     }
 }
