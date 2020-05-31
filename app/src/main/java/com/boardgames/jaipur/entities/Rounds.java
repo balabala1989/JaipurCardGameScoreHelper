@@ -56,6 +56,9 @@ public class Rounds implements Serializable {
     @ColumnInfo(name = "photo_path")
     private String photoPath;
 
+    @ColumnInfo(name = "notes")
+    private String notes;
+
     @NonNull
     @ColumnInfo(name = "time_created")
     private long timeCreated;

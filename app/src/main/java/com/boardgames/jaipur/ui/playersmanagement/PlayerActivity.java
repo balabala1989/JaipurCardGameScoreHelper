@@ -43,6 +43,7 @@ public class PlayerActivity extends AppCompatActivity {
     private boolean isDeleteConfirmed;
     AlertDialog dialog;
 
+    //TODO for update profile give option to remove the profile and keep default value
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //TODO when name is typed, out of click of the text box, the qwerty keyboard still displays. Remove it
@@ -54,6 +55,7 @@ public class PlayerActivity extends AppCompatActivity {
 
         if (receivedIntent == null) {
             Toast.makeText(getApplicationContext(), getString(R.string.player_update_issue), Toast.LENGTH_LONG).show();
+            finish();
             return;
         }
 

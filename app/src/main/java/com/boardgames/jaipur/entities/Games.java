@@ -39,6 +39,9 @@ public class Games implements Serializable {
     @ColumnInfo(name = "photo_location")
     private String gamePhotoLocation;
 
+    @ColumnInfo(name = "notes")
+    private String notes;
+
     @NonNull
     @ColumnInfo(name = "time_created")
     private long timeCreated;

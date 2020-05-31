@@ -46,7 +46,13 @@
 
     <string name="new_game_fragment_select_player_textView">Select Player</string>
     <string name="new_game_fragment_vs_textView">VS</string>
+    <string name="new_game_fragment_select_player_error_message">Please select two players to start the game...</string>
+
+    <string name="starting_player_activity_title">Starting Player</string>
 
     <string name="color_activity_actionbar">#007869</string>
+
+    <string name="retry_button_text">Try Again</string>
+    <string name="game_create_issue">Error!! Unable to create a game...</string>
 
 </resources>

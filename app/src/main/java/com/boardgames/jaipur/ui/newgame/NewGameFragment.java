@@ -1,6 +1,7 @@
 package com.boardgames.jaipur.ui.newgame;
 
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -44,6 +45,7 @@ public class NewGameFragment extends Fragment {
     private TextView playerOneTexView, playerTwoTextView;
     private MenuItem startMenuItem;
 
+    //TODO on click of the select player, remove him from the selected option and make select player empty
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -118,6 +120,17 @@ public class NewGameFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.startNewGameButton) {
+            if (playerOne == null || playerTwo == null) {
+                Toast.makeText(getContext(), getString(R.string.new_game_fragment_select_player_error_message), Toast.LENGTH_LONG).show();
+                return super.onOptionsItemSelected(item);
+            }
+            Intent startIntent = new Intent(getActivity(), StartingPlayerActivity.class);
+            startIntent.putExtra(ApplicationConstants.NEWGAMEFRAGMENT_TO_STARTINGPLAYERACTIVITY_PLAYERONE_DETAILS, playerOne);
+            startIntent.putExtra(ApplicationConstants.NEWGAMEFRAGMENT_TO_STARTINGPLAYERACTIVITY_PLAYERTWO_DETAILS, playerTwo);
+            startActivity(startIntent);
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -134,6 +147,9 @@ public class NewGameFragment extends Fragment {
                     return;
                 }
             }
+        }
+        else if (resultCode == Activity.RESULT_CANCELED) {
+            return;
         }
         Toast.makeText(getContext(), R.string.error_player_not_added, Toast.LENGTH_LONG).show();
     }
