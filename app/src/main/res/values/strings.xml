@@ -49,6 +49,7 @@
     <string name="new_game_fragment_select_player_error_message">Please select two players to start the game...</string>
 
     <string name="starting_player_activity_title">Starting Player</string>
+    <string name="starting_player_activity_firstplayer_textview">First Player</string>
 
     <string name="color_activity_actionbar">#007869</string>
 

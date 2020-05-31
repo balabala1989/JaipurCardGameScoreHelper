@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 
 @Entity(tableName = "games")
-public class Games implements Serializable {
+public class Game implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private long id;

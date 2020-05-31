@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.entities.Player;
 import com.boardgames.jaipur.utils.ApplicationConstants;
+import com.boardgames.jaipur.utils.PlayerUtils;
 import com.bumptech.glide.Glide;
 
 import android.content.Intent;
@@ -13,8 +14,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +29,9 @@ public class StartingPlayerActivity extends AppCompatActivity {
 
     private Player playerOne;
     private Player playerTwo;
+    private Player startingPlayer;
+    private int countOfHandler = 0;
+    private Button tryAgainButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +55,17 @@ public class StartingPlayerActivity extends AppCompatActivity {
         if (playerOne == null || playerTwo == null)
             handleException();
 
-        new Thread(() -> {
-            try {
-                Thread.sleep(200);
+        tryAgainButton = (Button) findViewById(R.id.retryButton);
+        tryAgainButton.setVisibility(View.INVISIBLE);
+        tryAgainButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                countOfHandler = 0;
+                tryAgainButton.setVisibility(View.INVISIBLE);
                 findStartingPlayer();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
-        }).start();
+        });
+        findStartingPlayer();
     }
 
     @Override
@@ -85,33 +95,29 @@ public class StartingPlayerActivity extends AppCompatActivity {
     }
 
     private void findStartingPlayer() {
-        Player startingPlayer = new Random().nextBoolean() ? playerOne : playerTwo;
-
-        ImageView startingPlayerImageView = findViewById(R.id.startingPlayerDisplayImageView);
-        TextView startingTextView = findViewById(R.id.startingPlayerTextView);
-
-        for (int i = 0; i < 5; i++) {
-            Player player = i%2 == 0 ? playerOne : playerTwo;
-            if (player.getPlayerAvatar() != null && player.getPlayerAvatar().equalsIgnoreCase(""))
-                Glide.with(this).load(R.drawable.default_player_avatar).into(startingPlayerImageView);
-            else {
-                Bitmap imageMap = BitmapFactory.decodeFile(player.getPlayerAvatar());
-                Glide.with(this).load(imageMap).into(startingPlayerImageView);
+        Handler loadHandler = new Handler();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (countOfHandler > 10) {
+                    tryAgainButton.setVisibility(View.VISIBLE);
+                    return;
+                }
+                startingPlayer = new Random().nextBoolean() ? playerOne : playerTwo;
+                ImageView startingPlayerImageView = (ImageView) findViewById(R.id.startingPlayerDisplayImageView);
+                TextView startingTextView = (TextView) findViewById(R.id.startingPlayerTextView);
+                int width = PlayerUtils.getWidthforImageView(StartingPlayerActivity.this);
+                if (startingPlayer.getPlayerAvatar() != null && startingPlayer.getPlayerAvatar().equalsIgnoreCase(""))
+                    Glide.with(getApplicationContext()).load(R.drawable.default_player_avatar).override(width, width).into(startingPlayerImageView);
+                else {
+                    Bitmap imageMap = BitmapFactory.decodeFile(startingPlayer.getPlayerAvatar());
+                    Glide.with(getApplicationContext()).load(imageMap).override(width, width).into(startingPlayerImageView);
+                }
+                startingTextView.setText(startingPlayer.getPlayerName());
+                countOfHandler++;
+                loadHandler.postDelayed(this, 50);
             }
-            startingTextView.setText(player.getPlayerName());
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (startingPlayer.getPlayerAvatar() != null && startingPlayer.getPlayerAvatar().equalsIgnoreCase(""))
-            Glide.with(this).load(R.drawable.default_player_avatar).into(startingPlayerImageView);
-        else {
-            Bitmap imageMap = BitmapFactory.decodeFile(startingPlayer.getPlayerAvatar());
-            Glide.with(this).load(imageMap).into(startingPlayerImageView);
-        }
-        startingTextView.setText(startingPlayer.getPlayerName());
+        };
+        loadHandler.postDelayed(runnable, 20);
     }
 }

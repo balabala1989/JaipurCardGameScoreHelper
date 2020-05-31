@@ -10,6 +10,7 @@ import com.boardgames.jaipur.entities.Player;
 import com.boardgames.jaipur.ui.utils.ImagePickAndCrop;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.CheckForPermissionsState;
+import com.boardgames.jaipur.utils.PlayerUtils;
 import com.bumptech.glide.Glide;
 
 import android.content.DialogInterface;
@@ -246,11 +247,9 @@ public class PlayerActivity extends AppCompatActivity {
             imageMap = BitmapFactory.decodeFile(updatePlayer.getPlayerAvatar());
         }
 
-       Display display = getWindowManager().getDefaultDisplay();
-       Point size = new Point();
-       display.getSize(size);
-       int width = (size.x/2) < (size.y/2) ? size.x/2 : size.y/2;
-      Glide.with(this).load(imageMap).override(width, width).into(playerAvatarImageView);
+
+       int width = PlayerUtils.getWidthforImageView(this);
+       Glide.with(this).load(imageMap).override(width, width).into(playerAvatarImageView);
     }
 
 

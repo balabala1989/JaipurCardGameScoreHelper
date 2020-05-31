@@ -1,10 +1,13 @@
 package com.boardgames.jaipur.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.net.Uri;
+import android.view.Display;
 import android.widget.Toast;
 
 import androidx.lifecycle.AndroidViewModel;
@@ -102,5 +105,12 @@ public class PlayerUtils {
             }
         }
         return inSampleSize;
+    }
+
+    public static int getWidthforImageView(Activity activity) {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return (size.x/2) < (size.y/2) ? size.x/2 : size.y/2;
     }
 }
