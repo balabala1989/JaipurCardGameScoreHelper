@@ -12,7 +12,6 @@ import com.boardgames.jaipur.dao.PlayerDao;
 import com.boardgames.jaipur.entities.Player;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 
-import java.time.Instant;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -22,7 +21,7 @@ public abstract class PlayerRoomDatabase extends RoomDatabase {
     public abstract PlayerDao playerDao();
 
     private static volatile PlayerRoomDatabase INSTANCE;
-    public static final ExecutorService databaseWriterExecutor = Executors.newFixedThreadPool(ApplicationConstants.PLAYER_DATABASE_NUMBER_OF_EXECUTABLE_THREADS);
+    public static final ExecutorService databaseWriterExecutor = Executors.newFixedThreadPool(ApplicationConstants.NUMBER_OF_EXECUTABLE_THREADS_FOR_DATABASE);
     private static RoomDatabase.Callback playerRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {

@@ -3,11 +3,12 @@ package com.boardgames.jaipur.entities;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity(tableName = "rounds")
+@Entity(tableName = "rounds", indices = {@Index("game_id")})
 public class Round implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
@@ -59,9 +60,17 @@ public class Round implements Serializable {
     @ColumnInfo(name = "notes")
     private String notes;
 
+    @ColumnInfo(name = "winner")
+    private long winner;
+
+
     @NonNull
     @ColumnInfo(name = "time_created")
     private long timeCreated;
+
+    @NonNull
+    @ColumnInfo(name = "time_updated")
+    private long timeUpdated;
 
     public long getId() {
         return id;
@@ -181,5 +190,29 @@ public class Round implements Serializable {
 
     public void setTimeCreated(long timeCreated) {
         this.timeCreated = timeCreated;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public long getTimeUpdated() {
+        return timeUpdated;
+    }
+
+    public void setTimeUpdated(long timeUpdated) {
+        this.timeUpdated = timeUpdated;
+    }
+
+    public long getWinner() {
+        return winner;
+    }
+
+    public void setWinner(long winner) {
+        this.winner = winner;
     }
 }

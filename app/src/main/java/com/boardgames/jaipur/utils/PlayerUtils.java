@@ -49,7 +49,7 @@ public class PlayerUtils {
             }
             else if (androidViewModel instanceof NewGameViewModel) {
                 NewGameViewModel newGameViewModel = (NewGameViewModel) androidViewModel;
-                newGameViewModel.insert(newPlayer);
+                newGameViewModel.insertAPlayer(newPlayer);
             }
         } catch (IOException e) {
             e.printStackTrace();

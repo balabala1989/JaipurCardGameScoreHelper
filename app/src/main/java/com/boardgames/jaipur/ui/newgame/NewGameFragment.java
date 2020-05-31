@@ -49,6 +49,8 @@ public class NewGameFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
+        PlayerUtils.isPlayerOneSelected = false;
+        PlayerUtils.isPlayerTwoSelected = false;
         newGameViewModel = new ViewModelProvider(this).get(NewGameViewModel.class);
         root = inflater.inflate(R.layout.fragment_new_game, container, false);
 

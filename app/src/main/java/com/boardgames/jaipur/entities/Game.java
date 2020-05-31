@@ -3,11 +3,12 @@ package com.boardgames.jaipur.entities;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity(tableName = "games")
+@Entity(tableName = "games", indices = {@Index("status")})
 public class Game implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
@@ -137,5 +138,13 @@ public class Game implements Serializable {
 
     public void setTimeUpdated(long timeUpdated) {
         this.timeUpdated = timeUpdated;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }

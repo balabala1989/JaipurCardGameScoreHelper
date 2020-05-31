@@ -1,6 +1,7 @@
 package com.boardgames.jaipur.dao;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -12,10 +13,11 @@ import com.boardgames.jaipur.entities.Game;
 
 import java.util.List;
 
+@Dao
 public interface GameDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public void insertGame(Game game);
+    public long insertGame(Game game);
 
     @Update
     public void updateGame(Game game);
@@ -32,4 +34,7 @@ public interface GameDao {
     @Transaction
     @Query("DELETE FROM games")
     public void deleteAllGames();
+
+    @Query("SELECT * FROM games where status = 'P'")
+    public LiveData<List<Game>> getPendingGame();
 }

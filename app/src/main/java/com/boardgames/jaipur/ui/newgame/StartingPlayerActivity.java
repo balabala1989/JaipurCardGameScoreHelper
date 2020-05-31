@@ -2,7 +2,10 @@ package com.boardgames.jaipur.ui.newgame;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.boardgames.jaipur.R;
+import com.boardgames.jaipur.entities.Game;
 import com.boardgames.jaipur.entities.Player;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.PlayerUtils;
@@ -32,12 +35,15 @@ public class StartingPlayerActivity extends AppCompatActivity {
     private Player startingPlayer;
     private int countOfHandler = 0;
     private Button tryAgainButton;
+    private NewGameViewModel newGameViewModel;
+    private long gameId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_starting_player);
 
+        newGameViewModel = new ViewModelProvider(this).get(NewGameViewModel.class);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.string.color_activity_actionbar))));
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -82,6 +88,12 @@ public class StartingPlayerActivity extends AppCompatActivity {
             finish();
             return true;
         }
+       else if (item.getItemId() == R.id.startNewGameButton) {
+           if (playerOne == null || playerTwo == null)
+               handleException();
+           createAGame();
+           startGame();
+       }
 
        return super.onOptionsItemSelected(item);
     }
@@ -119,5 +131,18 @@ public class StartingPlayerActivity extends AppCompatActivity {
             }
         };
         loadHandler.postDelayed(runnable, 20);
+    }
+
+    private void createAGame() {
+        Game game = new Game();
+        game.setPlayerOneID(playerOne.getId());
+        game.setPlayerTwoID(playerTwo.getId());
+        game.setRoundsCompleted(0);
+        game.setGamePlayStatus("P");
+        gameId = newGameViewModel.createAGame(game);
+    }
+
+    private void startGame() {
+
     }
 }

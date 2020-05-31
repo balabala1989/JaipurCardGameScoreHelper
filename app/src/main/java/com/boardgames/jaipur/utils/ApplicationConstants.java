@@ -7,7 +7,7 @@ package com.boardgames.jaipur.utils;
             All the parameters passed between the activities or fragment/activity will start with 8xxx
          */
         //Database constants
-        public static final int PLAYER_DATABASE_NUMBER_OF_EXECUTABLE_THREADS = 4;
+        public static final int NUMBER_OF_EXECUTABLE_THREADS_FOR_DATABASE = 4;
 
 
         //PlayerManagementFragment constants
