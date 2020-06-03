@@ -11,6 +11,7 @@ import com.boardgames.jaipur.entities.Game;
 import com.boardgames.jaipur.entities.Round;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class GamesAndRoundsRepository {
 
@@ -27,7 +28,9 @@ public class GamesAndRoundsRepository {
 
     public LiveData<List<Game>> getAllGames() {return gameDao.getAllGames();}
 
-    public long insertGame(Game game) {return gameDao.insertGame(game);}
+    public long insertGame(Game game) {
+       return gameDao.insertGame(game);
+    }
 
     public void updateGame(Game game) {gameDao.updateGame(game);}
 

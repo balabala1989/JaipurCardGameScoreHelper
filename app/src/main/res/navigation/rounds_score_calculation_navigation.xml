@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rounds_score_calculation"
+    app:startDestination="@id/diamondRoundsCalculationFragment">
+
+    <fragment
+        android:id="@+id/diamondRoundsCalculationFragment"
+        android:name="com.boardgames.jaipur.ui.rounds.DiamondRoundsCalculationFragment"
+        android:label="@string/diamond_calculation_fragment_label"
+        tools:layout="@layout/fragment_diamond_rounds_calculation" >
+        <action
+            android:id="@+id/action_diamondRoundsCalculationFragment_to_goldRoundsCalculationFragment"
+            app:destination="@id/goldRoundsCalculationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/goldRoundsCalculationFragment"
+        android:name="com.boardgames.jaipur.ui.rounds.GoldRoundsCalculationFragment"
+        android:label="@string/gold_calculation_fragment_label"
+        tools:layout="@layout/fragment_gold_rounds_calculation" >
+        <action
+            android:id="@+id/action_goldRoundsCalculationFragment_to_diamondRoundsCalculationFragment"
+            app:destination="@id/diamondRoundsCalculationFragment" />
+    </fragment>
+</navigation>

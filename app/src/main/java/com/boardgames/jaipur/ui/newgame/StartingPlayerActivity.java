@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.entities.Game;
 import com.boardgames.jaipur.entities.Player;
+import com.boardgames.jaipur.ui.rounds.RoundsCalculationActivity;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.PlayerUtils;
 import com.bumptech.glide.Glide;
@@ -143,6 +144,9 @@ public class StartingPlayerActivity extends AppCompatActivity {
     }
 
     private void startGame() {
-
+        Intent startIntent = new Intent(StartingPlayerActivity.this, RoundsCalculationActivity.class);
+        startIntent.putExtra(ApplicationConstants.NEWGAMEFRAGMENT_TO_STARTINGPLAYERACTIVITY_PLAYERONE_DETAILS, playerOne);
+        startIntent.putExtra(ApplicationConstants.NEWGAMEFRAGMENT_TO_STARTINGPLAYERACTIVITY_PLAYERTWO_DETAILS, playerTwo);
+        startActivity(startIntent);
     }
 }
