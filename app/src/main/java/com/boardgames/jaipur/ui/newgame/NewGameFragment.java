@@ -5,6 +5,7 @@ import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,6 +32,7 @@ import com.boardgames.jaipur.entities.Player;
 import com.boardgames.jaipur.ui.playersmanagement.PlayerActivity;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.PlayerUtils;
+import com.boardgames.jaipur.utils.PlayersInAGame;
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -129,8 +131,18 @@ public class NewGameFragment extends Fragment {
                 return super.onOptionsItemSelected(item);
             }
             Intent startIntent = new Intent(getActivity(), StartingPlayerActivity.class);
-            startIntent.putExtra(ApplicationConstants.NEWGAMEFRAGMENT_TO_STARTINGPLAYERACTIVITY_PLAYERONE_DETAILS, playerOne);
-            startIntent.putExtra(ApplicationConstants.NEWGAMEFRAGMENT_TO_STARTINGPLAYERACTIVITY_PLAYERTWO_DETAILS, playerTwo);
+            PlayersInAGame playersInAGame = new PlayersInAGame(playerOne, playerTwo);
+
+            if (playerOne.getPlayerAvatar() != null && playerOne.getPlayerAvatar().equalsIgnoreCase(""))
+                playersInAGame.setPlayerOneProfile(PlayerUtils.getUriForDrawable(getContext(), R.drawable.default_player_avatar));
+            else
+                playersInAGame.setPlayerOneProfile(Uri.parse(playerOne.getPlayerAvatar()));
+
+            if (playerTwo.getPlayerAvatar() != null && playerTwo.getPlayerAvatar().equalsIgnoreCase(""))
+                playersInAGame.setPlayerTwoProfile(PlayerUtils.getUriForDrawable(getContext(), R.drawable.default_player_avatar));
+            else
+                playersInAGame.setPlayerTwoProfile(Uri.parse(playerOne.getPlayerAvatar()));
+            startIntent.putExtra(ApplicationConstants.NEWGAMEFRAGMENT_TO_STARTINGPLAYERACTIVITY_PLAYERS_IN_A_GAME, playersInAGame);
             startActivity(startIntent);
         }
         return super.onOptionsItemSelected(item);

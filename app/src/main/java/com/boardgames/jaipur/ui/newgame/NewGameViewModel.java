@@ -1,6 +1,8 @@
 package com.boardgames.jaipur.ui.newgame;
 
 import android.app.Application;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -14,8 +16,6 @@ import com.boardgames.jaipur.repository.PlayerRepository;
 import java.util.List;
 
 public class NewGameViewModel extends AndroidViewModel {
-
-    private MutableLiveData<String> mText;
 
     private PlayerRepository playerRepository;
 
@@ -35,5 +35,11 @@ public class NewGameViewModel extends AndroidViewModel {
         return playerRepository.insert(player);
     }
 
-    public long createAGame(Game game) {return gamesAndRoundsRepository.insertGame(game);}
+    public long createAGame(Game game) {
+        return gamesAndRoundsRepository.insertGame(game);
+    }
+
+    public void deleteAGame(Game game) {
+        gamesAndRoundsRepository.deleteGame(game);
+    }
 }

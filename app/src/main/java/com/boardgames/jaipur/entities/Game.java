@@ -1,5 +1,8 @@
 package com.boardgames.jaipur.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -9,7 +12,7 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 
 @Entity(tableName = "games", indices = {@Index("status")})
-public class Game implements Serializable {
+public class Game implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -147,4 +150,55 @@ public class Game implements Serializable {
     public void setNotes(String notes) {
         this.notes = notes;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeLong(this.playerOneID);
+        dest.writeLong(this.playerTwoID);
+        dest.writeInt(this.roundsCompleted);
+        dest.writeString(this.playerOneScores);
+        dest.writeString(this.playerTwoScores);
+        dest.writeLong(this.winner);
+        dest.writeString(this.gamePlayStatus);
+        dest.writeString(this.gamePhotoLocation);
+        dest.writeString(this.notes);
+        dest.writeLong(this.timeCreated);
+        dest.writeLong(this.timeUpdated);
+    }
+
+    public Game() {
+    }
+
+    protected Game(Parcel in) {
+        this.id = in.readLong();
+        this.playerOneID = in.readLong();
+        this.playerTwoID = in.readLong();
+        this.roundsCompleted = in.readInt();
+        this.playerOneScores = in.readString();
+        this.playerTwoScores = in.readString();
+        this.winner = in.readLong();
+        this.gamePlayStatus = in.readString();
+        this.gamePhotoLocation = in.readString();
+        this.notes = in.readString();
+        this.timeCreated = in.readLong();
+        this.timeUpdated = in.readLong();
+    }
+
+    public static final Parcelable.Creator<Game> CREATOR = new Parcelable.Creator<Game>() {
+        @Override
+        public Game createFromParcel(Parcel source) {
+            return new Game(source);
+        }
+
+        @Override
+        public Game[] newArray(int size) {
+            return new Game[size];
+        }
+    };
 }

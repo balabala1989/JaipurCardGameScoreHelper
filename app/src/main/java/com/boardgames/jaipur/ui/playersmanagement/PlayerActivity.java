@@ -18,15 +18,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,7 +39,7 @@ public class PlayerActivity extends AppCompatActivity {
     private Player updatePlayer;
     private boolean isProfileImageChanged = false;
     private boolean isDeleteConfirmed;
-    AlertDialog dialog;
+    private AlertDialog dialog;
 
     //TODO for update profile give option to remove the profile and keep default value
     @Override
@@ -234,7 +231,7 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
    private void handleUpdatePlayerRequest(Intent receivedIntent) {
-       updatePlayer = (Player) receivedIntent.getSerializableExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS);
+       updatePlayer = receivedIntent.getParcelableExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS);
        ImageView playerAvatarImageView = (ImageView) findViewById(R.id.playerAvatarImageView);
        EditText playerNameEditText = (EditText) findViewById(R.id.playerNameEditText);
        Bitmap imageMap;
@@ -248,7 +245,7 @@ public class PlayerActivity extends AppCompatActivity {
         }
 
 
-       int width = PlayerUtils.getWidthforImageView(this);
+       int width = PlayerUtils.getWidthforImageViewByHalf(this);
        Glide.with(this).load(imageMap).override(width, width).into(playerAvatarImageView);
     }
 

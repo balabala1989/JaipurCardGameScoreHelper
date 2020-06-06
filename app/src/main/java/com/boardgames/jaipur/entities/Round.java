@@ -1,5 +1,8 @@
 package com.boardgames.jaipur.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -9,7 +12,7 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 
 @Entity(tableName = "rounds", indices = {@Index("game_id")})
-public class Round implements Serializable {
+public class Round implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -215,4 +218,67 @@ public class Round implements Serializable {
     public void setWinner(long winner) {
         this.winner = winner;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeLong(this.gameID);
+        dest.writeLong(this.playerID);
+        dest.writeInt(this.roundNumber);
+        dest.writeInt(this.score);
+        dest.writeString(this.diamondCount);
+        dest.writeString(this.goldCount);
+        dest.writeString(this.silverCount);
+        dest.writeString(this.silkCount);
+        dest.writeString(this.spiceCount);
+        dest.writeString(this.leatherCount);
+        dest.writeString(this.sealOfExcellence);
+        dest.writeString(this.camelCount);
+        dest.writeString(this.photoPath);
+        dest.writeString(this.notes);
+        dest.writeLong(this.winner);
+        dest.writeLong(this.timeCreated);
+        dest.writeLong(this.timeUpdated);
+    }
+
+    public Round() {
+    }
+
+    protected Round(Parcel in) {
+        this.id = in.readLong();
+        this.gameID = in.readLong();
+        this.playerID = in.readLong();
+        this.roundNumber = in.readInt();
+        this.score = in.readInt();
+        this.diamondCount = in.readString();
+        this.goldCount = in.readString();
+        this.silverCount = in.readString();
+        this.silkCount = in.readString();
+        this.spiceCount = in.readString();
+        this.leatherCount = in.readString();
+        this.sealOfExcellence = in.readString();
+        this.camelCount = in.readString();
+        this.photoPath = in.readString();
+        this.notes = in.readString();
+        this.winner = in.readLong();
+        this.timeCreated = in.readLong();
+        this.timeUpdated = in.readLong();
+    }
+
+    public static final Parcelable.Creator<Round> CREATOR = new Parcelable.Creator<Round>() {
+        @Override
+        public Round createFromParcel(Parcel source) {
+            return new Round(source);
+        }
+
+        @Override
+        public Round[] newArray(int size) {
+            return new Round[size];
+        }
+    };
 }

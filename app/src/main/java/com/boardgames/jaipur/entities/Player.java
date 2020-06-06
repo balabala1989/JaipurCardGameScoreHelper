@@ -1,5 +1,8 @@
 package com.boardgames.jaipur.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -8,7 +11,7 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 
 @Entity(tableName = "players")
-public class Player implements Serializable {
+public class Player implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -71,4 +74,41 @@ public class Player implements Serializable {
     public void setPlayerAvatar(String playerAvatar) {
         this.playerAvatar = playerAvatar;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeString(this.playerName);
+        dest.writeString(this.playerAvatar);
+        dest.writeLong(this.timeCreated);
+        dest.writeLong(this.timeUpdated);
+    }
+
+    public Player() {
+    }
+
+    protected Player(Parcel in) {
+        this.id = in.readLong();
+        this.playerName = in.readString();
+        this.playerAvatar = in.readString();
+        this.timeCreated = in.readLong();
+        this.timeUpdated = in.readLong();
+    }
+
+    public static final Parcelable.Creator<Player> CREATOR = new Parcelable.Creator<Player>() {
+        @Override
+        public Player createFromParcel(Parcel source) {
+            return new Player(source);
+        }
+
+        @Override
+        public Player[] newArray(int size) {
+            return new Player[size];
+        }
+    };
 }

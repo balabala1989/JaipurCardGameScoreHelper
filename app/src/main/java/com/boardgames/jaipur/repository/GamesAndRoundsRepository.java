@@ -1,6 +1,7 @@
 package com.boardgames.jaipur.repository;
 
 import android.app.Application;
+import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
@@ -11,12 +12,15 @@ import com.boardgames.jaipur.entities.Game;
 import com.boardgames.jaipur.entities.Round;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.Semaphore;
 
 public class GamesAndRoundsRepository {
 
     private GameDao gameDao;
     private RoundDao roundDao;
+    private Semaphore semaphore;
+    private long gameId = -1;
+    private long roundId = -1;
 
     public GamesAndRoundsRepository(Application application) {
         GamesRoomDatabase gamesRoomDatabase = GamesRoomDatabase.getDabase(application);
@@ -29,12 +33,28 @@ public class GamesAndRoundsRepository {
     public LiveData<List<Game>> getAllGames() {return gameDao.getAllGames();}
 
     public long insertGame(Game game) {
-       return gameDao.insertGame(game);
+        semaphore = new Semaphore(0);
+        new GameInsertAsyncTask().execute(game);
+        try {
+            semaphore.acquire();
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+       return gameId;
     }
 
-    public void updateGame(Game game) {gameDao.updateGame(game);}
+    public void updateGame(Game game) {
+        GamesRoomDatabase.databaseWriterExecutor.execute(() -> {
+            gameDao.updateGame(game);
+        });
+    }
 
-    public void deleteGame(Game game) {gameDao.deleteGame(game);}
+    public void deleteGame(Game game) {
+        GamesRoomDatabase.databaseWriterExecutor.execute(() -> {
+            gameDao.deleteGame(game);
+        });
+    }
 
     public LiveData<Game> getAGame(long gameId) {return gameDao.getAGame(gameId);}
 
@@ -44,14 +64,53 @@ public class GamesAndRoundsRepository {
 
     public LiveData<List<Round>> getAllRounds() {return roundDao.getAllRounds();}
 
-    public long insertRound(Round round) {return roundDao.insertRound(round);}
+    public long insertRound(Round round) {
+        semaphore = new Semaphore(0);
+        new RoundInsertAsyncTask().execute(round);
+        try {
+            semaphore.acquire();
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return roundId;
+    }
 
-    public void updateRound(Round round) {roundDao.updateRound(round);}
+    public void updateRound(Round round) {
+        GamesRoomDatabase.databaseWriterExecutor.execute(() -> {
+            roundDao.updateRound(round);
+        });
+    }
 
-    public void deleteRound(Round round) {roundDao.deleteRound(round);}
+    public void deleteRound(Round round) {
+        GamesRoomDatabase.databaseWriterExecutor.execute(() -> {
+            roundDao.deleteRound(round);
+        });
+    }
 
     public LiveData<Round> getARound(long roundId) {return roundDao.getARound(roundId);}
 
     public LiveData<List<Round>> getRoundsForAGame(long gameId) {return roundDao.getRoundsForAGame(gameId);}
+
+
+    private class GameInsertAsyncTask extends AsyncTask<Game, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Game... games) {
+            gameId = gameDao.insertGame(games[0]);
+            semaphore.release();
+            return null;
+        }
+    }
+
+    private class RoundInsertAsyncTask extends AsyncTask<Round, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Round... rounds) {
+            roundId = roundDao.insertRound(rounds[0]);
+            semaphore.release();
+            return null;
+        }
+    }
 
 }

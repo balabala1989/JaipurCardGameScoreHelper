@@ -34,6 +34,11 @@ package com.boardgames.jaipur.utils;
         public static final String PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_URI_PATH_REPLY = "com.boardgames.jaipur.ui.utils.imagepickandcrop.URI_PATH";
 
         //NewGameFragement constants
-        public  static final String NEWGAMEFRAGMENT_TO_STARTINGPLAYERACTIVITY_PLAYERONE_DETAILS = "com.boardgames.jaipur.ui.newgame.newgamefragment.PLAYER_ONE_DETAILS";
-        public  static final String NEWGAMEFRAGMENT_TO_STARTINGPLAYERACTIVITY_PLAYERTWO_DETAILS = "com.boardgames.jaipur.ui.newgame.newgamefragment.PLAYER_TWO_DETAILS";
+        public static final String NEWGAMEFRAGMENT_TO_STARTINGPLAYERACTIVITY_PLAYERONE_DETAILS = "com.boardgames.jaipur.ui.newgame.newgamefragment.PLAYER_ONE_DETAILS";
+        public static final String NEWGAMEFRAGMENT_TO_STARTINGPLAYERACTIVITY_PLAYERTWO_DETAILS = "com.boardgames.jaipur.ui.newgame.newgamefragment.PLAYER_TWO_DETAILS";
+        public static final String NEWGAMEFRAGMENT_TO_STARTINGPLAYERACTIVITY_PLAYERS_IN_A_GAME = "com.boardgames.jaipur.ui.newgame.newgamefragment.PLAYERS_IN_A_GAME";
+
+        //StartingPlayerActivity constants
+        public static final String STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME = "com.boardgames.jaipur.ui.newgame.startingplayeractivity.GAMEDETAILS";
+        public static final int GAMESUMMARYACTIVITY_ROUNDCALCACTIVITY_REQUEST_CODE = 8004;
 }

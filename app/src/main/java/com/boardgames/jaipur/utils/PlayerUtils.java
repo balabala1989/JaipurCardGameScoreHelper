@@ -1,6 +1,7 @@
 package com.boardgames.jaipur.utils;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -107,10 +108,25 @@ public class PlayerUtils {
         return inSampleSize;
     }
 
-    public static int getWidthforImageView(Activity activity) {
+    public static int getWidthforImageViewByHalf(Activity activity) {
         Display display = activity.getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         return (size.x/2) < (size.y/2) ? size.x/2 : size.y/2;
+    }
+
+    public static int getWidthforImageViewByOneThird(Activity activity) {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return (size.x/3) < (size.y/3) ? size.x/3 : size.y/3;
+    }
+
+    public static Uri getUriForDrawable(Context context, int drawableId) {
+        Uri imageUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
+                "://" + context.getResources().getResourcePackageName(drawableId)
+                + '/' + context.getResources().getResourceTypeName(drawableId)
+                + '/' + context.getResources().getResourceEntryName(drawableId) );
+        return imageUri;
     }
 }

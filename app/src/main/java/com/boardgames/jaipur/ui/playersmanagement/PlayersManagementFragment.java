@@ -101,7 +101,7 @@ public class PlayersManagementFragment extends Fragment {
 
     //TODO Need to call clearcache once the image is saved in intented location
     private void handleResultOKResponseForDeletePlayer(Intent dataIntent) {
-        Player player = (Player) dataIntent.getSerializableExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS);
+        Player player = dataIntent.getParcelableExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS);
 
         if (player == null){
             Toast.makeText(getContext(), R.string.error_player_not_added, Toast.LENGTH_LONG).show();
@@ -122,7 +122,7 @@ public class PlayersManagementFragment extends Fragment {
 
     private void handleResultOKResponseForUpdatePlayer(Intent dataIntent) {
         boolean isProfileChanged = dataIntent.getBooleanExtra(ApplicationConstants.PLAYERACTIVITY_UPDATE_OPERATION_PROFILE_IMAGE_CHANGED, false);
-        Player player = (Player) dataIntent.getSerializableExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS);
+        Player player = dataIntent.getParcelableExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS);
 
         if (isProfileChanged) {
             Uri uri = dataIntent.getParcelableExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PROFILE_IMAGE_URI_REPLY);
