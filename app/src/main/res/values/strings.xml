@@ -65,6 +65,7 @@
     <string name="imageview_content_description_text_for_player">Player Profile</string>
     <string name="imageview_content_description_text_for_coins">Coins</string>
     <string name="round_calc_description">Drag &amp; Drop the coins to the player to add it\nClick the player to remove the coins</string>
+    <string name="drag_drop_error">Unsuccessful drop!!! Try dropping it again.</string>
 
     <string name="gamesummary_roundone_title">Round 1</string>
     <string name="gamesummary_roundtwo_title">Round 2</string>

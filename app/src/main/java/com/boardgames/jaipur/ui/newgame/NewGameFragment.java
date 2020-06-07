@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -36,6 +37,7 @@ import com.boardgames.jaipur.utils.PlayersInAGame;
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.File;
 import java.util.List;
 
 public class NewGameFragment extends Fragment {
@@ -135,13 +137,15 @@ public class NewGameFragment extends Fragment {
 
             if (playerOne.getPlayerAvatar() != null && playerOne.getPlayerAvatar().equalsIgnoreCase(""))
                 playersInAGame.setPlayerOneProfile(PlayerUtils.getUriForDrawable(getContext(), R.drawable.default_player_avatar));
-            else
-                playersInAGame.setPlayerOneProfile(Uri.parse(playerOne.getPlayerAvatar()));
+            else {
+                playersInAGame.setPlayerOneProfile(Uri.fromFile(new File(playerOne.getPlayerAvatar())));
+            }
 
             if (playerTwo.getPlayerAvatar() != null && playerTwo.getPlayerAvatar().equalsIgnoreCase(""))
                 playersInAGame.setPlayerTwoProfile(PlayerUtils.getUriForDrawable(getContext(), R.drawable.default_player_avatar));
-            else
-                playersInAGame.setPlayerTwoProfile(Uri.parse(playerOne.getPlayerAvatar()));
+            else {
+                playersInAGame.setPlayerTwoProfile(Uri.fromFile(new File(playerTwo.getPlayerAvatar())));
+            }
             startIntent.putExtra(ApplicationConstants.NEWGAMEFRAGMENT_TO_STARTINGPLAYERACTIVITY_PLAYERS_IN_A_GAME, playersInAGame);
             startActivity(startIntent);
         }
