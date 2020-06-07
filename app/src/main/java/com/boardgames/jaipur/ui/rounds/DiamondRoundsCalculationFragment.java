@@ -1,5 +1,6 @@
 package com.boardgames.jaipur.ui.rounds;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.boardgames.jaipur.R;
+import com.boardgames.jaipur.utils.GameUtils;
 
 
 public class DiamondRoundsCalculationFragment extends Fragment {
@@ -22,10 +24,15 @@ public class DiamondRoundsCalculationFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_diamond_rounds_calculation, container, false);
 
+
+        RoundsCalculationActivity mainActivity = (RoundsCalculationActivity) getActivity();
+
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.string.color_activity_actionbar))));
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(getString(R.string.diamond_calculation_fragment_label));
+        actionBar.setTitle(mainActivity.getRoundTitle() + getString(R.string.diamond_calculation_fragment_label));
+
+        GameUtils.loadPlayerDetailsInDisplay(DiamondRoundsCalculationFragment.this, root, mainActivity.getGameDetails());
         return root;
     }
 }

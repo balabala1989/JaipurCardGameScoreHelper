@@ -41,4 +41,5 @@ package com.boardgames.jaipur.utils;
         //StartingPlayerActivity constants
         public static final String STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME = "com.boardgames.jaipur.ui.newgame.startingplayeractivity.GAMEDETAILS";
         public static final int GAMESUMMARYACTIVITY_ROUNDCALCACTIVITY_REQUEST_CODE = 8004;
+        public static final String HYPEN = " - ";
 }
