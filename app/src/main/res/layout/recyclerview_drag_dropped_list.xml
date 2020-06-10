@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/deleteItemsRelativeLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/playerImageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/imageview_content_description_text_for_player"
+        app:srcCompat="@drawable/default_player_avatar" />
+
+    <ImageView
+        android:id="@+id/draggedItemImageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@id/playerImageView"
+        android:layout_toRightOf="@id/playerImageView"
+        android:contentDescription="@string/imageview_content_description_text_for_coins"
+        app:srcCompat="@drawable/default_player_avatar" />
+
+    <TextView
+        android:id="@+id/playerNameTextView"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/playerImageView"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/biorhyme"
+        android:gravity="center"
+        android:textColor="#04289E"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/deleteItemImageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_toEndOf="@id/draggedItemImageView"
+        android:layout_toRightOf="@id/draggedItemImageView"
+        android:contentDescription="@string/imageview_content_description_text_for_coins"
+        app:srcCompat="@drawable/delete_item"
+        tools:visibility="invisible" />
+</RelativeLayout>

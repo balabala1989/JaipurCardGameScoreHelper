@@ -37,6 +37,7 @@
     <string name="imageview_add_player_gallery">Choose from Gallery</string>
     <string name="alertdialog_title_add_profile_photo">Add Profile Photo</string>
     <string name="button_cancel">Cancel</string>
+    <string name="button_close">Close</string>
     <string name="image_picker_issue">Error!! Unable to set profile picture...</string>
     <string name="player_update_issue">Error!! Unable to update the player profile now...</string>
     <string name="edittext_playername_error">Player Name cannot be blank</string>
@@ -75,6 +76,8 @@
     <string name="reset_button_text">Reset</string>
     <string name="rematch_button_text">Rematch</string>
     <string name="save_button_text">Save</string>
+    <string name="empty_dragged_item_data">No items drag and dropped yet!!!</string>
+    <string name="alert_title_for_dropped_items">Drag and Dropped Coins</string>
 
 
 </resources>

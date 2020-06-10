@@ -42,4 +42,8 @@ package com.boardgames.jaipur.utils;
         public static final String STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME = "com.boardgames.jaipur.ui.newgame.startingplayeractivity.GAMEDETAILS";
         public static final int GAMESUMMARYACTIVITY_ROUNDCALCACTIVITY_REQUEST_CODE = 8004;
         public static final String HYPEN = " - ";
+        public static final String SEPARATOR_OF_VIEWS = "~";
+
+        public static final String ROUNDS_CALC_DIAMOND_GOODS = "DIAMONDS";
+
 }

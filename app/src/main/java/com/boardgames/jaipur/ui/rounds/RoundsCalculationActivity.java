@@ -1,17 +1,26 @@
 package com.boardgames.jaipur.ui.rounds;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.boardgames.jaipur.R;
+import com.boardgames.jaipur.ui.newgame.DraggedItemsListViewModel;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.GameDetails;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+
+import java.util.HashMap;
 
 public class RoundsCalculationActivity extends AppCompatActivity {
 
     private GameDetails gameDetails;
     private String roundTitle;
+    private HashMap<String, HashMap<Long, Integer>> goodsToPlayersScore;
+    private HashMap<Long, Uri> playerToProfileUri;
+    private DraggedItemsListViewModel draggedItemsListViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +33,14 @@ public class RoundsCalculationActivity extends AppCompatActivity {
 
         gameDetails = receivedIntent.getParcelableExtra(ApplicationConstants.STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME);
         roundTitle = computeRoundTitle();
+
+        playerToProfileUri = new HashMap<>();
+        playerToProfileUri.put(gameDetails.getPlayersInAGame().getPlayerOne().getId(), gameDetails.getPlayersInAGame().getPlayerOneProfile());
+        playerToProfileUri.put(gameDetails.getPlayersInAGame().getPlayerTwo().getId(), gameDetails.getPlayersInAGame().getPlayerTwoProfile());
+       draggedItemsListViewModel = new ViewModelProvider(this).get(DraggedItemsListViewModel.class);
     }
 
-    private void handleException() {
+    public void handleException() {
         Intent replyIntent = new Intent();
         setResult(RESULT_CANCELED, replyIntent);
         finish();
@@ -59,5 +73,29 @@ public class RoundsCalculationActivity extends AppCompatActivity {
 
     public void setRoundTitle(String roundTitle) {
         this.roundTitle = roundTitle;
+    }
+
+    public HashMap<String, HashMap<Long, Integer>> getGoodsToPlayersScore() {
+        return goodsToPlayersScore;
+    }
+
+    public void setGoodsToPlayersScore(HashMap<String, HashMap<Long, Integer>> goodsToPlayersScore) {
+        this.goodsToPlayersScore = goodsToPlayersScore;
+    }
+
+    public HashMap<Long, Uri> getPlayerToProfileUri() {
+        return playerToProfileUri;
+    }
+
+    public void setPlayerToProfileUri(HashMap<Long, Uri> playerToProfileUri) {
+        this.playerToProfileUri = playerToProfileUri;
+    }
+
+    public DraggedItemsListViewModel getDraggedItemsListViewModel() {
+        return draggedItemsListViewModel;
+    }
+
+    public void setDraggedItemsListViewModel(DraggedItemsListViewModel draggedItemsListViewModel) {
+        this.draggedItemsListViewModel = draggedItemsListViewModel;
     }
 }

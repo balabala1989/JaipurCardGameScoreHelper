@@ -54,7 +54,7 @@ public class PlayerListAdapater extends RecyclerView.Adapter<RecyclerView.ViewHo
     private boolean isPermissionGranted;
     private Fragment parentFragment;
     public static final int EMPTY_VIEW = 10;
-    private boolean isFloatinButtonVisible = true;
+    private boolean isFloatingButtonVisible = true;
     private View rootView;
 
     public PlayerListAdapater(Fragment fragment, View rootView) {
@@ -85,10 +85,10 @@ public class PlayerListAdapater extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof PlayerViewHolder) {
             if (playersList != null) {
-               if (!isFloatinButtonVisible) {
+               if (!isFloatingButtonVisible) {
                     FloatingActionButton addFloatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.addPlayerButton);
                     addFloatingActionButton.setVisibility(View.VISIBLE);
-                    isFloatinButtonVisible = true;
+                    isFloatingButtonVisible = true;
                 }
                 PlayerViewHolder viewHolder = (PlayerViewHolder) holder;
                 Player player = playersList.get(position);
@@ -123,10 +123,10 @@ public class PlayerListAdapater extends RecyclerView.Adapter<RecyclerView.ViewHo
         else if (holder instanceof EmptyPlayerViewHolder) {
             EmptyPlayerViewHolder viewHolder = (EmptyPlayerViewHolder) holder;
             Glide.with(contextObj).load(R.drawable.add_player_icon).into(viewHolder.emptyPlayerImageView);
-            if (isFloatinButtonVisible) {
+            if (isFloatingButtonVisible) {
                 FloatingActionButton addFloatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.addPlayerButton);
                 addFloatingActionButton.setVisibility(View.INVISIBLE);
-                isFloatinButtonVisible = false;
+                isFloatingButtonVisible = false;
             }
 
             viewHolder.emptyPlayerImageView.setOnClickListener(new View.OnClickListener() {

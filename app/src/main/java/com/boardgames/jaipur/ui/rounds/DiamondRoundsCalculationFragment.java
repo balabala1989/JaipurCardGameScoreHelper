@@ -1,16 +1,16 @@
 package com.boardgames.jaipur.ui.rounds;
 
 import android.content.ClipData;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -21,8 +21,14 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.boardgames.jaipur.R;
+import com.boardgames.jaipur.ui.newgame.DraggedItemsListViewModel;
+import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.GameUtils;
 import com.boardgames.jaipur.utils.ImageDragShadowBuilder;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 
 public class DiamondRoundsCalculationFragment extends Fragment implements View.OnDragListener, View.OnTouchListener {
@@ -31,14 +37,25 @@ public class DiamondRoundsCalculationFragment extends Fragment implements View.O
     private ImageView playerOneImageView;
     private ImageView playerTwoImageView;
     private ImageView diamondsImageView;
+    private int[] dragShadowResources = {R.drawable.a1_2_diamonds_77_drag_shadow,
+            R.drawable.a1_4_diamonds_5_drag_shadow,
+            R.drawable.a1_4_diamonds_5_drag_shadow,
+            R.drawable.a1_4_diamonds_5_drag_shadow};
+    private int[] displayImageViewResources = {R.drawable.a1_3_diamonds_555_imageview,
+            R.drawable.a1_5_diamonds_55_imageview,
+            R.drawable.a1_4_diamonds_5_drag_shadow,
+            -1};
+    private ArrayList<String> dragAndDropOrder;
 
+
+    private RoundsCalculationActivity mainActivity;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_diamond_rounds_calculation, container, false);
 
 
-        RoundsCalculationActivity mainActivity = (RoundsCalculationActivity) getActivity();
+        mainActivity = (RoundsCalculationActivity) getActivity();
 
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.string.color_activity_actionbar))));
@@ -54,6 +71,23 @@ public class DiamondRoundsCalculationFragment extends Fragment implements View.O
         diamondsImageView.setOnTouchListener(this);
         playerOneImageView.setOnDragListener(this);
         playerTwoImageView.setOnDragListener(this);
+
+        dragAndDropOrder = new ArrayList<>();
+
+
+        playerOneImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleProfileImageClick();
+            }
+        });
+
+        playerTwoImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleProfileImageClick();
+            }
+        });
 
         return root;
     }
@@ -79,16 +113,35 @@ public class DiamondRoundsCalculationFragment extends Fragment implements View.O
             }
 
             case DragEvent.ACTION_DROP: {
-                Toast.makeText(getContext(),"Dropped", Toast.LENGTH_SHORT).show();
+                String playerName;
+                long playerId;
+                if (v.getId() == playerOneImageView.getId()) {
+                    playerName = mainActivity.getGameDetails().getPlayersInAGame().getPlayerOne().getPlayerName();
+                    playerId = mainActivity.getGameDetails().getPlayersInAGame().getPlayerOne().getId();
+                }
+                else {
+                    playerName = mainActivity.getGameDetails().getPlayersInAGame().getPlayerTwo().getPlayerName();
+                    playerId = mainActivity.getGameDetails().getPlayersInAGame().getPlayerTwo().getId();
+                }
+                GameUtils.computeScoreForDraggedItem(getActivity(),
+                        playerId,
+                        dragShadowResources[trackCoinsUsed],
+                        playerName,
+                        ApplicationConstants.ROUNDS_CALC_DIAMOND_GOODS,
+                        dragAndDropOrder);
+
+                if (displayImageViewResources[trackCoinsUsed] == -1)
+                    diamondsImageView.setVisibility(View.INVISIBLE);
+                else
+                    diamondsImageView.setImageResource(displayImageViewResources[trackCoinsUsed]);
+
+                trackCoinsUsed++;
                 v.invalidate();
                 return true;
             }
 
             case DragEvent.ACTION_DRAG_ENDED: {
-                if (event.getResult()) {
-                    diamondsImageView.setImageResource(R.drawable.diamonds_7_over);
-                }
-                else {
+                if (!event.getResult()) {
                     Toast.makeText(getContext(), getContext().getString(R.string.drag_drop_error), Toast.LENGTH_SHORT).show();
                 }
                 ((ImageView) v).setBackgroundResource(R.drawable.image_border);
@@ -105,10 +158,21 @@ public class DiamondRoundsCalculationFragment extends Fragment implements View.O
 
         ClipData data = ClipData.newPlainText("", "");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            v.startDragAndDrop(data, ImageDragShadowBuilder.fromResource(getContext(), R.drawable.diamonds_77_only), null, 0);
+            v.startDragAndDrop(data, ImageDragShadowBuilder.fromResource(getContext(), dragShadowResources[trackCoinsUsed]), null, 0);
         } else {
-            v.startDrag(data, ImageDragShadowBuilder.fromResource(getContext(), R.drawable.diamonds_77_only), null, 0);
+            v.startDrag(data, ImageDragShadowBuilder.fromResource(getContext(), dragShadowResources[trackCoinsUsed]), null, 0);
         }
         return false;
+    }
+
+    private void handleProfileImageClick() {
+        GameUtils.displayDraggedItemsForRemoval(getActivity(), getContext(),
+                DiamondRoundsCalculationFragment.this, dragAndDropOrder, ApplicationConstants.ROUNDS_CALC_DIAMOND_GOODS);
+       /* trackCoinsUsed = dragAndDropOrder.size();
+
+        if (trackCoinsUsed == 0)
+            diamondsImageView.setImageResource(R.drawable.a1_1_diamonds_full_imageview);
+        else
+            diamondsImageView.setImageResource(displayImageViewResources[trackCoinsUsed]);*/
     }
 }

@@ -61,7 +61,7 @@ public class PlayersManagementFragment extends Fragment {
         final PlayerListAdapater adapater = new PlayerListAdapater(this, root);
         playerRecyclerView.setAdapter(adapater);
         playerRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_GRIDLAYOUT_NUMBER_OF_COLUMNS));
-        playersManagementViewModel.getAllPlayers().observe(this, new Observer<List<Player>>() {
+        playersManagementViewModel.getAllPlayers().observe(getViewLifecycleOwner(), new Observer<List<Player>>() {
             @Override
             public void onChanged(List<Player> players) {
                 adapater.setPlayersList(players);
