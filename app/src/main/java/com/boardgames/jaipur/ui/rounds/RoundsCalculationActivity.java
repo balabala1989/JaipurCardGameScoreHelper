@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.boardgames.jaipur.R;
-import com.boardgames.jaipur.ui.newgame.DraggedItemsListViewModel;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.GameDetails;
 

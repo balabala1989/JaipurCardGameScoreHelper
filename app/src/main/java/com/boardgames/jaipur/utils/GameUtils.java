@@ -1,42 +1,36 @@
 package com.boardgames.jaipur.utils;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.adapter.DraggedItemListAdapter;
-import com.boardgames.jaipur.ui.newgame.DraggedItemsListViewModel;
+import com.boardgames.jaipur.ui.rounds.DraggedItemsListViewModel;
+import com.boardgames.jaipur.ui.rounds.DiamondRoundsCalculationFragment;
 import com.boardgames.jaipur.ui.rounds.RoundsCalculationActivity;
 import com.bumptech.glide.Glide;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class GameUtils {
 
     //Holds the value of the coins for the dragshadow used in Round Calculation
     public static final HashMap<Integer, Integer> dragShadowResourceToValue;
-    private static AlertDialog alertDialog;
+    private static MaterialStyledDialog dialog;
 
 
     static  {
@@ -93,15 +87,27 @@ public class GameUtils {
     }
 
     public static void displayDraggedItemsForRemoval(Activity activity, Context context, Fragment parentFragment, ArrayList<String> dragAndDropOrder, String goodsInDisplay) {
+
+
         DraggedItemsListViewModel draggedItemsListViewModel = ((RoundsCalculationActivity) activity).getDraggedItemsListViewModel();
         draggedItemsListViewModel.setDragAndDroppedOrder(dragAndDropOrder);
         View dialogView = LayoutInflater.from(context).inflate(R.layout.layout_remove_dragged_item_alertdialog, null);
-        RecyclerView draggedListView = dialogView.findViewById(R.id.playersRecyclerView);
+        RecyclerView draggedListView = dialogView.findViewById(R.id.draggedItemsRecyclerView);
         final DraggedItemListAdapter listAdapter = new DraggedItemListAdapter(activity, context, dialogView, draggedItemsListViewModel, goodsInDisplay);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         draggedListView.setAdapter(listAdapter);
-        draggedListView.setLayoutManager(linearLayoutManager);
+        draggedListView.setLayoutManager( new LinearLayoutManager(context));
+
+        MaterialStyledDialog.Builder builder = new MaterialStyledDialog.Builder(context);
+        builder.setTitle(R.string.alert_title_for_dropped_items);
+        builder.setCustomView(dialogView, 0, 0, 0, 0);
+        builder.setScrollable(Boolean.TRUE);
+        builder.setCancelable(Boolean.FALSE);
+        builder.setHeaderColor(R.color.defaultColor);
+        builder.setIcon(R.drawable.delete_item);
+        dialog = builder.build();
+
+
+
 
         draggedItemsListViewModel.getDraggedItemList().observe(parentFragment, new Observer<ArrayList<String>>() {
             @Override
@@ -112,19 +118,20 @@ public class GameUtils {
             }
         });
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(context.getString(R.string.alert_title_for_dropped_items));
-        builder.setView(dialogView);
-        alertDialog = builder.create();
-
-        Button closeButton = (Button) dialogView.findViewById(R.id.closeButton);
+       Button closeButton = (Button) dialogView.findViewById(R.id.closeButton);
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertDialog.dismiss();
+               if (parentFragment instanceof DiamondRoundsCalculationFragment)
+                   ((DiamondRoundsCalculationFragment) parentFragment).handleAlertDialogCloseButton();
+                dialog.dismiss();
             }
         });
 
-        alertDialog.show();
+        dialog.show();
+    }
+
+    public static void handleNextButtonClick(Activity activity, String goodsInDisplay) {
+
     }
 }

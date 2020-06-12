@@ -38,6 +38,7 @@ dependencies {
     implementation "androidx.room:room-guava:$room_version"
     implementation 'com.github.yalantis:ucrop:2.2.5'
     implementation 'com.karumi:dexter:6.1.2'
+    implementation 'com.github.javiersantos:MaterialStyledDialogs:3.0.1'
 
 
     implementation 'com.github.bumptech.glide:glide:4.11.0'

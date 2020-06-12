@@ -1,4 +1,4 @@
-package com.boardgames.jaipur.ui.newgame;
+package com.boardgames.jaipur.ui.rounds;
 
 import android.app.Application;
 

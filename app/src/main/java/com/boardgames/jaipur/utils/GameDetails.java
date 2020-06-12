@@ -7,14 +7,14 @@ import com.boardgames.jaipur.entities.Game;
 import com.boardgames.jaipur.entities.Player;
 import com.boardgames.jaipur.entities.Round;
 
-import java.io.Serializable;
+import java.util.List;
 
 public class GameDetails implements Parcelable {
     private Game game;
     private PlayersInAGame playersInAGame;
-    private Round[] playerOneRounds;
-    private Round[] playerTwoRounds;
-    private Player[] roundWinners;
+    private List<Round> playerOneRounds;
+    private List<Round> playerTwoRounds;
+    private List<Player> roundWinners;
     private int roundInProgress;
     private int roundsCompleted;
 
@@ -34,19 +34,19 @@ public class GameDetails implements Parcelable {
         this.playersInAGame = playersInAGame;
     }
 
-    public Round[] getPlayerOneRounds() {
+    public List<Round> getPlayerOneRounds() {
         return playerOneRounds;
     }
 
-    public void setPlayerOneRounds(Round[] playerOneRounds) {
+    public void setPlayerOneRounds(List<Round> playerOneRounds) {
         this.playerOneRounds = playerOneRounds;
     }
 
-    public Round[] getPlayerTwoRounds() {
+    public List<Round> getPlayerTwoRounds() {
         return playerTwoRounds;
     }
 
-    public void setPlayerTwoRounds(Round[] playerTwoRounds) {
+    public void setPlayerTwoRounds(List<Round> playerTwoRounds) {
         this.playerTwoRounds = playerTwoRounds;
     }
 
@@ -66,13 +66,14 @@ public class GameDetails implements Parcelable {
         this.roundsCompleted = roundsCompleted;
     }
 
-    public Player[] getRoundWinners() {
+    public List<Player> getRoundWinners() {
         return roundWinners;
     }
 
-    public void setRoundWinners(Player[] roundWinners) {
+    public void setRoundWinners(List<Player> roundWinners) {
         this.roundWinners = roundWinners;
     }
+
 
     @Override
     public int describeContents() {
@@ -83,9 +84,9 @@ public class GameDetails implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(this.game, flags);
         dest.writeParcelable(this.playersInAGame, flags);
-        dest.writeTypedArray(this.playerOneRounds, flags);
-        dest.writeTypedArray(this.playerTwoRounds, flags);
-        dest.writeTypedArray(this.roundWinners, flags);
+        dest.writeTypedList(this.playerOneRounds);
+        dest.writeTypedList(this.playerTwoRounds);
+        dest.writeTypedList(this.roundWinners);
         dest.writeInt(this.roundInProgress);
         dest.writeInt(this.roundsCompleted);
     }
@@ -96,9 +97,9 @@ public class GameDetails implements Parcelable {
     protected GameDetails(Parcel in) {
         this.game = in.readParcelable(Game.class.getClassLoader());
         this.playersInAGame = in.readParcelable(PlayersInAGame.class.getClassLoader());
-        this.playerOneRounds = in.createTypedArray(Round.CREATOR);
-        this.playerTwoRounds = in.createTypedArray(Round.CREATOR);
-        this.roundWinners = in.createTypedArray(Player.CREATOR);
+        this.playerOneRounds = in.createTypedArrayList(Round.CREATOR);
+        this.playerTwoRounds = in.createTypedArrayList(Round.CREATOR);
+        this.roundWinners = in.createTypedArrayList(Player.CREATOR);
         this.roundInProgress = in.readInt();
         this.roundsCompleted = in.readInt();
     }

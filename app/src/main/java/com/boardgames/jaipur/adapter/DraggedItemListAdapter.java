@@ -1,7 +1,6 @@
 package com.boardgames.jaipur.adapter;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.boardgames.jaipur.R;
-import com.boardgames.jaipur.ui.newgame.DraggedItemsListViewModel;
+import com.boardgames.jaipur.ui.rounds.DraggedItemsListViewModel;
 import com.boardgames.jaipur.ui.rounds.RoundsCalculationActivity;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.CheckForPermissionsState;
@@ -21,8 +20,6 @@ import com.boardgames.jaipur.utils.GameUtils;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 
 public class DraggedItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -95,11 +92,14 @@ public class DraggedItemListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     public void onClick(View v) {
 
                         Integer playerScore = roundsCalculationActivity.getGoodsToPlayersScore().get(goodsInDisplay).get(Long.parseLong(splicedItem[0]));
-                        Integer draggedItemValue = GameUtils.dragShadowResourceToValue.get(splicedItem[2]);
+                        Integer draggedItemValue = GameUtils.dragShadowResourceToValue.get(Integer.parseInt(splicedItem[2]));
                         roundsCalculationActivity.getGoodsToPlayersScore().get(goodsInDisplay).put(Long.parseLong(splicedItem[0]), playerScore - draggedItemValue);
                         draggedItemsListViewModel.deleteSelectedItem();
                     }
                 });
+            }
+            else {
+                viewHolder.deleteItemImageView.setVisibility(View.INVISIBLE);
             }
 
             Glide.with(contextObj)

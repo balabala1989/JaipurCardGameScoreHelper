@@ -3,17 +3,18 @@ package com.boardgames.jaipur.ui.rounds;
 import android.content.ClipData;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,14 +22,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.boardgames.jaipur.R;
-import com.boardgames.jaipur.ui.newgame.DraggedItemsListViewModel;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.GameUtils;
 import com.boardgames.jaipur.utils.ImageDragShadowBuilder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 
 
 public class DiamondRoundsCalculationFragment extends Fragment implements View.OnDragListener, View.OnTouchListener {
@@ -46,6 +44,7 @@ public class DiamondRoundsCalculationFragment extends Fragment implements View.O
             R.drawable.a1_4_diamonds_5_drag_shadow,
             -1};
     private ArrayList<String> dragAndDropOrder;
+    private MenuItem completeMenuItem;
 
 
     private RoundsCalculationActivity mainActivity;
@@ -168,11 +167,41 @@ public class DiamondRoundsCalculationFragment extends Fragment implements View.O
     private void handleProfileImageClick() {
         GameUtils.displayDraggedItemsForRemoval(getActivity(), getContext(),
                 DiamondRoundsCalculationFragment.this, dragAndDropOrder, ApplicationConstants.ROUNDS_CALC_DIAMOND_GOODS);
-       /* trackCoinsUsed = dragAndDropOrder.size();
+    }
 
-        if (trackCoinsUsed == 0)
+    public void handleAlertDialogCloseButton() {
+        trackCoinsUsed = dragAndDropOrder.size() - 1;
+
+        if (diamondsImageView.getVisibility() == View.INVISIBLE)
+            diamondsImageView.setVisibility(View.VISIBLE);
+        if (trackCoinsUsed == -1)
             diamondsImageView.setImageResource(R.drawable.a1_1_diamonds_full_imageview);
-        else
-            diamondsImageView.setImageResource(displayImageViewResources[trackCoinsUsed]);*/
+        else {
+            if (displayImageViewResources[trackCoinsUsed] == -1) {
+                diamondsImageView.setVisibility(View.INVISIBLE);
+            }
+            else {
+                diamondsImageView.setImageResource(displayImageViewResources[trackCoinsUsed]);
+            }
+        }
+
+        trackCoinsUsed++;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        menuInflater.inflate(R.menu.activity_new_game_menu, menu);
+        completeMenuItem = menu.findItem(R.id.startNewGameButton);
+        completeMenuItem.setVisible(true);
+        super.onCreateOptionsMenu(menu, menuInflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.startNewGameButton) {
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
