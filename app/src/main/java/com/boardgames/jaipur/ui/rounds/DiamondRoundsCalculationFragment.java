@@ -44,7 +44,6 @@ public class DiamondRoundsCalculationFragment extends Fragment implements View.O
             R.drawable.a1_4_diamonds_5_drag_shadow,
             -1};
     private ArrayList<String> dragAndDropOrder;
-    private MenuItem completeMenuItem;
 
 
     private RoundsCalculationActivity mainActivity;
@@ -87,6 +86,8 @@ public class DiamondRoundsCalculationFragment extends Fragment implements View.O
                 handleProfileImageClick();
             }
         });
+
+        setHasOptionsMenu(true);
 
         return root;
     }
@@ -191,8 +192,6 @@ public class DiamondRoundsCalculationFragment extends Fragment implements View.O
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         menuInflater.inflate(R.menu.activity_new_game_menu, menu);
-        completeMenuItem = menu.findItem(R.id.startNewGameButton);
-        completeMenuItem.setVisible(true);
         super.onCreateOptionsMenu(menu, menuInflater);
     }
 

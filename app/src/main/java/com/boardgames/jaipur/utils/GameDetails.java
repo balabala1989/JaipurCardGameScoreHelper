@@ -7,14 +7,14 @@ import com.boardgames.jaipur.entities.Game;
 import com.boardgames.jaipur.entities.Player;
 import com.boardgames.jaipur.entities.Round;
 
-import java.util.List;
+import java.util.HashMap;
 
 public class GameDetails implements Parcelable {
     private Game game;
     private PlayersInAGame playersInAGame;
-    private List<Round> playerOneRounds;
-    private List<Round> playerTwoRounds;
-    private List<Player> roundWinners;
+    private HashMap<Integer, Round> playerOneRounds;
+    private HashMap<Integer, Round> playerTwoRounds;
+    private HashMap<Integer, Player> roundWinners;
     private int roundInProgress;
     private int roundsCompleted;
 
@@ -34,19 +34,19 @@ public class GameDetails implements Parcelable {
         this.playersInAGame = playersInAGame;
     }
 
-    public List<Round> getPlayerOneRounds() {
+    public HashMap<Integer, Round> getPlayerOneRounds() {
         return playerOneRounds;
     }
 
-    public void setPlayerOneRounds(List<Round> playerOneRounds) {
+    public void setPlayerOneRounds(HashMap<Integer, Round> playerOneRounds) {
         this.playerOneRounds = playerOneRounds;
     }
 
-    public List<Round> getPlayerTwoRounds() {
+    public HashMap<Integer, Round> getPlayerTwoRounds() {
         return playerTwoRounds;
     }
 
-    public void setPlayerTwoRounds(List<Round> playerTwoRounds) {
+    public void setPlayerTwoRounds(HashMap<Integer, Round> playerTwoRounds) {
         this.playerTwoRounds = playerTwoRounds;
     }
 
@@ -66,11 +66,11 @@ public class GameDetails implements Parcelable {
         this.roundsCompleted = roundsCompleted;
     }
 
-    public List<Player> getRoundWinners() {
+    public HashMap<Integer, Player> getRoundWinners() {
         return roundWinners;
     }
 
-    public void setRoundWinners(List<Player> roundWinners) {
+    public void setRoundWinners(HashMap<Integer, Player> roundWinners) {
         this.roundWinners = roundWinners;
     }
 
@@ -84,9 +84,9 @@ public class GameDetails implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(this.game, flags);
         dest.writeParcelable(this.playersInAGame, flags);
-        dest.writeTypedList(this.playerOneRounds);
-        dest.writeTypedList(this.playerTwoRounds);
-        dest.writeTypedList(this.roundWinners);
+        dest.writeSerializable(this.playerOneRounds);
+        dest.writeSerializable(this.playerTwoRounds);
+        dest.writeSerializable(this.roundWinners);
         dest.writeInt(this.roundInProgress);
         dest.writeInt(this.roundsCompleted);
     }
@@ -97,9 +97,9 @@ public class GameDetails implements Parcelable {
     protected GameDetails(Parcel in) {
         this.game = in.readParcelable(Game.class.getClassLoader());
         this.playersInAGame = in.readParcelable(PlayersInAGame.class.getClassLoader());
-        this.playerOneRounds = in.createTypedArrayList(Round.CREATOR);
-        this.playerTwoRounds = in.createTypedArrayList(Round.CREATOR);
-        this.roundWinners = in.createTypedArrayList(Player.CREATOR);
+        this.playerOneRounds = (HashMap<Integer, Round>) in.readSerializable();
+        this.playerTwoRounds = (HashMap<Integer, Round>) in.readSerializable();
+        this.roundWinners = (HashMap<Integer, Player>) in.readSerializable();
         this.roundInProgress = in.readInt();
         this.roundsCompleted = in.readInt();
     }
