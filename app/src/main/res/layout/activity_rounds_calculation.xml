@@ -2,16 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/roundsRelativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.rounds.RoundsCalculationActivity">
 
     <fragment
+        android:id="@+id/rounds_score_calculation_host"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rounds_score_calculation_host"
-        app:navGraph="@navigation/rounds_score_calculation_navigation"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        app:defaultNavHost="true"/>
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/rounds_score_calculation_navigation" />
 
 </RelativeLayout>

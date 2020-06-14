@@ -9,9 +9,7 @@ import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import java.io.Serializable;
-
-@Entity(tableName = "rounds", indices = {@Index("game_id")})
+@Entity(tableName = "rounds", indices = {@Index("game_id"), @Index("player_id")})
 public class Round implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
@@ -33,29 +31,38 @@ public class Round implements Parcelable {
     @ColumnInfo(name = "score")
     private int score;
 
-    @ColumnInfo(name = "diamond_count")
-    private String diamondCount;
+    @ColumnInfo(name = "diamond_score")
+    private int diamondScore;
 
-    @ColumnInfo(name = "gold_count")
-    private String goldCount;
+    @ColumnInfo(name = "gold_score")
+    private int goldScore;
 
-    @ColumnInfo(name = "silver_count")
-    private String silverCount;
+    @ColumnInfo(name = "silver_score")
+    private int silverScore;
 
-    @ColumnInfo(name = "silk_count")
-    private String silkCount;
+    @ColumnInfo(name = "cloth_score")
+    private int clothScore;
 
-    @ColumnInfo(name = "spice_count")
-    private String spiceCount;
+    @ColumnInfo(name = "spice_score")
+    private int spiceScore;
 
-    @ColumnInfo(name = "leather_count")
-    private String leatherCount;
+    @ColumnInfo(name = "leather_score")
+    private int leatherScore;
+
+    @ColumnInfo(name = "three_card_token_score")
+    private int threeCardTokenScore;
+
+    @ColumnInfo(name = "four_card_token_score")
+    private int fourCardTokenScore;
+
+    @ColumnInfo(name = "five_card_token_score")
+    private int fiveCardTokenScore;
 
     @ColumnInfo(name = "seal_of_excellence")
-    private String sealOfExcellence;
+    private char sealOfExcellence;
 
-    @ColumnInfo(name = "camel_count")
-    private String camelCount;
+    @ColumnInfo(name = "camel_received")
+    private char camelReceived;
 
     @ColumnInfo(name = "photo_path")
     private String photoPath;
@@ -115,68 +122,68 @@ public class Round implements Parcelable {
         this.score = score;
     }
 
-    public String getDiamondCount() {
-        return diamondCount;
+    public int getDiamondScore() {
+        return diamondScore;
     }
 
-    public void setDiamondCount(String diamondCount) {
-        this.diamondCount = diamondCount;
+    public void setDiamondScore(int diamondScore) {
+        this.diamondScore = diamondScore;
     }
 
-    public String getGoldCount() {
-        return goldCount;
+    public int getGoldScore() {
+        return goldScore;
     }
 
-    public void setGoldCount(String goldCount) {
-        this.goldCount = goldCount;
+    public void setGoldScore(int goldScore) {
+        this.goldScore = goldScore;
     }
 
-    public String getSilverCount() {
-        return silverCount;
+    public int getSilverScore() {
+        return silverScore;
     }
 
-    public void setSilverCount(String silverCount) {
-        this.silverCount = silverCount;
+    public void setSilverScore(int silverScore) {
+        this.silverScore = silverScore;
     }
 
-    public String getSilkCount() {
-        return silkCount;
+    public int getClothScore() {
+        return clothScore;
     }
 
-    public void setSilkCount(String silkCount) {
-        this.silkCount = silkCount;
+    public void setClothScore(int clothScore) {
+        this.clothScore = clothScore;
     }
 
-    public String getSpiceCount() {
-        return spiceCount;
+    public int getSpiceScore() {
+        return spiceScore;
     }
 
-    public void setSpiceCount(String spiceCount) {
-        this.spiceCount = spiceCount;
+    public void setSpiceScore(int spiceScore) {
+        this.spiceScore = spiceScore;
     }
 
-    public String getLeatherCount() {
-        return leatherCount;
+    public int getLeatherScore() {
+        return leatherScore;
     }
 
-    public void setLeatherCount(String leatherCount) {
-        this.leatherCount = leatherCount;
+    public void setLeatherScore(int leatherScore) {
+        this.leatherScore = leatherScore;
     }
 
-    public String getSealOfExcellence() {
+    public char getSealOfExcellence() {
         return sealOfExcellence;
     }
 
-    public void setSealOfExcellence(String sealOfExcellence) {
+    public void setSealOfExcellence(char sealOfExcellence) {
         this.sealOfExcellence = sealOfExcellence;
     }
 
-    public String getCamelCount() {
-        return camelCount;
+    public char getCamelReceived() {
+        return camelReceived;
     }
 
-    public void setCamelCount(String camelCount) {
-        this.camelCount = camelCount;
+    public void setCamelReceived(char camelReceived) {
+        this.camelReceived = camelReceived;
     }
 
     public String getPhotoPath() {
@@ -219,6 +226,31 @@ public class Round implements Parcelable {
         this.winner = winner;
     }
 
+    public int getThreeCardTokenScore() {
+        return threeCardTokenScore;
+    }
+
+    public void setThreeCardTokenScore(int threeCardTokenScore) {
+        this.threeCardTokenScore = threeCardTokenScore;
+    }
+
+    public int getFourCardTokenScore() {
+        return fourCardTokenScore;
+    }
+
+    public void setFourCardTokenScore(int fourCardTokenScore) {
+        this.fourCardTokenScore = fourCardTokenScore;
+    }
+
+    public int getFiveCardTokenScore() {
+        return fiveCardTokenScore;
+    }
+
+    public void setFiveCardTokenScore(int fiveCardTokenScore) {
+        this.fiveCardTokenScore = fiveCardTokenScore;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -231,14 +263,17 @@ public class Round implements Parcelable {
         dest.writeLong(this.playerID);
         dest.writeInt(this.roundNumber);
         dest.writeInt(this.score);
-        dest.writeString(this.diamondCount);
-        dest.writeString(this.goldCount);
-        dest.writeString(this.silverCount);
-        dest.writeString(this.silkCount);
-        dest.writeString(this.spiceCount);
-        dest.writeString(this.leatherCount);
-        dest.writeString(this.sealOfExcellence);
-        dest.writeString(this.camelCount);
+        dest.writeInt(this.diamondScore);
+        dest.writeInt(this.goldScore);
+        dest.writeInt(this.silverScore);
+        dest.writeInt(this.clothScore);
+        dest.writeInt(this.spiceScore);
+        dest.writeInt(this.leatherScore);
+        dest.writeInt(this.threeCardTokenScore);
+        dest.writeInt(this.fourCardTokenScore);
+        dest.writeInt(this.fiveCardTokenScore);
+        dest.writeInt(this.sealOfExcellence);
+        dest.writeInt(this.camelReceived);
         dest.writeString(this.photoPath);
         dest.writeString(this.notes);
         dest.writeLong(this.winner);
@@ -255,14 +290,17 @@ public class Round implements Parcelable {
         this.playerID = in.readLong();
         this.roundNumber = in.readInt();
         this.score = in.readInt();
-        this.diamondCount = in.readString();
-        this.goldCount = in.readString();
-        this.silverCount = in.readString();
-        this.silkCount = in.readString();
-        this.spiceCount = in.readString();
-        this.leatherCount = in.readString();
-        this.sealOfExcellence = in.readString();
-        this.camelCount = in.readString();
+        this.diamondScore = in.readInt();
+        this.goldScore = in.readInt();
+        this.silverScore = in.readInt();
+        this.clothScore = in.readInt();
+        this.spiceScore = in.readInt();
+        this.leatherScore = in.readInt();
+        this.threeCardTokenScore = in.readInt();
+        this.fourCardTokenScore = in.readInt();
+        this.fiveCardTokenScore = in.readInt();
+        this.sealOfExcellence = (char) in.readInt();
+        this.camelReceived = (char) in.readInt();
         this.photoPath = in.readString();
         this.notes = in.readString();
         this.winner = in.readLong();

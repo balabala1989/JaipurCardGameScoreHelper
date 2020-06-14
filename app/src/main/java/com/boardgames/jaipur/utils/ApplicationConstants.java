@@ -44,6 +44,14 @@ package com.boardgames.jaipur.utils;
         public static final String HYPEN = " - ";
         public static final String SEPARATOR_OF_VIEWS = "~";
 
-        public static final String ROUNDS_CALC_DIAMOND_GOODS = "DIAMONDS";
+        public static final String ROUNDS_CALC_DIAMOND_GOODS = "DIAMOND";
+        public static final String ROUNDS_CALC_GOLD_GOODS = "GOLD";
+        public static final String ROUNDS_CALC_SILVER_GOODS = "SILVER";
+        public static final String ROUNDS_CALC_CLOTH_GOODS = "CLOTH";
+        public static final String ROUNDS_CALC_SPICE_GOODS = "SPICE";
+        public static final String ROUNDS_CALC_LEATHER_GOODS = "LEATHER";
+        public static final String ROUNDS_CALC_3_CARD_TOKEN = "3_CARD_TOKEN";
+        public static final String ROUNDS_CALC_4_CARD_TOKEN = "4_CARD_TOKEN";
+        public static final String ROUNDS_CALC_5_CARD_TOKEN = "5_CARD_TOKEN";
 
 }

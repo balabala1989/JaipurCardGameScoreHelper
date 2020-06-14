@@ -17,7 +17,7 @@ import com.boardgames.jaipur.utils.ApplicationConstants;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Game.class, Round.class}, version = 1, exportSchema = false)
+@Database(entities = {Game.class, Round.class}, version = 2, exportSchema = false)
 public abstract class GamesRoomDatabase extends RoomDatabase {
 
     public abstract GameDao gameDao();
@@ -45,7 +45,10 @@ public abstract class GamesRoomDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     //TODO Need to delete the call back before publishing the app
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            GamesRoomDatabase.class, "games_database").addCallback(gamesDatabaseCallback).build();
+                            GamesRoomDatabase.class, "games_database")
+                            .addCallback(gamesDatabaseCallback)
+                            .fallbackToDestructiveMigration()
+                            .build();
                     /*INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             GamesRoomDatabase.class, "games_database").build(); */
                 }

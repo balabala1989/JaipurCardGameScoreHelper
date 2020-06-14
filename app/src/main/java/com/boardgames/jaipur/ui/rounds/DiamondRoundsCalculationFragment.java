@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -198,8 +199,13 @@ public class DiamondRoundsCalculationFragment extends Fragment implements View.O
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if (item.getItemId() == R.id.startNewGameButton) {
-
+        if (item.getItemId() == android.R.id.home) {
+            ((RoundsCalculationActivity)getActivity()).handleException();
+            return true;
+        }
+        else if (item.getItemId() == R.id.startNewGameButton) {
+            GameUtils.handleNextButtonClick(getActivity(), ApplicationConstants.ROUNDS_CALC_DIAMOND_GOODS);
+            Navigation.findNavController(getActivity(), R.id.roundsRelativeLayout).navigate(R.id.action_diamondRoundsCalculationFragment_to_goldRoundsCalculationFragment);
         }
         return super.onOptionsItemSelected(item);
     }
