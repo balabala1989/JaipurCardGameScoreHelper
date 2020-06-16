@@ -21,6 +21,7 @@
         tools:layout="@layout/fragment_gold_rounds_calculation" >
         <action
             android:id="@+id/action_goldRoundsCalculationFragment_to_diamondRoundsCalculationFragment"
-            app:destination="@id/diamondRoundsCalculationFragment" />
+            app:popUpTo="@id/diamondRoundsCalculationFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

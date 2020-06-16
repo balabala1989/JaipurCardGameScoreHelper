@@ -9,7 +9,9 @@ import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -23,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.boardgames.jaipur.R;
+import com.boardgames.jaipur.entities.Game;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.GameUtils;
 import com.boardgames.jaipur.utils.ImageDragShadowBuilder;
@@ -45,9 +48,8 @@ public class DiamondRoundsCalculationFragment extends Fragment implements View.O
             R.drawable.a1_4_diamonds_5_drag_shadow,
             -1};
     private ArrayList<String> dragAndDropOrder;
-
-
     private RoundsCalculationActivity mainActivity;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,6 +91,8 @@ public class DiamondRoundsCalculationFragment extends Fragment implements View.O
         });
 
         setHasOptionsMenu(true);
+
+        GameUtils.resetOrInitializeActivityVars(mainActivity, ApplicationConstants.ROUNDS_CALC_DIAMOND_GOODS);
 
         return root;
     }
@@ -192,7 +196,7 @@ public class DiamondRoundsCalculationFragment extends Fragment implements View.O
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        menuInflater.inflate(R.menu.activity_new_game_menu, menu);
+        menuInflater.inflate(R.menu.fragment_diamond_to_gold_menu, menu);
         super.onCreateOptionsMenu(menu, menuInflater);
     }
 
@@ -203,9 +207,11 @@ public class DiamondRoundsCalculationFragment extends Fragment implements View.O
             ((RoundsCalculationActivity)getActivity()).handleException();
             return true;
         }
-        else if (item.getItemId() == R.id.startNewGameButton) {
+        else if (item.getItemId() == R.id.goldRoundsCalculationFragment) {
             GameUtils.handleNextButtonClick(getActivity(), ApplicationConstants.ROUNDS_CALC_DIAMOND_GOODS);
-            Navigation.findNavController(getActivity(), R.id.roundsRelativeLayout).navigate(R.id.action_diamondRoundsCalculationFragment_to_goldRoundsCalculationFragment);
+
+            return NavigationUI.onNavDestinationSelected(item, mainActivity.getNavController())
+                    || super.onOptionsItemSelected(item);
         }
         return super.onOptionsItemSelected(item);
     }

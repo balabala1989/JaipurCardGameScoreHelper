@@ -2,6 +2,8 @@ package com.boardgames.jaipur.ui.rounds;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.utils.ApplicationConstants;
@@ -20,11 +22,14 @@ public class RoundsCalculationActivity extends AppCompatActivity {
     private HashMap<String, HashMap<Long, Integer>> goodsToPlayersScore;
     private HashMap<Long, Uri> playerToProfileUri;
     private DraggedItemsListViewModel draggedItemsListViewModel;
+    private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rounds_calculation);
+
+        navController = Navigation.findNavController(this, R.id.rounds_score_calculation_host);
 
         Intent receivedIntent = getIntent();
         if (receivedIntent == null)
@@ -96,5 +101,13 @@ public class RoundsCalculationActivity extends AppCompatActivity {
 
     public void setDraggedItemsListViewModel(DraggedItemsListViewModel draggedItemsListViewModel) {
         this.draggedItemsListViewModel = draggedItemsListViewModel;
+    }
+
+    public NavController getNavController() {
+        return navController;
+    }
+
+    public void setNavController(NavController navController) {
+        this.navController = navController;
     }
 }

@@ -13,6 +13,7 @@ import com.boardgames.jaipur.adapter.DraggedItemListAdapter;
 import com.boardgames.jaipur.entities.Round;
 import com.boardgames.jaipur.ui.rounds.DraggedItemsListViewModel;
 import com.boardgames.jaipur.ui.rounds.DiamondRoundsCalculationFragment;
+import com.boardgames.jaipur.ui.rounds.GoldRoundsCalculationFragment;
 import com.boardgames.jaipur.ui.rounds.RoundsCalculationActivity;
 import com.bumptech.glide.Glide;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
@@ -38,6 +39,8 @@ public class GameUtils {
         dragShadowResourceToValue = new HashMap<Integer, Integer>();
         dragShadowResourceToValue.put(R.drawable.a1_2_diamonds_77_drag_shadow, 14);
         dragShadowResourceToValue.put(R.drawable.a1_4_diamonds_5_drag_shadow, 5);
+        dragShadowResourceToValue.put(R.drawable.a2_2_gold_66_drag_shadow, 12);
+        dragShadowResourceToValue.put(R.drawable.a2_4_gold_5_drag_shadow, 5);
     }
 
     public static void loadPlayerDetailsInDisplay(Fragment parentFragment, View fragmentView, GameDetails gameDetails) {
@@ -125,6 +128,8 @@ public class GameUtils {
             public void onClick(View v) {
                if (parentFragment instanceof DiamondRoundsCalculationFragment)
                    ((DiamondRoundsCalculationFragment) parentFragment).handleAlertDialogCloseButton();
+               else if (parentFragment instanceof GoldRoundsCalculationFragment)
+                   ((GoldRoundsCalculationFragment) parentFragment).handleAlertDialogCloseButton();
                 dialog.dismiss();
             }
         });
@@ -137,7 +142,6 @@ public class GameUtils {
         if (!roundsCalculationActivity.getGoodsToPlayersScore().containsKey(goodsInDisplay))
             roundsCalculationActivity.handleException();
 
-        HashMap<Long, Integer> playerScores = roundsCalculationActivity.getGoodsToPlayersScore().get(goodsInDisplay);
         GameDetails gameDetails = roundsCalculationActivity.getGameDetails();
 
         //Calculate first player scores
@@ -178,7 +182,10 @@ public class GameUtils {
     }
 
    private static void setScoresToGameDetails(HashMap<String, HashMap<Long, Integer>> goodsToPlayerScore, Round round, GameDetails gameDetails, long playerID, String goodsInDisplay) {
-        if (!goodsToPlayerScore.containsKey(goodsInDisplay) || !goodsToPlayerScore.get(goodsInDisplay).containsKey(playerID))
+        if (goodsToPlayerScore == null ||
+                !goodsToPlayerScore.containsKey(goodsInDisplay) ||
+                goodsToPlayerScore.get(goodsInDisplay) == null ||
+                !goodsToPlayerScore.get(goodsInDisplay).containsKey(playerID))
             return;
         HashMap<Long, Integer> playerScores = goodsToPlayerScore.get(goodsInDisplay);
         int playerScoreInGoods = playerScores.get(playerID);
@@ -188,42 +195,64 @@ public class GameUtils {
             round.setRoundNumber(gameDetails.getRoundInProgress());
         }
 
+        setScore(round, playerScoreInGoods, goodsInDisplay);
+    }
+
+    private static void setScore(Round round, int score, String goodsInDisplay) {
         switch (goodsInDisplay) {
             case ApplicationConstants.ROUNDS_CALC_DIAMOND_GOODS:
-                round.setDiamondScore(playerScoreInGoods);
+                round.setDiamondScore(score);
                 break;
 
             case ApplicationConstants.ROUNDS_CALC_GOLD_GOODS:
-                round.setGoldScore(playerScoreInGoods);
+                round.setGoldScore(score);
                 break;
 
             case ApplicationConstants.ROUNDS_CALC_SILVER_GOODS:
-                round.setSilverScore(playerScoreInGoods);
+                round.setSilverScore(score);
                 break;
 
             case ApplicationConstants.ROUNDS_CALC_CLOTH_GOODS:
-                round.setClothScore(playerScoreInGoods);
+                round.setClothScore(score);
                 break;
 
             case ApplicationConstants.ROUNDS_CALC_SPICE_GOODS:
-                round.setSpiceScore(playerScoreInGoods);
+                round.setSpiceScore(score);
                 break;
 
             case ApplicationConstants.ROUNDS_CALC_LEATHER_GOODS:
-                round.setLeatherScore(playerScoreInGoods);
+                round.setLeatherScore(score);
                 break;
 
             case ApplicationConstants.ROUNDS_CALC_3_CARD_TOKEN:
-                round.setThreeCardTokenScore(playerScoreInGoods);
+                round.setThreeCardTokenScore(score);
                 break;
 
             case ApplicationConstants.ROUNDS_CALC_4_CARD_TOKEN:
-                round.setFourCardTokenScore(playerScoreInGoods);
+                round.setFourCardTokenScore(score);
                 break;
 
             case ApplicationConstants.ROUNDS_CALC_5_CARD_TOKEN:
-                round.setFiveCardTokenScore(playerScoreInGoods);
+                round.setFiveCardTokenScore(score);
                 break;
+        }
+    }
+
+    public static void resetOrInitializeActivityVars(Activity mainActivity, String goodsInDisplay) {
+        RoundsCalculationActivity roundsCalculationActivity = (RoundsCalculationActivity) mainActivity;
+        if (roundsCalculationActivity.getGoodsToPlayersScore() != null && roundsCalculationActivity.getGoodsToPlayersScore().containsKey(goodsInDisplay)) {
+            roundsCalculationActivity.getGoodsToPlayersScore().put(goodsInDisplay, new HashMap<Long, Integer>());
+        }
+
+        //Resetting gamedetails
+        GameDetails gameDetails = roundsCalculationActivity.getGameDetails();
+
+        if (gameDetails.getPlayerOneRounds() != null && gameDetails.getPlayerOneRounds().containsKey(gameDetails.getRoundInProgress())) {
+            setScore(gameDetails.getPlayerOneRounds().get(gameDetails.getRoundInProgress()), 0, goodsInDisplay);
+        }
+
+        if (gameDetails.getPlayerTwoRounds() != null && gameDetails.getPlayerTwoRounds().containsKey(gameDetails.getRoundInProgress())) {
+            setScore(gameDetails.getPlayerTwoRounds().get(gameDetails.getRoundInProgress()), 0, goodsInDisplay);
         }
     }
 }
