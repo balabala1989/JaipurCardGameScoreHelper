@@ -20,8 +20,34 @@
         android:label="@string/gold_calculation_fragment_label"
         tools:layout="@layout/fragment_gold_rounds_calculation" >
         <action
+            android:id="@+id/action_goldRoundsCalculationFragment_to_silverRoundsCalculationFragment"
+            app:destination="@id/silverRoundsCalculationFragment"/>
+       <action
             android:id="@+id/action_goldRoundsCalculationFragment_to_diamondRoundsCalculationFragment"
-            app:popUpTo="@id/diamondRoundsCalculationFragment"
-            app:popUpToInclusive="true" />
+            app:destination="@+id/diamondRoundsCalculationFragment"
+            app:popUpTo="@id/diamondRoundsCalculationFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/silverRoundsCalculationFragment"
+        android:name="com.boardgames.jaipur.ui.rounds.SilverRoundsCalculationFragment"
+        android:label="fragment_silver_rounds_calculation"
+        tools:layout="@layout/fragment_silver_rounds_calculation" >
+       <action
+            android:id="@+id/action_silverRoundsCalculationFragment_to_goldRoundsCalculationFragment"
+            app:destination="@+id/goldRoundsCalculationFragment"
+            app:popUpTo="@id/goldRoundsCalculationFragment" />
+        <action
+            android:id="@+id/action_silverRoundsCalculationFragment_to_clothRoundsCalculationFragment"
+            app:destination="@id/clothRoundsCalculationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/clothRoundsCalculationFragment"
+        android:name="com.boardgames.jaipur.ui.rounds.ClothRoundsCalculationFragment"
+        android:label="fragment_cloth_rounds_calculation"
+        tools:layout="@layout/fragment_cloth_rounds_calculation" >
+        <action
+            android:id="@+id/action_clothRoundsCalculationFragment_to_silverRoundsCalculationFragment"
+            app:destination="@id/silverRoundsCalculationFragment"
+            app:popUpTo="@id/silverRoundsCalculationFragment"/>
     </fragment>
 </navigation>

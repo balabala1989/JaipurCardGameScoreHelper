@@ -11,15 +11,18 @@ import android.widget.TextView;
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.adapter.DraggedItemListAdapter;
 import com.boardgames.jaipur.entities.Round;
+import com.boardgames.jaipur.ui.rounds.ClothRoundsCalculationFragment;
 import com.boardgames.jaipur.ui.rounds.DraggedItemsListViewModel;
 import com.boardgames.jaipur.ui.rounds.DiamondRoundsCalculationFragment;
 import com.boardgames.jaipur.ui.rounds.GoldRoundsCalculationFragment;
 import com.boardgames.jaipur.ui.rounds.RoundsCalculationActivity;
+import com.boardgames.jaipur.ui.rounds.SilverRoundsCalculationFragment;
 import com.bumptech.glide.Glide;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,6 +44,12 @@ public class GameUtils {
         dragShadowResourceToValue.put(R.drawable.a1_4_diamonds_5_drag_shadow, 5);
         dragShadowResourceToValue.put(R.drawable.a2_2_gold_66_drag_shadow, 12);
         dragShadowResourceToValue.put(R.drawable.a2_4_gold_5_drag_shadow, 5);
+        dragShadowResourceToValue.put(R.drawable.a3_2_silver_55_drag_shadow, 10);
+        dragShadowResourceToValue.put(R.drawable.a3_4_silver_5_drag_shadow, 5);
+        dragShadowResourceToValue.put(R.drawable.a4_2_cloth_5_drag_shadow, 5);
+        dragShadowResourceToValue.put(R.drawable.a4_4_cloth_3_drag_shadow, 3);
+        dragShadowResourceToValue.put(R.drawable.a4_7_cloth_2_drag_shadow, 2);
+        dragShadowResourceToValue.put(R.drawable.a4_10_cloth_1_drag_shadow, 1);
     }
 
     public static void loadPlayerDetailsInDisplay(Fragment parentFragment, View fragmentView, GameDetails gameDetails) {
@@ -130,6 +139,10 @@ public class GameUtils {
                    ((DiamondRoundsCalculationFragment) parentFragment).handleAlertDialogCloseButton();
                else if (parentFragment instanceof GoldRoundsCalculationFragment)
                    ((GoldRoundsCalculationFragment) parentFragment).handleAlertDialogCloseButton();
+               else if (parentFragment instanceof SilverRoundsCalculationFragment)
+                   ((SilverRoundsCalculationFragment) parentFragment).handleAlertDialogCloseButton();
+               else if (parentFragment instanceof ClothRoundsCalculationFragment)
+                   ((ClothRoundsCalculationFragment) parentFragment).handleAlertDialogCloseButton();
                 dialog.dismiss();
             }
         });
@@ -139,7 +152,8 @@ public class GameUtils {
 
     public static void handleNextButtonClick(Activity activity, String goodsInDisplay) {
         RoundsCalculationActivity roundsCalculationActivity = (RoundsCalculationActivity)activity;
-        if (!roundsCalculationActivity.getGoodsToPlayersScore().containsKey(goodsInDisplay))
+        // TODO change code to raise alert if no goods were selected and proceed. just do not throw exception and force use to select one
+        if (roundsCalculationActivity.getGoodsToPlayersScore() == null || !roundsCalculationActivity.getGoodsToPlayersScore().containsKey(goodsInDisplay))
             roundsCalculationActivity.handleException();
 
         GameDetails gameDetails = roundsCalculationActivity.getGameDetails();
@@ -244,6 +258,8 @@ public class GameUtils {
             roundsCalculationActivity.getGoodsToPlayersScore().put(goodsInDisplay, new HashMap<Long, Integer>());
         }
 
+        //Reset the dragged data
+        roundsCalculationActivity.getDraggedItemsListViewModel().setDragAndDroppedOrder(new ArrayList<>());
         //Resetting gamedetails
         GameDetails gameDetails = roundsCalculationActivity.getGameDetails();
 
@@ -254,5 +270,7 @@ public class GameUtils {
         if (gameDetails.getPlayerTwoRounds() != null && gameDetails.getPlayerTwoRounds().containsKey(gameDetails.getRoundInProgress())) {
             setScore(gameDetails.getPlayerTwoRounds().get(gameDetails.getRoundInProgress()), 0, goodsInDisplay);
         }
+
+        roundsCalculationActivity.getDraggedItemsListViewModel().resetDraggedItemList();
     }
 }

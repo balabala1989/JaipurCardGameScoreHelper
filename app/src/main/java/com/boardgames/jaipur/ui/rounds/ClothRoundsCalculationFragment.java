@@ -9,7 +9,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.ui.NavigationUI;
 
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -30,20 +29,25 @@ import com.boardgames.jaipur.utils.ImageDragShadowBuilder;
 import java.util.ArrayList;
 
 
-public class GoldRoundsCalculationFragment extends Fragment implements View.OnDragListener, View.OnTouchListener {
-
+public class ClothRoundsCalculationFragment extends Fragment implements View.OnDragListener, View.OnTouchListener {
 
     private int trackCoinsUsed = 0;
     private ImageView playerOneImageView;
     private ImageView playerTwoImageView;
-    private ImageView goldImageView;
-    private int[] dragShadowResources = {R.drawable.a2_2_gold_66_drag_shadow,
-            R.drawable.a2_4_gold_5_drag_shadow,
-            R.drawable.a2_4_gold_5_drag_shadow,
-            R.drawable.a2_4_gold_5_drag_shadow};
-    private int[] displayImageViewResources = {R.drawable.a2_3_gold_555_imageview,
-            R.drawable.a2_5_gold_55_imageview,
-            R.drawable.a2_4_gold_5_drag_shadow,
+    private ImageView clothImageView;
+    private int[] dragShadowResources = {R.drawable.a4_2_cloth_5_drag_shadow,
+            R.drawable.a4_4_cloth_3_drag_shadow,
+            R.drawable.a4_4_cloth_3_drag_shadow,
+            R.drawable.a4_7_cloth_2_drag_shadow,
+            R.drawable.a4_7_cloth_2_drag_shadow,
+            R.drawable.a4_10_cloth_1_drag_shadow,
+            R.drawable.a4_10_cloth_1_drag_shadow};
+    private int[] displayImageViewResources = {R.drawable.a4_3_cloth_33_22_11_imageview,
+            R.drawable.a4_5_cloth_3_22_11_imageview,
+            R.drawable.a4_6_cloth_22_11_imageview,
+            R.drawable.a4_8_cloth_2_11_imageview,
+            R.drawable.a4_9_cloth_11_imageview,
+            R.drawable.a4_10_cloth_1_drag_shadow,
             -1};
     private ArrayList<String> dragAndDropOrder;
     private RoundsCalculationActivity mainActivity;
@@ -51,7 +55,8 @@ public class GoldRoundsCalculationFragment extends Fragment implements View.OnDr
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_gold_rounds_calculation, container, false);
+
+        View root = inflater.inflate(R.layout.fragment_cloth_rounds_calculation, container, false);
 
 
         mainActivity = (RoundsCalculationActivity) getActivity();
@@ -59,15 +64,15 @@ public class GoldRoundsCalculationFragment extends Fragment implements View.OnDr
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.string.color_activity_actionbar))));
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(mainActivity.getRoundTitle() + getString(R.string.gold_calculation_fragment_label));
+        actionBar.setTitle(mainActivity.getRoundTitle() + getString(R.string.cloth_calculation_fragment_label));
 
-        GameUtils.loadPlayerDetailsInDisplay(GoldRoundsCalculationFragment.this, root, mainActivity.getGameDetails());
+        GameUtils.loadPlayerDetailsInDisplay(ClothRoundsCalculationFragment.this, root, mainActivity.getGameDetails());
         View roundCalUserLayout = root.findViewById(R.id.roundUsersDisplay);
         playerOneImageView = roundCalUserLayout.findViewById(R.id.playerOneImageView);
         playerTwoImageView = roundCalUserLayout.findViewById(R.id.playerTwoImageView);
-        goldImageView = root.findViewById(R.id.goldImageView);
+        clothImageView = root.findViewById(R.id.clothImageView);
 
-        goldImageView.setOnTouchListener(this);
+        clothImageView.setOnTouchListener(this);
         playerOneImageView.setOnDragListener(this);
         playerTwoImageView.setOnDragListener(this);
 
@@ -90,30 +95,10 @@ public class GoldRoundsCalculationFragment extends Fragment implements View.OnDr
 
         setHasOptionsMenu(true);
 
-        GameUtils.resetOrInitializeActivityVars(mainActivity, ApplicationConstants.ROUNDS_CALC_GOLD_GOODS);
+        GameUtils.resetOrInitializeActivityVars(mainActivity, ApplicationConstants.ROUNDS_CALC_CLOTH_GOODS);
 
         return root;
-    }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        menuInflater.inflate(R.menu.fragment_round_cal_next_menu, menu);
-        super.onCreateOptionsMenu(menu, menuInflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if (item.getItemId() == android.R.id.home) {
-            ((RoundsCalculationActivity)getActivity()).getNavController().navigate(R.id.action_goldRoundsCalculationFragment_to_diamondRoundsCalculationFragment);
-            return true;
-        }
-        else if (item.getItemId() == R.id.nextRoundsCalculationFragment) {
-            GameUtils.handleNextButtonClick(getActivity(), ApplicationConstants.ROUNDS_CALC_GOLD_GOODS);
-
-            mainActivity.getNavController().navigate(R.id.action_goldRoundsCalculationFragment_to_silverRoundsCalculationFragment);
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -151,13 +136,13 @@ public class GoldRoundsCalculationFragment extends Fragment implements View.OnDr
                         playerId,
                         dragShadowResources[trackCoinsUsed],
                         playerName,
-                        ApplicationConstants.ROUNDS_CALC_GOLD_GOODS,
+                        ApplicationConstants.ROUNDS_CALC_CLOTH_GOODS,
                         dragAndDropOrder);
 
                 if (displayImageViewResources[trackCoinsUsed] == -1)
-                    goldImageView.setVisibility(View.INVISIBLE);
+                    clothImageView.setVisibility(View.INVISIBLE);
                 else
-                    goldImageView.setImageResource(displayImageViewResources[trackCoinsUsed]);
+                    clothImageView.setImageResource(displayImageViewResources[trackCoinsUsed]);
 
                 trackCoinsUsed++;
                 v.invalidate();
@@ -191,26 +176,46 @@ public class GoldRoundsCalculationFragment extends Fragment implements View.OnDr
 
     private void handleProfileImageClick() {
         GameUtils.displayDraggedItemsForRemoval(getActivity(), getContext(),
-                GoldRoundsCalculationFragment.this, dragAndDropOrder, ApplicationConstants.ROUNDS_CALC_GOLD_GOODS);
+                ClothRoundsCalculationFragment.this, dragAndDropOrder, ApplicationConstants.ROUNDS_CALC_CLOTH_GOODS);
     }
 
     public void handleAlertDialogCloseButton() {
         trackCoinsUsed = dragAndDropOrder.size() - 1;
 
-        if (goldImageView.getVisibility() == View.INVISIBLE)
-            goldImageView.setVisibility(View.VISIBLE);
+        if (clothImageView.getVisibility() == View.INVISIBLE)
+            clothImageView.setVisibility(View.VISIBLE);
         if (trackCoinsUsed == -1)
-            goldImageView.setImageResource(R.drawable.a2_1_gold_full_imageview);
+            clothImageView.setImageResource(R.drawable.a4_1_cloth_full_imageview);
         else {
             if (displayImageViewResources[trackCoinsUsed] == -1) {
-                goldImageView.setVisibility(View.INVISIBLE);
+                clothImageView.setVisibility(View.INVISIBLE);
             }
             else {
-                goldImageView.setImageResource(displayImageViewResources[trackCoinsUsed]);
+                clothImageView.setImageResource(displayImageViewResources[trackCoinsUsed]);
             }
         }
 
         trackCoinsUsed++;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        menuInflater.inflate(R.menu.fragment_round_cal_next_menu, menu);
+        super.onCreateOptionsMenu(menu, menuInflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == android.R.id.home) {
+            ((RoundsCalculationActivity)getActivity()).getNavController().navigate(R.id.action_clothRoundsCalculationFragment_to_silverRoundsCalculationFragment);
+            return true;
+        }
+        else if (item.getItemId() == R.id.nextRoundsCalculationFragment) {
+            GameUtils.handleNextButtonClick(getActivity(), ApplicationConstants.ROUNDS_CALC_CLOTH_GOODS);
+
+            mainActivity.getNavController().navigate(R.id.action_silverRoundsCalculationFragment_to_goldRoundsCalculationFragment);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

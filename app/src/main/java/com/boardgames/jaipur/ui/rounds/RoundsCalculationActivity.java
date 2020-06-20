@@ -1,14 +1,17 @@
 package com.boardgames.jaipur.ui.rounds;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.boardgames.jaipur.R;
+import com.boardgames.jaipur.ui.newgame.GameSummaryActivity;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.GameDetails;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -109,5 +112,32 @@ public class RoundsCalculationActivity extends AppCompatActivity {
 
     public void setNavController(NavController navController) {
         this.navController = navController;
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog dialog;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.alertdialog_confirmation_title));
+        builder.setMessage(getString(R.string.alertdialog_backbutton_press_round_calc_msg));
+        builder.setPositiveButton(getString(R.string.alertdialog_confirmation_positive_button), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Intent resetIntent = new Intent(RoundsCalculationActivity.this, GameSummaryActivity.class);
+                setResult(RESULT_CANCELED, resetIntent);
+                finish();
+            }
+        });
+
+        builder.setNegativeButton(getString(R.string.alertdialog_confirmation_negative_button), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog = builder.create();
+        dialog.show();
     }
 }

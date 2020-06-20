@@ -62,6 +62,8 @@
 
     <string name="diamond_calculation_fragment_label">Diamonds</string>
     <string name="gold_calculation_fragment_label">Gold</string>
+    <string name="silver_calculation_fragment_label">Silver</string>
+    <string name="cloth_calculation_fragment_label">Cloth</string>
 
     <string name="imageview_content_description_text_for_player">Player Profile</string>
     <string name="imageview_content_description_text_for_coins">Coins</string>
@@ -73,6 +75,7 @@
     <string name="gamesummary_roundthree_title">Round 3</string>
     <string name="game_summary_activity_title">Game Summary</string>
     <string name="alertdialog_backbutton_press_game_summary_msg">Current game data will be lost!!! Do you want to continue?</string>
+    <string name="alertdialog_backbutton_press_round_calc_msg">Current round data will be lost!!! Do you want to continue?</string>
     <string name="reset_button_text">Reset</string>
     <string name="rematch_button_text">Rematch</string>
     <string name="save_button_text">Save</string>

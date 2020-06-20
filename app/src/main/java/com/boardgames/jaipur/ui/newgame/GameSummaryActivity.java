@@ -95,6 +95,10 @@ public class GameSummaryActivity extends AppCompatActivity {
             return true;
         }
 
+        else if (item.getItemId() == R.id.calculateButton) {
+            startRoundCalculation();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

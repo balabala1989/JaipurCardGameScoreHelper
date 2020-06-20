@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/goldRoundsCalculationFragment"
+        android:id="@+id/nextRoundsCalculationFragment"
         app:showAsAction="always"
         android:icon="@drawable/ic_arrow_forward_white_24dp"
         />

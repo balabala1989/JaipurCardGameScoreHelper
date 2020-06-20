@@ -20,9 +20,10 @@ public class DraggedItemsListViewModel extends AndroidViewModel {
     public MutableLiveData<ArrayList<String>> getDraggedItemList() {
         if (draggedItemList == null) {
             draggedItemList = new MutableLiveData<>();
-            draggedItemList.setValue(dragAndDroppedOrder);
+
         }
 
+        draggedItemList.setValue(dragAndDroppedOrder);
         return draggedItemList;
     }
 
@@ -36,5 +37,14 @@ public class DraggedItemsListViewModel extends AndroidViewModel {
 
     public void setDragAndDroppedOrder(ArrayList<String> dragAndDroppedOrder) {
         this.dragAndDroppedOrder = dragAndDroppedOrder;
+    }
+
+    public MutableLiveData<ArrayList<String>> resetDraggedItemList() {
+        if (draggedItemList == null) {
+            draggedItemList = new MutableLiveData<>();
+        }
+
+        draggedItemList.setValue(new ArrayList<String>());
+        return draggedItemList;
     }
 }
