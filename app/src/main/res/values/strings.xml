@@ -60,10 +60,16 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="diamond_calculation_fragment_label">Diamonds</string>
+    <string name="diamond_calculation_fragment_label">Diamond</string>
     <string name="gold_calculation_fragment_label">Gold</string>
     <string name="silver_calculation_fragment_label">Silver</string>
     <string name="cloth_calculation_fragment_label">Cloth</string>
+    <string name="spice_calculation_fragment_label">Spice</string>
+    <string name="leather_calculation_fragment_label">Leather</string>
+    <string name="three_card_token_calculation_fragment_label">3 Card Tokens</string>
+    <string name="four_card_token_calculation_fragment_label">4 Card Tokens</string>
+    <string name="five_card_token_calculation_fragment_label">5 Card Tokens</string>
+    <string name="camel_token_calculation_fragment_label">Camel Token</string>
 
     <string name="imageview_content_description_text_for_player">Player Profile</string>
     <string name="imageview_content_description_text_for_coins">Coins</string>
@@ -76,11 +82,14 @@
     <string name="game_summary_activity_title">Game Summary</string>
     <string name="alertdialog_backbutton_press_game_summary_msg">Current game data will be lost!!! Do you want to continue?</string>
     <string name="alertdialog_backbutton_press_round_calc_msg">Current round data will be lost!!! Do you want to continue?</string>
+    <string name="alertdialog_backbutton_press_item_calc_msg">Current selection will be lost!!! Do you want to continue?</string>
     <string name="reset_button_text">Reset</string>
     <string name="rematch_button_text">Rematch</string>
     <string name="save_button_text">Save</string>
     <string name="empty_dragged_item_data">No items drag and dropped yet!!!</string>
     <string name="alert_title_for_dropped_items">Drag and Dropped Coins</string>
+
+    <string name="default_score">0</string>
 
 
 </resources>

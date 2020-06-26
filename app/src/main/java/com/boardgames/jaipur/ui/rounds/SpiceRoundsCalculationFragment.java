@@ -29,34 +29,33 @@ import com.boardgames.jaipur.utils.ImageDragShadowBuilder;
 import java.util.ArrayList;
 
 
-public class ClothRoundsCalculationFragment extends Fragment implements View.OnDragListener, View.OnTouchListener {
+public class SpiceRoundsCalculationFragment extends Fragment implements View.OnDragListener, View.OnTouchListener {
 
     private int trackCoinsUsed = 0;
     private ImageView playerOneImageView;
     private ImageView playerTwoImageView;
-    private ImageView clothImageView;
-    private int[] dragShadowResources = {R.drawable.a4_2_cloth_5_drag_shadow,
-            R.drawable.a4_4_cloth_3_drag_shadow,
-            R.drawable.a4_4_cloth_3_drag_shadow,
-            R.drawable.a4_7_cloth_2_drag_shadow,
-            R.drawable.a4_7_cloth_2_drag_shadow,
-            R.drawable.a4_10_cloth_1_drag_shadow,
-            R.drawable.a4_10_cloth_1_drag_shadow};
-    private int[] displayImageViewResources = {R.drawable.a4_3_cloth_33_22_11_imageview,
-            R.drawable.a4_5_cloth_3_22_11_imageview,
-            R.drawable.a4_6_cloth_22_11_imageview,
-            R.drawable.a4_8_cloth_2_11_imageview,
-            R.drawable.a4_9_cloth_11_imageview,
-            R.drawable.a4_10_cloth_1_drag_shadow,
+    private ImageView spiceImageView;
+    private int[] dragShadowResources = {R.drawable.a5_2_spice_5_drag_shadow,
+            R.drawable.a5_4_spice_3_drag_shadow,
+            R.drawable.a5_4_spice_3_drag_shadow,
+            R.drawable.a5_7_spice_2_drag_shadow,
+            R.drawable.a5_7_spice_2_drag_shadow,
+            R.drawable.a5_10_spice_1_drag_shadow,
+            R.drawable.a5_10_spice_1_drag_shadow};
+    private int[] displayImageViewResources = {R.drawable.a5_3_spice_33_22_11_imageview,
+            R.drawable.a5_5_spice_3_22_11_imageview,
+            R.drawable.a5_6_spice_22_11_imageview,
+            R.drawable.a5_8_spice_2_11_imageview,
+            R.drawable.a5_9_spice_11_imageview,
+            R.drawable.a5_10_spice_1_drag_shadow,
             -1};
     private ArrayList<String> dragAndDropOrder;
     private RoundsCalculationActivity mainActivity;
-
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        View root = inflater.inflate(R.layout.fragment_cloth_rounds_calculation, container, false);
+        View root = inflater.inflate(R.layout.fragment_spice_rounds_calculation, container, false);
 
 
         mainActivity = (RoundsCalculationActivity) getActivity();
@@ -64,15 +63,15 @@ public class ClothRoundsCalculationFragment extends Fragment implements View.OnD
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.string.color_activity_actionbar))));
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(mainActivity.getRoundTitle() + getString(R.string.cloth_calculation_fragment_label));
+        actionBar.setTitle(mainActivity.getRoundTitle() + getString(R.string.spice_calculation_fragment_label));
 
-        GameUtils.loadPlayerDetailsInDisplay(ClothRoundsCalculationFragment.this, root, mainActivity.getGameDetails());
+        GameUtils.loadPlayerDetailsInDisplay(SpiceRoundsCalculationFragment.this, root, mainActivity.getGameDetails());
         View roundCalUserLayout = root.findViewById(R.id.roundUsersDisplay);
         playerOneImageView = roundCalUserLayout.findViewById(R.id.playerOneImageView);
         playerTwoImageView = roundCalUserLayout.findViewById(R.id.playerTwoImageView);
-        clothImageView = root.findViewById(R.id.clothImageView);
+        spiceImageView = root.findViewById(R.id.spiceImageView);
 
-        clothImageView.setOnTouchListener(this);
+        spiceImageView.setOnTouchListener(this);
         playerOneImageView.setOnDragListener(this);
         playerTwoImageView.setOnDragListener(this);
 
@@ -95,10 +94,9 @@ public class ClothRoundsCalculationFragment extends Fragment implements View.OnD
 
         setHasOptionsMenu(true);
 
-        GameUtils.resetOrInitializeActivityVars(mainActivity, ApplicationConstants.ROUNDS_CALC_CLOTH_GOODS);
+        GameUtils.resetOrInitializeActivityVars(mainActivity, ApplicationConstants.ROUNDS_CALC_SPICE_GOODS);
 
         return root;
-
     }
 
     @Override
@@ -136,13 +134,13 @@ public class ClothRoundsCalculationFragment extends Fragment implements View.OnD
                         playerId,
                         dragShadowResources[trackCoinsUsed],
                         playerName,
-                        ApplicationConstants.ROUNDS_CALC_CLOTH_GOODS,
+                        ApplicationConstants.ROUNDS_CALC_SPICE_GOODS,
                         dragAndDropOrder);
 
                 if (displayImageViewResources[trackCoinsUsed] == -1)
-                    clothImageView.setVisibility(View.INVISIBLE);
+                    spiceImageView.setVisibility(View.INVISIBLE);
                 else
-                    clothImageView.setImageResource(displayImageViewResources[trackCoinsUsed]);
+                    spiceImageView.setImageResource(displayImageViewResources[trackCoinsUsed]);
 
                 trackCoinsUsed++;
                 v.invalidate();
@@ -176,22 +174,22 @@ public class ClothRoundsCalculationFragment extends Fragment implements View.OnD
 
     private void handleProfileImageClick() {
         GameUtils.displayDraggedItemsForRemoval(getActivity(), getContext(),
-                ClothRoundsCalculationFragment.this, dragAndDropOrder, ApplicationConstants.ROUNDS_CALC_CLOTH_GOODS);
+                SpiceRoundsCalculationFragment.this, dragAndDropOrder, ApplicationConstants.ROUNDS_CALC_SPICE_GOODS);
     }
 
     public void handleAlertDialogCloseButton() {
         trackCoinsUsed = dragAndDropOrder.size() - 1;
 
-        if (clothImageView.getVisibility() == View.INVISIBLE)
-            clothImageView.setVisibility(View.VISIBLE);
+        if (spiceImageView.getVisibility() == View.INVISIBLE)
+            spiceImageView.setVisibility(View.VISIBLE);
         if (trackCoinsUsed == -1)
-            clothImageView.setImageResource(R.drawable.a4_1_cloth_full_imageview);
+            spiceImageView.setImageResource(R.drawable.a5_1_spice_full_imageview);
         else {
             if (displayImageViewResources[trackCoinsUsed] == -1) {
-                clothImageView.setVisibility(View.INVISIBLE);
+                spiceImageView.setVisibility(View.INVISIBLE);
             }
             else {
-                clothImageView.setImageResource(displayImageViewResources[trackCoinsUsed]);
+                spiceImageView.setImageResource(displayImageViewResources[trackCoinsUsed]);
             }
         }
 
@@ -208,13 +206,13 @@ public class ClothRoundsCalculationFragment extends Fragment implements View.OnD
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == android.R.id.home) {
-            ((RoundsCalculationActivity)getActivity()).getNavController().navigate(R.id.action_clothRoundsCalculationFragment_to_silverRoundsCalculationFragment);
+            ((RoundsCalculationActivity)getActivity()).getNavController().navigate(R.id.action_spiceRoundsCalculationFragment_to_clothRoundsCalculationFragment);
             return true;
         }
         else if (item.getItemId() == R.id.nextRoundsCalculationFragment) {
-            GameUtils.handleNextButtonClick(getActivity(), ApplicationConstants.ROUNDS_CALC_CLOTH_GOODS);
+            GameUtils.handleNextButtonClick(getActivity(), ApplicationConstants.ROUNDS_CALC_SPICE_GOODS);
 
-            mainActivity.getNavController().navigate(R.id.action_clothRoundsCalculationFragment_to_spiceRoundsCalculationFragment);
+            mainActivity.getNavController().navigate(R.id.action_silverRoundsCalculationFragment_to_goldRoundsCalculationFragment);
         }
         return super.onOptionsItemSelected(item);
     }

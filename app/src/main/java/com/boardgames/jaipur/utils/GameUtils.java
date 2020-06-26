@@ -16,13 +16,14 @@ import com.boardgames.jaipur.ui.rounds.DraggedItemsListViewModel;
 import com.boardgames.jaipur.ui.rounds.DiamondRoundsCalculationFragment;
 import com.boardgames.jaipur.ui.rounds.GoldRoundsCalculationFragment;
 import com.boardgames.jaipur.ui.rounds.RoundsCalculationActivity;
+import com.boardgames.jaipur.ui.rounds.RoundsCalculationSummaryActivity;
 import com.boardgames.jaipur.ui.rounds.SilverRoundsCalculationFragment;
+import com.boardgames.jaipur.ui.rounds.SpiceRoundsCalculationFragment;
 import com.bumptech.glide.Glide;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,8 +38,66 @@ public class GameUtils {
     public static final HashMap<Integer, Integer> dragShadowResourceToValue;
     private static MaterialStyledDialog dialog;
 
+    public static final HashMap<String,String> goodsNameToGoodsItems;
+    public static final HashMap<String, HashMap<String, Integer>> goodsToItemsToScore;
+    public static final HashMap<String, HashMap<String, Integer>> goodsToItemsToImage;
+    private static final String DIAMOND_ITEMS = "1_7~2_5_1~3_5_2~4_5_3";
+    private static final String GOLD_ITEMS = "1_6~2_5_1~3_5_2~4_5_3";
+    private static final String SILVER_ITEMS = "1_5~2_5_1~3_5_2~4_5_3";
 
     static  {
+
+        goodsNameToGoodsItems = new HashMap<>();
+        goodsToItemsToScore = new HashMap<>();
+        goodsToItemsToImage = new HashMap<>();
+
+        goodsNameToGoodsItems.put(ApplicationConstants.ROUNDS_CALC_DIAMOND_GOODS,DIAMOND_ITEMS);
+        goodsNameToGoodsItems.put(ApplicationConstants.ROUNDS_CALC_GOLD_GOODS,GOLD_ITEMS);
+        goodsNameToGoodsItems.put(ApplicationConstants.ROUNDS_CALC_SILVER_GOODS,SILVER_ITEMS);
+
+        HashMap<String, Integer> itemsToScore = new HashMap<>();
+        HashMap<String, Integer> itemsToImage = new HashMap<>();
+        //Diamonds
+
+        itemsToScore.put("1_7",14);
+        itemsToScore.put("2_5_1",5);
+        itemsToScore.put("3_5_2", 5);
+        itemsToScore.put("4_5_3", 5);
+        itemsToImage.put("1_7",R.drawable.a1_2_diamonds_77_drag_shadow);
+        itemsToImage.put("2_5_1",R.drawable.a1_4_diamonds_5_drag_shadow);
+        itemsToImage.put("3_5_2",R.drawable.a1_4_diamonds_5_drag_shadow);
+        itemsToImage.put("4_5_3",R.drawable.a1_4_diamonds_5_drag_shadow);
+        goodsToItemsToScore.put(ApplicationConstants.ROUNDS_CALC_DIAMOND_GOODS,itemsToScore);
+        goodsToItemsToImage.put(ApplicationConstants.ROUNDS_CALC_DIAMOND_GOODS, itemsToImage);
+
+        //Gold
+        itemsToScore = new HashMap<>();
+        itemsToImage = new HashMap<>();
+        itemsToScore.put("1_6",12);
+        itemsToScore.put("2_5_1",5);
+        itemsToScore.put("3_5_2", 5);
+        itemsToScore.put("4_5_3", 5);
+        itemsToImage.put("1_6",R.drawable.a2_2_gold_66_drag_shadow);
+        itemsToImage.put("2_5_1",R.drawable.a2_4_gold_5_drag_shadow);
+        itemsToImage.put("3_5_2",R.drawable.a2_4_gold_5_drag_shadow);
+        itemsToImage.put("4_5_3",R.drawable.a2_4_gold_5_drag_shadow);
+        goodsToItemsToScore.put(ApplicationConstants.ROUNDS_CALC_GOLD_GOODS,itemsToScore);
+        goodsToItemsToImage.put(ApplicationConstants.ROUNDS_CALC_GOLD_GOODS, itemsToImage);
+
+        //Gold
+        itemsToScore = new HashMap<>();
+        itemsToImage = new HashMap<>();
+        itemsToScore.put("1_5",10);
+        itemsToScore.put("2_5_1",5);
+        itemsToScore.put("3_5_2", 5);
+        itemsToScore.put("4_5_3", 5);
+        itemsToImage.put("1_5",R.drawable.a3_2_silver_55_drag_shadow);
+        itemsToImage.put("2_5_1",R.drawable.a3_4_silver_5_drag_shadow);
+        itemsToImage.put("3_5_2",R.drawable.a3_4_silver_5_drag_shadow);
+        itemsToImage.put("4_5_3",R.drawable.a3_4_silver_5_drag_shadow);
+        goodsToItemsToScore.put(ApplicationConstants.ROUNDS_CALC_SILVER_GOODS,itemsToScore);
+        goodsToItemsToImage.put(ApplicationConstants.ROUNDS_CALC_SILVER_GOODS, itemsToImage);
+
         dragShadowResourceToValue = new HashMap<Integer, Integer>();
         dragShadowResourceToValue.put(R.drawable.a1_2_diamonds_77_drag_shadow, 14);
         dragShadowResourceToValue.put(R.drawable.a1_4_diamonds_5_drag_shadow, 5);
@@ -50,6 +109,31 @@ public class GameUtils {
         dragShadowResourceToValue.put(R.drawable.a4_4_cloth_3_drag_shadow, 3);
         dragShadowResourceToValue.put(R.drawable.a4_7_cloth_2_drag_shadow, 2);
         dragShadowResourceToValue.put(R.drawable.a4_10_cloth_1_drag_shadow, 1);
+        dragShadowResourceToValue.put(R.drawable.a5_2_spice_5_drag_shadow, 5);
+        dragShadowResourceToValue.put(R.drawable.a5_4_spice_3_drag_shadow, 3);
+        dragShadowResourceToValue.put(R.drawable.a5_7_spice_2_drag_shadow, 2);
+        dragShadowResourceToValue.put(R.drawable.a5_10_spice_1_drag_shadow, 1);
+    }
+
+    public static void loadPlayerDetailsInDisplay(Activity activity, GameDetails gameDetails) {
+        int width = PlayerUtils.getWidthforImageViewByOneThird(activity);
+        RoundsCalculationSummaryActivity roundsCalculationSummaryActivity = (RoundsCalculationSummaryActivity) activity;
+        ImageView playerOneImageView = roundsCalculationSummaryActivity.findViewById(R.id.playerOneImageView);
+        ImageView playerTwoImageView = roundsCalculationSummaryActivity.findViewById(R.id.playerTwoImageView);
+        TextView playerOneTextView = roundsCalculationSummaryActivity.findViewById(R.id.playerOneTextView);
+        TextView playerTwoTextView = roundsCalculationSummaryActivity.findViewById(R.id.playerTwoTextView);
+
+        playerOneTextView.setText(gameDetails.getPlayersInAGame().getPlayerOne().getPlayerName());
+        playerTwoTextView.setText(gameDetails.getPlayersInAGame().getPlayerTwo().getPlayerName());
+
+        Glide.with(roundsCalculationSummaryActivity.getApplicationContext())
+                .load(gameDetails.getPlayersInAGame().getPlayerOneProfile())
+                .override(width, width)
+                .into(playerOneImageView);
+        Glide.with(roundsCalculationSummaryActivity.getApplicationContext())
+                .load(gameDetails.getPlayersInAGame().getPlayerTwoProfile())
+                .override(width, width)
+                .into(playerTwoImageView);
     }
 
     public static void loadPlayerDetailsInDisplay(Fragment parentFragment, View fragmentView, GameDetails gameDetails) {
@@ -143,6 +227,8 @@ public class GameUtils {
                    ((SilverRoundsCalculationFragment) parentFragment).handleAlertDialogCloseButton();
                else if (parentFragment instanceof ClothRoundsCalculationFragment)
                    ((ClothRoundsCalculationFragment) parentFragment).handleAlertDialogCloseButton();
+               else if (parentFragment instanceof SpiceRoundsCalculationFragment)
+                   ((SpiceRoundsCalculationFragment) parentFragment).handleAlertDialogCloseButton();
                 dialog.dismiss();
             }
         });

@@ -43,6 +43,7 @@ package com.boardgames.jaipur.utils;
         public static final int GAMESUMMARYACTIVITY_ROUNDCALCACTIVITY_REQUEST_CODE = 8004;
         public static final String HYPEN = " - ";
         public static final String SEPARATOR_OF_VIEWS = "~";
+        public static final String SEPARATOR_OF_DATA = "|";
 
         public static final String ROUNDS_CALC_DIAMOND_GOODS = "DIAMOND";
         public static final String ROUNDS_CALC_GOLD_GOODS = "GOLD";
@@ -53,5 +54,12 @@ package com.boardgames.jaipur.utils;
         public static final String ROUNDS_CALC_3_CARD_TOKEN = "3_CARD_TOKEN";
         public static final String ROUNDS_CALC_4_CARD_TOKEN = "4_CARD_TOKEN";
         public static final String ROUNDS_CALC_5_CARD_TOKEN = "5_CARD_TOKEN";
+        public static final String ROUNDS_CALC_CAMEL_TOKEN = "CAMEL_TOKEN";
 
+
+        public static final String EXCEPTION_DUE_TO_UNAVAILABILITY_OF_INTENT = "EXCEPTION_DUE_TO_UNAVAILABILITY_OF_INTENT";
+        public static final String GOODS_DATA_FROM_SUMMARY_TO_ITEM_DETAILS = "GOODS_DATA";
+        public static final String GOODS_NAME_FROM_SUMMARY_TO_ITEM_DETAILS = "GOODS_NAME";
+        public static final String SELECTED_PLAYER_FROM_SUMMARY_TO_ITEM_DETAILS = "SELECTED_PLAYER";
+        public static final long DEFAULT_PLAYER_ID = -1;
 }

@@ -49,5 +49,18 @@
             android:id="@+id/action_clothRoundsCalculationFragment_to_silverRoundsCalculationFragment"
             app:destination="@id/silverRoundsCalculationFragment"
             app:popUpTo="@id/silverRoundsCalculationFragment"/>
+        <action
+            android:id="@+id/action_clothRoundsCalculationFragment_to_spiceRoundsCalculationFragment"
+            app:destination="@id/spiceRoundsCalculationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/spiceRoundsCalculationFragment"
+        android:name="com.boardgames.jaipur.ui.rounds.SpiceRoundsCalculationFragment"
+        android:label="fragment_spice_rounds_calculation"
+        tools:layout="@layout/fragment_spice_rounds_calculation" >
+        <action
+            android:id="@+id/action_spiceRoundsCalculationFragment_to_clothRoundsCalculationFragment"
+            app:destination="@id/clothRoundsCalculationFragment"
+            app:popUpTo="@id/spiceRoundsCalculationFragment"/>
     </fragment>
 </navigation>
