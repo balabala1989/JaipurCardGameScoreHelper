@@ -7,9 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.boardgames.jaipur.MainActivity;
 import com.boardgames.jaipur.R;
-import com.boardgames.jaipur.entities.Game;
-import com.boardgames.jaipur.entities.Player;
-import com.boardgames.jaipur.ui.rounds.RoundsCalculationActivity;
+import com.boardgames.jaipur.ui.rounds.RoundsCalculationSummaryActivity;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.GameDetails;
 import com.boardgames.jaipur.utils.PlayerUtils;
@@ -17,8 +15,6 @@ import com.bumptech.glide.Glide;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -103,7 +99,7 @@ public class GameSummaryActivity extends AppCompatActivity {
     }
 
     private void computeRoundScore(int roundNumber) {
-        Intent roundIntent = new Intent(GameSummaryActivity.this, RoundsCalculationActivity.class);
+        //Intent roundIntent = new Intent(GameSummaryActivity.this, RoundsCalculationActivity.class);
 
     }
 
@@ -154,7 +150,8 @@ public class GameSummaryActivity extends AppCompatActivity {
     }
 
     private void startRoundCalculation() {
-        Intent roundCalIntent = new Intent(GameSummaryActivity.this, RoundsCalculationActivity.class);
+        //Intent roundCalIntent = new Intent(GameSummaryActivity.this, RoundsCalculationActivity.class);
+        Intent roundCalIntent = new Intent(GameSummaryActivity.this, RoundsCalculationSummaryActivity.class);
         roundCalIntent.putExtra(ApplicationConstants.STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME, gameDetails);
         startActivityForResult(roundCalIntent, ApplicationConstants.GAMESUMMARYACTIVITY_ROUNDCALCACTIVITY_REQUEST_CODE);
     }

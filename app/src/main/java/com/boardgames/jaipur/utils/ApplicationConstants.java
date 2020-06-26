@@ -62,4 +62,6 @@ package com.boardgames.jaipur.utils;
         public static final String GOODS_NAME_FROM_SUMMARY_TO_ITEM_DETAILS = "GOODS_NAME";
         public static final String SELECTED_PLAYER_FROM_SUMMARY_TO_ITEM_DETAILS = "SELECTED_PLAYER";
         public static final long DEFAULT_PLAYER_ID = -1;
+
+        public static final int ROUND_SUMMARY_ITEM_DISPLAY_REQUEST_IMAGE = 9002;
 }

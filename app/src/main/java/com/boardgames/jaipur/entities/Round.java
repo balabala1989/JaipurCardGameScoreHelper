@@ -9,8 +9,10 @@ import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName = "rounds", indices = {@Index("game_id"), @Index("player_id")})
-public class Round implements Parcelable {
+public class Round implements Parcelable, Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private long id;

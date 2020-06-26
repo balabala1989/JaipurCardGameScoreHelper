@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:contentDescription="@string/imageview_content_description_text_for_coins"
-        app:srcCompat="@drawable/a1_2_diamonds_77_drag_shadow" />
+        app:srcCompat="@drawable/a1_1_diamonds_77_imagview" />
 
     <TextView
         android:id="@+id/playerNameTextView"

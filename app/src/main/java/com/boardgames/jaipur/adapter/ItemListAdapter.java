@@ -78,7 +78,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 itemListViewHolder.playerNameTextView.setText(gameDetails.getPlayersInAGame().getPlayerTwo().getPlayerName());
             }
 
-            if (playerID != selectedPlayerID) {
+            if (playerID != ApplicationConstants.DEFAULT_PLAYER_ID && playerID != selectedPlayerID) {
                 itemListViewHolder.itemImageView.setClickable(false);
             }
             else {

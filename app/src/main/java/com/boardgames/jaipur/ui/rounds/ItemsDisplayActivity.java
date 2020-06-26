@@ -47,20 +47,22 @@ public class ItemsDisplayActivity extends AppCompatActivity {
             handleException(true);
 
         gameDetails = receivedIntent.getParcelableExtra(ApplicationConstants.STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME);
+        goodsNameReceived = receivedIntent.getStringExtra(ApplicationConstants.GOODS_NAME_FROM_SUMMARY_TO_ITEM_DETAILS);
+        goodsDataReceived = receivedIntent.getStringExtra(ApplicationConstants.GOODS_DATA_FROM_SUMMARY_TO_ITEM_DETAILS);
+        selectedPlayerID = receivedIntent.getLongExtra(ApplicationConstants.SELECTED_PLAYER_FROM_SUMMARY_TO_ITEM_DETAILS, (int) ApplicationConstants.DEFAULT_PLAYER_ID);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.string.color_activity_actionbar))));
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(computeRoundTitle());
 
-        goodsNameReceived = receivedIntent.getStringExtra(ApplicationConstants.GOODS_NAME_FROM_SUMMARY_TO_ITEM_DETAILS);
-        goodsDataReceived = receivedIntent.getStringExtra(ApplicationConstants.GOODS_DATA_FROM_SUMMARY_TO_ITEM_DETAILS);
-        selectedPlayerID = receivedIntent.getIntExtra(ApplicationConstants.SELECTED_PLAYER_FROM_SUMMARY_TO_ITEM_DETAILS, (int) ApplicationConstants.DEFAULT_PLAYER_ID);
+
         if (selectedPlayerID == ApplicationConstants.DEFAULT_PLAYER_ID)
             handleException(true);
 
         initializeGoodToPlayer();
 
+        goodsData = new ArrayList<>();
         for (Map.Entry<String, Long> entry : goodsToPlayer.entrySet()) {
             goodsData.add(entry.getKey() + ApplicationConstants.SEPARATOR_OF_VIEWS + String.valueOf(entry.getValue()));
         }
@@ -132,46 +134,22 @@ public class ItemsDisplayActivity extends AppCompatActivity {
         }
 
         if (selectedPlayerID == gameDetails.getPlayersInAGame().getPlayerOne().getId()) {
-            setScoreForPlayer(gameDetails.getPlayerOneRounds().get(gameDetails.getRoundInProgress()), score);
+            GameUtils.setScore(gameDetails.getPlayerOneRounds().get(gameDetails.getRoundInProgress()), score, goodsNameReceived);
         }
         else {
-            setScoreForPlayer(gameDetails.getPlayerTwoRounds().get(gameDetails.getRoundInProgress()), score);
+            GameUtils.setScore(gameDetails.getPlayerTwoRounds().get(gameDetails.getRoundInProgress()), score, goodsNameReceived);
         }
 
         goodsDataReceived = buffer.toString();
+        if (goodsDataReceived.length() != 0)
+            goodsDataReceived = goodsDataReceived.substring(0, goodsDataReceived.length() - 1);
         Intent replyIntent = new Intent();
         replyIntent.putExtra(ApplicationConstants.STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME, gameDetails);
-        replyIntent.putExtra(ApplicationConstants.GOODS_DATA_FROM_SUMMARY_TO_ITEM_DETAILS, goodsDataReceived.substring(0, goodsDataReceived.length() - 1));
+        replyIntent.putExtra(ApplicationConstants.GOODS_DATA_FROM_SUMMARY_TO_ITEM_DETAILS, goodsDataReceived);
         replyIntent.putExtra(ApplicationConstants.GOODS_NAME_FROM_SUMMARY_TO_ITEM_DETAILS, goodsNameReceived);
+        replyIntent.putExtra(ApplicationConstants.SELECTED_PLAYER_FROM_SUMMARY_TO_ITEM_DETAILS, selectedPlayerID);
         setResult(RESULT_OK, replyIntent);
         finish();
-    }
-
-    private void setScoreForPlayer(Round round, int score) {
-        switch (goodsNameReceived) {
-            case ApplicationConstants.ROUNDS_CALC_DIAMOND_GOODS:
-                round.setDiamondScore(score);
-            case ApplicationConstants.ROUNDS_CALC_GOLD_GOODS:
-                round.setGoldScore(score);
-            case ApplicationConstants.ROUNDS_CALC_SILVER_GOODS:
-                round.setSilverScore(score);
-            case ApplicationConstants.ROUNDS_CALC_CLOTH_GOODS:
-                round.setClothScore(score);
-            case ApplicationConstants.ROUNDS_CALC_SPICE_GOODS:
-                round.setSpiceScore(score);
-            case ApplicationConstants.ROUNDS_CALC_LEATHER_GOODS:
-                round.setLeatherScore(score);
-            case ApplicationConstants.ROUNDS_CALC_3_CARD_TOKEN:
-                round.setThreeCardTokenScore(score);
-            case ApplicationConstants.ROUNDS_CALC_4_CARD_TOKEN:
-                round.setFourCardTokenScore(score);
-            case ApplicationConstants.ROUNDS_CALC_5_CARD_TOKEN:
-                round.setFiveCardTokenScore(score);
-            case ApplicationConstants.ROUNDS_CALC_CAMEL_TOKEN:
-                round.setCamelReceived('Y');
-            default:
-                return;
-        }
     }
 
     private void handleException(boolean isExceptionOccurred) {
@@ -184,6 +162,7 @@ public class ItemsDisplayActivity extends AppCompatActivity {
 
     private void initializeGoodToPlayer() {
         //Initialize the map with -1 indicating no player assigned
+        goodsToPlayer = new HashMap<>();
         String items = GameUtils.goodsNameToGoodsItems.get(goodsNameReceived);
         StringTokenizer tokenizer = new StringTokenizer(items,ApplicationConstants.SEPARATOR_OF_VIEWS);
         while (tokenizer.hasMoreTokens()) {
@@ -206,37 +185,52 @@ public class ItemsDisplayActivity extends AppCompatActivity {
         switch(gameDetails.getRoundInProgress()) {
             case 1:
                 roundTitle = getString(R.string.gamesummary_roundone_title) + ApplicationConstants.HYPEN;
+                break;
             case 2:
                 roundTitle = getString(R.string.gamesummary_roundtwo_title) + ApplicationConstants.HYPEN;
+                break;
             case 3:
                 roundTitle = getString(R.string.gamesummary_roundthree_title) + ApplicationConstants.HYPEN;
+                break;
             default:
                 roundTitle = "";
+                break;
         }
 
         switch(goodsNameReceived) {
             case ApplicationConstants.ROUNDS_CALC_DIAMOND_GOODS:
                 roundTitle += getString(R.string.diamond_calculation_fragment_label);
+                break;
             case ApplicationConstants.ROUNDS_CALC_GOLD_GOODS:
                 roundTitle += getString(R.string.gold_calculation_fragment_label);
+                break;
             case ApplicationConstants.ROUNDS_CALC_SILVER_GOODS:
                 roundTitle += getString(R.string.silver_calculation_fragment_label);
+                break;
             case ApplicationConstants.ROUNDS_CALC_CLOTH_GOODS:
                 roundTitle += getString(R.string.cloth_calculation_fragment_label);
+                break;
             case ApplicationConstants.ROUNDS_CALC_SPICE_GOODS:
                 roundTitle += getString(R.string.spice_calculation_fragment_label);
+                break;
             case ApplicationConstants.ROUNDS_CALC_LEATHER_GOODS:
                 roundTitle += getString(R.string.leather_calculation_fragment_label);
+                break;
             case ApplicationConstants.ROUNDS_CALC_3_CARD_TOKEN:
                 roundTitle += getString(R.string.three_card_token_calculation_fragment_label);
+                break;
             case ApplicationConstants.ROUNDS_CALC_4_CARD_TOKEN:
                 roundTitle += getString(R.string.four_card_token_calculation_fragment_label);
+                break;
             case ApplicationConstants.ROUNDS_CALC_5_CARD_TOKEN:
                 roundTitle += getString(R.string.five_card_token_calculation_fragment_label);
+                break;
             case ApplicationConstants.ROUNDS_CALC_CAMEL_TOKEN:
                 roundTitle += getString(R.string.camel_token_calculation_fragment_label);
+                break;
             default:
                 roundTitle = "";
+                break;
         }
 
         return roundTitle;
