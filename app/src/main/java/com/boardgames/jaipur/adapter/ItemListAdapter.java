@@ -1,6 +1,7 @@
 package com.boardgames.jaipur.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,6 +81,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             if (playerID != ApplicationConstants.DEFAULT_PLAYER_ID && playerID != selectedPlayerID) {
                 itemListViewHolder.itemImageView.setClickable(false);
+                itemListViewHolder.playerNameTextView.setTextColor(Color.parseColor("#c40819"));
             }
             else {
                 itemListViewHolder.itemImageView.setClickable(true);

@@ -9,6 +9,8 @@
         android:id="@+id/singleItemImageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:contentDescription="@string/imageview_content_description_text_for_coins"
         app:srcCompat="@drawable/a1_1_diamonds_77_imagview" />
 
@@ -16,6 +18,8 @@
         android:id="@+id/playerNameTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="8dp"
         android:fontFamily="@font/biorhyme"
         android:gravity="center"
         android:textColor="#04289E"

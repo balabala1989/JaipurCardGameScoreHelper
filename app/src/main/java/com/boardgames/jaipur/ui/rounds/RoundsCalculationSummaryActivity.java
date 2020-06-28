@@ -1,6 +1,7 @@
 package com.boardgames.jaipur.ui.rounds;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.entities.Round;
@@ -11,10 +12,13 @@ import com.boardgames.jaipur.utils.GoodsDetailsForARound;
 import com.boardgames.jaipur.utils.PlayerUtils;
 import com.bumptech.glide.Glide;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,6 +35,22 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
     private TextView goldPlayerTwoTextView;
     private TextView silverPlayerOneTextView;
     private TextView silverPlayerTwoTextView;
+    private TextView clothPlayerOneTextView;
+    private TextView clothPlayerTwoTextView;
+    private TextView spicePlayerOneTextView;
+    private TextView spicePlayerTwoTextView;
+    private TextView leatherPlayerOneTextView;
+    private TextView leatherPlayerTwoTextView;
+    private TextView threeTokenPlayerOneTextView;
+    private TextView threeTokenPlayerTwoTextView;
+    private TextView fourTokenPlayerOneTextView;
+    private TextView fourTokenPlayerTwoTextView;
+    private TextView fiveTokenPlayerOneTextView;
+    private TextView fiveTokenPlayerTwoTextView;
+    private TextView camelTokenPlayerOneTextView;
+    private TextView camelTokenPlayerTwoTextView;
+    private TextView sumPlayerOneTextView;
+    private TextView sumPlayerTwoTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +106,31 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
             gameDetails.getPlayerTwoRounds().put(gameDetails.getRoundInProgress(), initializeRoundWithPlayer(gameDetails.getPlayersInAGame().getPlayerTwo().getId()));
         }
 
+
+
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_new_game_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            handleBackOrHomeButtonClick();
+        }
+        else if (item.getItemId() == R.id.startNewGameButton) {
+            handleResultOk();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        handleBackOrHomeButtonClick();
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -100,15 +143,38 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
         }
     }
 
+    private void handleBackOrHomeButtonClick() {
+        AlertDialog dialog;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.alertdialog_confirmation_title));
+        builder.setMessage(getString(R.string.alertdialog_backbutton_press_round_calc_msg));
+        builder.setPositiveButton(getString(R.string.alertdialog_confirmation_positive_button), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                handleException(false);
+            }
+        });
+
+        builder.setNegativeButton(getString(R.string.alertdialog_confirmation_negative_button), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog = builder.create();
+        dialog.show();
+    }
 
     private String computeRoundTitle(int roundInProgress) {
         switch (roundInProgress) {
             case 1:
-                return getString(R.string.gamesummary_roundone_title);
+                return getString(R.string.gamesummary_roundone_title) + " Summary";
             case 2:
-                return getString(R.string.gamesummary_roundtwo_title);
+                return getString(R.string.gamesummary_roundtwo_title) + " Summary";
             case 3:
-                return getString(R.string.gamesummary_roundthree_title);
+                return getString(R.string.gamesummary_roundthree_title) + " Summary";
             default:
                 return "";
         }
@@ -130,7 +196,22 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
         goldPlayerTwoTextView = findViewById(R.id.playerTwoGoldTextView);
         silverPlayerOneTextView = findViewById(R.id.playerOneSilverTextView);
         silverPlayerTwoTextView = findViewById(R.id.playerTwoSilverTextView);
-
+        clothPlayerOneTextView = findViewById(R.id.playerOneClothTextView);
+        clothPlayerTwoTextView = findViewById(R.id.playerTwoClothTextView);
+        spicePlayerOneTextView = findViewById(R.id.playerOneSpiceTextView);
+        spicePlayerTwoTextView = findViewById(R.id.playerTwoSpiceTextView);
+        leatherPlayerOneTextView = findViewById(R.id.playerOneLeatherTextView);
+        leatherPlayerTwoTextView = findViewById(R.id.playerTwoLeatherTextView);
+        threeTokenPlayerOneTextView = findViewById(R.id.playerOneThreeTokenTextView);
+        threeTokenPlayerTwoTextView = findViewById(R.id.playerTwoThreeTokenTextView);
+        fourTokenPlayerOneTextView = findViewById(R.id.playerOneFourTokenTextView);
+        fourTokenPlayerTwoTextView = findViewById(R.id.playerTwoFourTokenTextView);
+        fiveTokenPlayerOneTextView = findViewById(R.id.playerOneFiveTokenTextView);
+        fiveTokenPlayerTwoTextView = findViewById(R.id.playerTwoFiveTokenTextView);
+        camelTokenPlayerOneTextView = findViewById(R.id.playerOneCamelTokenTextView);
+        camelTokenPlayerTwoTextView = findViewById(R.id.playerTwoCamelTokenTextView);
+        sumPlayerOneTextView = findViewById(R.id.playerOneSumTextView);
+        sumPlayerTwoTextView = findViewById(R.id.playerTwoSumTextView);
 
         diamondPlayerOneTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,6 +249,90 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
                 handleTextViewClick(gameDetails.getPlayersInAGame().getPlayerTwo().getId(), ApplicationConstants.ROUNDS_CALC_SILVER_GOODS);
             }
         });
+        clothPlayerOneTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleTextViewClick(gameDetails.getPlayersInAGame().getPlayerOne().getId(), ApplicationConstants.ROUNDS_CALC_CLOTH_GOODS);
+            }
+        });
+        clothPlayerTwoTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleTextViewClick(gameDetails.getPlayersInAGame().getPlayerTwo().getId(), ApplicationConstants.ROUNDS_CALC_CLOTH_GOODS);
+            }
+        });
+        spicePlayerOneTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleTextViewClick(gameDetails.getPlayersInAGame().getPlayerOne().getId(), ApplicationConstants.ROUNDS_CALC_SPICE_GOODS);
+            }
+        });
+        spicePlayerTwoTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleTextViewClick(gameDetails.getPlayersInAGame().getPlayerTwo().getId(), ApplicationConstants.ROUNDS_CALC_SPICE_GOODS);
+            }
+        });
+        leatherPlayerOneTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleTextViewClick(gameDetails.getPlayersInAGame().getPlayerOne().getId(), ApplicationConstants.ROUNDS_CALC_LEATHER_GOODS);
+            }
+        });
+        leatherPlayerTwoTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleTextViewClick(gameDetails.getPlayersInAGame().getPlayerTwo().getId(), ApplicationConstants.ROUNDS_CALC_LEATHER_GOODS);
+            }
+        });
+        threeTokenPlayerOneTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleTextViewClick(gameDetails.getPlayersInAGame().getPlayerOne().getId(), ApplicationConstants.ROUNDS_CALC_3_CARD_TOKEN);
+            }
+        });
+        threeTokenPlayerTwoTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleTextViewClick(gameDetails.getPlayersInAGame().getPlayerTwo().getId(), ApplicationConstants.ROUNDS_CALC_3_CARD_TOKEN);
+            }
+        });
+        fourTokenPlayerOneTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleTextViewClick(gameDetails.getPlayersInAGame().getPlayerOne().getId(), ApplicationConstants.ROUNDS_CALC_4_CARD_TOKEN);
+            }
+        });
+        fourTokenPlayerTwoTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleTextViewClick(gameDetails.getPlayersInAGame().getPlayerTwo().getId(), ApplicationConstants.ROUNDS_CALC_4_CARD_TOKEN);
+            }
+        });
+        fiveTokenPlayerOneTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleTextViewClick(gameDetails.getPlayersInAGame().getPlayerOne().getId(), ApplicationConstants.ROUNDS_CALC_5_CARD_TOKEN);
+            }
+        });
+        fiveTokenPlayerTwoTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleTextViewClick(gameDetails.getPlayersInAGame().getPlayerTwo().getId(), ApplicationConstants.ROUNDS_CALC_5_CARD_TOKEN);
+            }
+        });
+        camelTokenPlayerOneTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleTextViewClick(gameDetails.getPlayersInAGame().getPlayerOne().getId(), ApplicationConstants.ROUNDS_CALC_CAMEL_TOKEN);
+            }
+        });
+        camelTokenPlayerTwoTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleTextViewClick(gameDetails.getPlayersInAGame().getPlayerTwo().getId(), ApplicationConstants.ROUNDS_CALC_CAMEL_TOKEN);
+            }
+        });
     }
 
     private void handleTextViewClick(long playerClicked, String goodsSelected) {
@@ -190,6 +355,10 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
 
         updateGoodsDetailsForARoundAndScore(goodsNameReceived, goodsDataReceived, selectedPlayerID);
 
+        sumPlayerOneTextView.setText(String.valueOf(computeScore(gameDetails.getPlayerOneRounds().get(gameDetails.getRoundInProgress()))));
+        sumPlayerTwoTextView.setText(String.valueOf(computeScore(gameDetails.getPlayerTwoRounds().get(gameDetails.getRoundInProgress()))));
+
+        findWinnerOfRound();
     }
 
     private void updateGoodsDetailsForARoundAndScore(String goodsNameReceived, String goodsDataReceived, long selectedPlayerID) {
@@ -217,6 +386,56 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
                 break;
             case ApplicationConstants.ROUNDS_CALC_CLOTH_GOODS:
                 goodsDetailsForARound.setClothGoodsDetail(goodsDataReceived);
+                if (selectedPlayerID == gameDetails.getPlayersInAGame().getPlayerOne().getId())
+                    clothPlayerOneTextView.setText(String.valueOf(gameDetails.getPlayerOneRounds().get(gameDetails.getRoundInProgress()).getClothScore()));
+                else
+                    clothPlayerTwoTextView.setText(String.valueOf(gameDetails.getPlayerTwoRounds().get(gameDetails.getRoundInProgress()).getClothScore()));
+                break;
+            case ApplicationConstants.ROUNDS_CALC_SPICE_GOODS:
+                goodsDetailsForARound.setSpiceGoodsDetail(goodsDataReceived);
+                if (selectedPlayerID == gameDetails.getPlayersInAGame().getPlayerOne().getId())
+                    spicePlayerOneTextView.setText(String.valueOf(gameDetails.getPlayerOneRounds().get(gameDetails.getRoundInProgress()).getSpiceScore()));
+                else
+                    spicePlayerTwoTextView.setText(String.valueOf(gameDetails.getPlayerTwoRounds().get(gameDetails.getRoundInProgress()).getSpiceScore()));
+                break;
+            case ApplicationConstants.ROUNDS_CALC_LEATHER_GOODS:
+                goodsDetailsForARound.setLeatherGoodsDetail(goodsDataReceived);
+                if (selectedPlayerID == gameDetails.getPlayersInAGame().getPlayerOne().getId())
+                    leatherPlayerOneTextView.setText(String.valueOf(gameDetails.getPlayerOneRounds().get(gameDetails.getRoundInProgress()).getLeatherScore()));
+                else
+                    leatherPlayerTwoTextView.setText(String.valueOf(gameDetails.getPlayerTwoRounds().get(gameDetails.getRoundInProgress()).getLeatherScore()));
+                break;
+            case ApplicationConstants.ROUNDS_CALC_3_CARD_TOKEN:
+                goodsDetailsForARound.setThreeTokenDetail(goodsDataReceived);
+                if (selectedPlayerID == gameDetails.getPlayersInAGame().getPlayerOne().getId())
+                    threeTokenPlayerOneTextView.setText(String.valueOf(gameDetails.getPlayerOneRounds().get(gameDetails.getRoundInProgress()).getThreeCardTokenScore()));
+                else
+                    threeTokenPlayerTwoTextView.setText(String.valueOf(gameDetails.getPlayerTwoRounds().get(gameDetails.getRoundInProgress()).getThreeCardTokenScore()));
+                break;
+            case ApplicationConstants.ROUNDS_CALC_4_CARD_TOKEN:
+                goodsDetailsForARound.setFourTokenDetail(goodsDataReceived);
+                if (selectedPlayerID == gameDetails.getPlayersInAGame().getPlayerOne().getId())
+                    fourTokenPlayerOneTextView.setText(String.valueOf(gameDetails.getPlayerOneRounds().get(gameDetails.getRoundInProgress()).getFourCardTokenScore()));
+                else
+                    fourTokenPlayerTwoTextView.setText(String.valueOf(gameDetails.getPlayerTwoRounds().get(gameDetails.getRoundInProgress()).getFourCardTokenScore()));
+                break;
+            case ApplicationConstants.ROUNDS_CALC_5_CARD_TOKEN:
+                goodsDetailsForARound.setFiveTokenDetail(goodsDataReceived);
+                if (selectedPlayerID == gameDetails.getPlayersInAGame().getPlayerOne().getId())
+                    fiveTokenPlayerOneTextView.setText(String.valueOf(gameDetails.getPlayerOneRounds().get(gameDetails.getRoundInProgress()).getFiveCardTokenScore()));
+                else
+                    fiveTokenPlayerTwoTextView.setText(String.valueOf(gameDetails.getPlayerTwoRounds().get(gameDetails.getRoundInProgress()).getFiveCardTokenScore()));
+                break;
+            case ApplicationConstants.ROUNDS_CALC_CAMEL_TOKEN:
+                goodsDetailsForARound.setCamelTokenDetail(goodsDataReceived);
+                if (selectedPlayerID == gameDetails.getPlayersInAGame().getPlayerOne().getId()) {
+                    char camelReceived = gameDetails.getPlayerOneRounds().get(gameDetails.getRoundInProgress()).getCamelReceived();
+                    camelTokenPlayerOneTextView.setText(camelReceived == 'Y' ? "5" : "0");
+                }
+                else {
+                    char camelReceived = gameDetails.getPlayerTwoRounds().get(gameDetails.getRoundInProgress()).getCamelReceived();
+                    camelTokenPlayerTwoTextView.setText(camelReceived == 'Y' ? "5" : "0");
+                }
                 break;
             default:
                 return;
@@ -232,12 +451,22 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
             case ApplicationConstants.ROUNDS_CALC_SILVER_GOODS:
                 return goodsDetailsForARound.getSilverGoodsDetail();
             case ApplicationConstants.ROUNDS_CALC_CLOTH_GOODS:
-                //goodsDetailsForARound.setClothGoodsDetail(goodsDataReceived);
-                break;
+                return goodsDetailsForARound.getClothGoodsDetail();
+            case ApplicationConstants.ROUNDS_CALC_SPICE_GOODS:
+                return goodsDetailsForARound.getSpiceGoodsDetail();
+            case ApplicationConstants.ROUNDS_CALC_LEATHER_GOODS:
+                return goodsDetailsForARound.getLeatherGoodsDetail();
+            case ApplicationConstants.ROUNDS_CALC_3_CARD_TOKEN:
+                return goodsDetailsForARound.getThreeTokenDetail();
+            case ApplicationConstants.ROUNDS_CALC_4_CARD_TOKEN:
+                return goodsDetailsForARound.getFourTokenDetail();
+            case ApplicationConstants.ROUNDS_CALC_5_CARD_TOKEN:
+                return goodsDetailsForARound.getFiveTokenDetail();
+            case ApplicationConstants.ROUNDS_CALC_CAMEL_TOKEN:
+                return goodsDetailsForARound.getCamelTokenDetail();
             default:
                 return "";
         }
-        return "";
     }
 
     private Round initializeRoundWithPlayer(long playerID) {
@@ -248,6 +477,48 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
         round.setDiamondScore(0);
         round.setGoldScore(0);
         round.setSilverScore(0);
+        round.setClothScore(0);
+        round.setSpiceScore(0);
+        round.setLeatherScore(0);
+        round.setThreeCardTokenScore(0);
+        round.setFourCardTokenScore(0);
+        round.setFiveCardTokenScore(0);
+        round.setCamelReceived('N');
+        round.setTimeCreated(System.currentTimeMillis()/100);
+        round.setTimeUpdated(System.currentTimeMillis()/100);
+        round.setScore(0);
         return round;
+    }
+
+    private int computeScore(Round round) {
+        int score = 0;
+        score += round.getDiamondScore() + round.getGoldScore() + round.getSilverScore() + round.getClothScore() + round.getSpiceScore() + round.getLeatherScore()
+                + round.getThreeCardTokenScore() + round.getFourCardTokenScore() + round.getFiveCardTokenScore();
+
+        score += round.getCamelReceived() == 'Y' ? 5 : 0;
+
+        round.setScore(score);
+
+        return score;
+    }
+
+    private void findWinnerOfRound() {
+        Round playerOneRound = gameDetails.getPlayerOneRounds().get(gameDetails.getRoundInProgress());
+        Round playerTwoRound = gameDetails.getPlayerTwoRounds().get(gameDetails.getRoundInProgress());
+
+        ImageView playerOneSealOfExcellence = findViewById(R.id.winnerPlayerOneSealOfExcellence);
+        ImageView playerTwoSealOfExcellence = findViewById(R.id.winnerPlayerTwoSealOfExcellence);
+
+        if (playerOneRound.getScore() > playerTwoRound.getScore())
+            playerOneSealOfExcellence.setVisibility(View.VISIBLE);
+        else if (playerOneRound.getScore() < playerTwoRound.getScore())
+            playerTwoSealOfExcellence.setVisibility(View.VISIBLE);
+        else {
+            //TODO need to do the logic of counting the bouns card and goods card
+        }
+    }
+
+    private void handleResultOk() {
+
     }
 }
