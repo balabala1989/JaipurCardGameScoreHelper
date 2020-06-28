@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 
 @Entity(tableName = "players")
-public class Player implements Parcelable {
+public class Player implements Parcelable, Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private long id;

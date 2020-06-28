@@ -15,6 +15,7 @@ public class GameDetails implements Parcelable {
     private HashMap<Integer, Round> playerOneRounds;
     private HashMap<Integer, Round> playerTwoRounds;
     private HashMap<Integer, Player> roundWinners;
+    private HashMap<Integer, GoodsDetailsForARound> goodsDetailsForARoundMap;
     private int roundInProgress;
     private int roundsCompleted;
 
@@ -74,6 +75,14 @@ public class GameDetails implements Parcelable {
         this.roundWinners = roundWinners;
     }
 
+    public HashMap<Integer, GoodsDetailsForARound> getGoodsDetailsForARoundMap() {
+        return goodsDetailsForARoundMap;
+    }
+
+    public void setGoodsDetailsForARoundMap(HashMap<Integer, GoodsDetailsForARound> goodsDetailsForARoundMap) {
+        this.goodsDetailsForARoundMap = goodsDetailsForARoundMap;
+    }
+
 
     @Override
     public int describeContents() {
@@ -87,6 +96,7 @@ public class GameDetails implements Parcelable {
         dest.writeSerializable(this.playerOneRounds);
         dest.writeSerializable(this.playerTwoRounds);
         dest.writeSerializable(this.roundWinners);
+        dest.writeSerializable(this.goodsDetailsForARoundMap);
         dest.writeInt(this.roundInProgress);
         dest.writeInt(this.roundsCompleted);
     }
@@ -100,6 +110,7 @@ public class GameDetails implements Parcelable {
         this.playerOneRounds = (HashMap<Integer, Round>) in.readSerializable();
         this.playerTwoRounds = (HashMap<Integer, Round>) in.readSerializable();
         this.roundWinners = (HashMap<Integer, Player>) in.readSerializable();
+        this.goodsDetailsForARoundMap = (HashMap<Integer, GoodsDetailsForARound>) in.readSerializable();
         this.roundInProgress = in.readInt();
         this.roundsCompleted = in.readInt();
     }

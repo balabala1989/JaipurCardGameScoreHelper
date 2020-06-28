@@ -3,7 +3,9 @@ package com.boardgames.jaipur.utils;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class GoodsDetailsForARound implements Parcelable {
+import java.io.Serializable;
+
+public class GoodsDetailsForARound implements Parcelable, Serializable {
 
     private String diamondGoodsDetail;
     private String goldGoodsDetail;

@@ -4,7 +4,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.boardgames.jaipur.R;
+import com.boardgames.jaipur.entities.Player;
 import com.boardgames.jaipur.entities.Round;
+import com.boardgames.jaipur.repository.GamesAndRoundsRepository;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.GameDetails;
 import com.boardgames.jaipur.utils.GameUtils;
@@ -51,6 +53,8 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
     private TextView camelTokenPlayerTwoTextView;
     private TextView sumPlayerOneTextView;
     private TextView sumPlayerTwoTextView;
+    private long winnerOfRound;
+    private GamesAndRoundsRepository gamesAndRoundsRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,11 +102,11 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
             gameDetails.setPlayerTwoRounds(new HashMap<>());
         }
 
-        if (gameDetails.getPlayerOneRounds().isEmpty() || !gameDetails.getPlayerOneRounds().containsKey(gameDetails.getRoundInProgress())) {
+        if (gameDetails.getPlayerOneRounds().isEmpty() || !gameDetails.getPlayerOneRounds().containsKey(gameDetails.getRoundInProgress()) || gameDetails.getPlayerOneRounds().get(gameDetails.getRoundInProgress()) == null) {
             gameDetails.getPlayerOneRounds().put(gameDetails.getRoundInProgress(), initializeRoundWithPlayer(gameDetails.getPlayersInAGame().getPlayerOne().getId()));
         }
 
-        if (gameDetails.getPlayerTwoRounds().isEmpty() || !gameDetails.getPlayerTwoRounds().containsKey(gameDetails.getRoundInProgress())) {
+        if (gameDetails.getPlayerTwoRounds().isEmpty() || !gameDetails.getPlayerTwoRounds().containsKey(gameDetails.getRoundInProgress()) || gameDetails.getPlayerTwoRounds().get(gameDetails.getRoundInProgress()) == null) {
             gameDetails.getPlayerTwoRounds().put(gameDetails.getRoundInProgress(), initializeRoundWithPlayer(gameDetails.getPlayersInAGame().getPlayerTwo().getId()));
         }
 
@@ -152,7 +156,7 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                handleException(false);
+                handleCancelRequest();
             }
         });
 
@@ -185,8 +189,22 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
         Intent replyIntent = new Intent();
         if (isExceptionOccurred)
             replyIntent.putExtra(ApplicationConstants.EXCEPTION_DUE_TO_UNAVAILABILITY_OF_INTENT,"Y");
+        replyIntent.putExtra(ApplicationConstants.STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME, gameDetails);
         setResult(RESULT_CANCELED, replyIntent);
         finish();
+    }
+
+    private void handleCancelRequest() {
+        if (gameDetails.getPlayerOneRounds() != null)
+            gameDetails.getPlayerOneRounds().put(gameDetails.getRoundInProgress(), null);
+        if (gameDetails.getPlayerTwoRounds() != null)
+            gameDetails.getPlayerTwoRounds().put(gameDetails.getRoundInProgress(), null);
+        if (gameDetails.getGoodsDetailsForARoundMap() != null)
+            gameDetails.getGoodsDetailsForARoundMap().put(gameDetails.getRoundInProgress(), null);
+        if (gameDetails.getRoundWinners() != null )
+            gameDetails.getRoundWinners().put(gameDetails.getRoundInProgress(), null);
+
+        handleException(false);
     }
 
     private void initializeAllTextViewClickListeners() {
@@ -509,16 +527,48 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
         ImageView playerOneSealOfExcellence = findViewById(R.id.winnerPlayerOneSealOfExcellence);
         ImageView playerTwoSealOfExcellence = findViewById(R.id.winnerPlayerTwoSealOfExcellence);
 
-        if (playerOneRound.getScore() > playerTwoRound.getScore())
+        if (playerOneRound.getScore() > playerTwoRound.getScore()) {
             playerOneSealOfExcellence.setVisibility(View.VISIBLE);
-        else if (playerOneRound.getScore() < playerTwoRound.getScore())
+            playerTwoSealOfExcellence.setVisibility(View.INVISIBLE);
+            winnerOfRound = gameDetails.getPlayersInAGame().getPlayerOne().getId();
+        }
+        else if (playerOneRound.getScore() < playerTwoRound.getScore()) {
             playerTwoSealOfExcellence.setVisibility(View.VISIBLE);
+            playerOneSealOfExcellence.setVisibility(View.INVISIBLE);
+            winnerOfRound = gameDetails.getPlayersInAGame().getPlayerTwo().getId();
+        }
         else {
             //TODO need to do the logic of counting the bouns card and goods card
         }
     }
 
     private void handleResultOk() {
+        Round playerOneRound;
+        Round playerTwoRound;
+        if (gameDetails.getGoodsDetailsForARoundMap() == null)
+            gameDetails.setGoodsDetailsForARoundMap(new HashMap<>());
+        if (gameDetails.getGoodsDetailsForARoundMap().isEmpty() || !gameDetails.getGoodsDetailsForARoundMap().containsKey(gameDetails.getRoundInProgress()) || gameDetails.getGoodsDetailsForARoundMap().get(gameDetails.getRoundInProgress()) == null)
+            gameDetails.getGoodsDetailsForARoundMap().put(gameDetails.getRoundInProgress(), goodsDetailsForARound);
 
+        if (gameDetails.getRoundWinners() == null )
+            gameDetails.setRoundWinners(new HashMap<>());
+        if (gameDetails.getRoundWinners().isEmpty() || !gameDetails.getRoundWinners().containsKey(gameDetails.getRoundInProgress()) || gameDetails.getRoundWinners().get(gameDetails.getRoundInProgress()) == null) {
+            Player winnerPlayer = winnerOfRound == gameDetails.getPlayersInAGame().getPlayerOne().getId() ? gameDetails.getPlayersInAGame().getPlayerOne() : gameDetails.getPlayersInAGame().getPlayerTwo();
+            gameDetails.getRoundWinners().put(gameDetails.getRoundInProgress(), winnerPlayer);
+        }
+
+        playerOneRound = gameDetails.getPlayerOneRounds().get(gameDetails.getRoundInProgress());
+        playerTwoRound = gameDetails.getPlayerTwoRounds().get(gameDetails.getRoundInProgress());
+        gamesAndRoundsRepository = new GamesAndRoundsRepository(getApplication());
+
+        gamesAndRoundsRepository.insertRound(playerOneRound);
+        gamesAndRoundsRepository.insertRound(playerTwoRound);
+
+        gameDetails.setRoundsCompleted(gameDetails.getRoundInProgress());
+
+        Intent replyIntent = new Intent();
+        replyIntent.putExtra(ApplicationConstants.STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME, gameDetails);
+        setResult(RESULT_OK, replyIntent);
+        finish();
     }
 }

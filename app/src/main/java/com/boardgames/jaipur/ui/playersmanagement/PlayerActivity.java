@@ -22,6 +22,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
@@ -115,7 +116,7 @@ public class PlayerActivity extends AppCompatActivity {
             return true;
         }
 
-        replyTent.putExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS, updatePlayer);
+        replyTent.putExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS, (Parcelable) updatePlayer);
         if (item.getItemId() == R.id.updatePlayerDeleteButton) {
             alertUserForDeleteOperation(replyTent);
             return super.onOptionsItemSelected(item);
