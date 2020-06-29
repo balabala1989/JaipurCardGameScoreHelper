@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,7 @@ public class PlayersManagementFragment extends Fragment {
         final PlayerListAdapater adapater = new PlayerListAdapater(this, root);
         playerRecyclerView.setAdapter(adapater);
         playerRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_GRIDLAYOUT_NUMBER_OF_COLUMNS));
-        playersManagementViewModel.getAllPlayers().observe(this, new Observer<List<Player>>() {
+        playersManagementViewModel.getAllPlayers().observe(getViewLifecycleOwner(), new Observer<List<Player>>() {
             @Override
             public void onChanged(List<Player> players) {
                 adapater.setPlayersList(players);
@@ -99,8 +100,9 @@ public class PlayersManagementFragment extends Fragment {
         Toast.makeText(getContext(), R.string.error_player_not_added, Toast.LENGTH_LONG).show();
     }
 
+    //TODO Need to call clearcache once the image is saved in intented location
     private void handleResultOKResponseForDeletePlayer(Intent dataIntent) {
-        Player player = (Player) dataIntent.getSerializableExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS);
+        Player player = dataIntent.getParcelableExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS);
 
         if (player == null){
             Toast.makeText(getContext(), R.string.error_player_not_added, Toast.LENGTH_LONG).show();
@@ -121,7 +123,7 @@ public class PlayersManagementFragment extends Fragment {
 
     private void handleResultOKResponseForUpdatePlayer(Intent dataIntent) {
         boolean isProfileChanged = dataIntent.getBooleanExtra(ApplicationConstants.PLAYERACTIVITY_UPDATE_OPERATION_PROFILE_IMAGE_CHANGED, false);
-        Player player = (Player) dataIntent.getSerializableExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS);
+        Player player = dataIntent.getParcelableExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS);
 
         if (isProfileChanged) {
             Uri uri = dataIntent.getParcelableExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PROFILE_IMAGE_URI_REPLY);
@@ -161,7 +163,7 @@ public class PlayersManagementFragment extends Fragment {
         Intent updateIntent = new Intent(getContext(), PlayerActivity.class);
         updateIntent.putExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_TYPE,
                 ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_FOR_UPDATE_PLAYER);
-        updateIntent.putExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS, player);
+        updateIntent.putExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS, (Parcelable) player);
         updateIntent.putExtra(ApplicationConstants.PLAYERACTIVITY_TITLE, getString(R.string.playeractivity_title_for_edit_player));
         startActivityForResult(updateIntent, ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_CODE);
     }

@@ -10,6 +10,7 @@ import com.boardgames.jaipur.entities.Player;
 import com.boardgames.jaipur.ui.utils.ImagePickAndCrop;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.CheckForPermissionsState;
+import com.boardgames.jaipur.utils.PlayerUtils;
 import com.bumptech.glide.Glide;
 
 import android.content.DialogInterface;
@@ -17,15 +18,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,8 +40,9 @@ public class PlayerActivity extends AppCompatActivity {
     private Player updatePlayer;
     private boolean isProfileImageChanged = false;
     private boolean isDeleteConfirmed;
-    AlertDialog dialog;
+    private AlertDialog dialog;
 
+    //TODO for update profile give option to remove the profile and keep default value
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //TODO when name is typed, out of click of the text box, the qwerty keyboard still displays. Remove it
@@ -54,6 +54,7 @@ public class PlayerActivity extends AppCompatActivity {
 
         if (receivedIntent == null) {
             Toast.makeText(getApplicationContext(), getString(R.string.player_update_issue), Toast.LENGTH_LONG).show();
+            finish();
             return;
         }
 
@@ -115,7 +116,7 @@ public class PlayerActivity extends AppCompatActivity {
             return true;
         }
 
-        replyTent.putExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS, updatePlayer);
+        replyTent.putExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS, (Parcelable) updatePlayer);
         if (item.getItemId() == R.id.updatePlayerDeleteButton) {
             alertUserForDeleteOperation(replyTent);
             return super.onOptionsItemSelected(item);
@@ -231,7 +232,7 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
    private void handleUpdatePlayerRequest(Intent receivedIntent) {
-       updatePlayer = (Player) receivedIntent.getSerializableExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS);
+       updatePlayer = receivedIntent.getParcelableExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS);
        ImageView playerAvatarImageView = (ImageView) findViewById(R.id.playerAvatarImageView);
        EditText playerNameEditText = (EditText) findViewById(R.id.playerNameEditText);
        Bitmap imageMap;
@@ -244,11 +245,9 @@ public class PlayerActivity extends AppCompatActivity {
             imageMap = BitmapFactory.decodeFile(updatePlayer.getPlayerAvatar());
         }
 
-       Display display = getWindowManager().getDefaultDisplay();
-       Point size = new Point();
-       display.getSize(size);
-       int width = (size.x/2) < (size.y/2) ? size.x/2 : size.y/2;
-      Glide.with(this).load(imageMap).override(width, width).into(playerAvatarImageView);
+
+       int width = PlayerUtils.getWidthforImageViewByHalf(this);
+       Glide.with(this).load(imageMap).override(width, width).into(playerAvatarImageView);
     }
 
 

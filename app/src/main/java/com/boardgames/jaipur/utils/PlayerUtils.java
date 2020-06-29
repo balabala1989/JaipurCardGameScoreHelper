@@ -1,10 +1,14 @@
 package com.boardgames.jaipur.utils;
 
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.net.Uri;
+import android.view.Display;
 import android.widget.Toast;
 
 import androidx.lifecycle.AndroidViewModel;
@@ -21,6 +25,10 @@ import java.io.IOException;
 
 public class PlayerUtils {
 
+    public static boolean isPlayerOneSelected = false;
+    public static boolean isPlayerTwoSelected = false;
+
+    //TODO Need to call clearcache once the image is saved in intented location
     public static void handleResultOKResponseForNewPlayer(Context context, AndroidViewModel androidViewModel, Intent dataIntent) {
         Uri uri = dataIntent.getParcelableExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PROFILE_IMAGE_URI_REPLY);
         String playerName = dataIntent.getStringExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PLAYER_NAME_REPLY);
@@ -42,7 +50,7 @@ public class PlayerUtils {
             }
             else if (androidViewModel instanceof NewGameViewModel) {
                 NewGameViewModel newGameViewModel = (NewGameViewModel) androidViewModel;
-                newGameViewModel.insert(newPlayer);
+                newGameViewModel.insertAPlayer(newPlayer);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -98,5 +106,27 @@ public class PlayerUtils {
             }
         }
         return inSampleSize;
+    }
+
+    public static int getWidthforImageViewByHalf(Activity activity) {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return (size.x/2) < (size.y/2) ? size.x/2 : size.y/2;
+    }
+
+    public static int getWidthforImageViewByOneThird(Activity activity) {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return (size.x/3) < (size.y/3) ? size.x/3 : size.y/3;
+    }
+
+    public static Uri getUriForDrawable(Context context, int drawableId) {
+        Uri imageUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
+                "://" + context.getResources().getResourcePackageName(drawableId)
+                + '/' + context.getResources().getResourceTypeName(drawableId)
+                + '/' + context.getResources().getResourceEntryName(drawableId) );
+        return imageUri;
     }
 }
