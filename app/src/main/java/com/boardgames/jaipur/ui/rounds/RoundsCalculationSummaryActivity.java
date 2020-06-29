@@ -72,6 +72,11 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(computeRoundTitle(gameDetails.getRoundInProgress()));
 
+        /*if (gameDetails.getGoodsDetailsForARoundMap() == null)
+            gameDetails.setGoodsDetailsForARoundMap(new HashMap<>());
+        if (gameDetails.getGoodsDetailsForARoundMap().isEmpty() || !gameDetails.getGoodsDetailsForARoundMap().containsKey(gameDetails.getRoundInProgress()) || gameDetails.getGoodsDetailsForARoundMap().get(gameDetails.getRoundInProgress()) == null)
+           */
+
         goodsDetailsForARound = new GoodsDetailsForARound();
 
         ImageView playerOneImageView = findViewById(R.id.playerOneImageView);
@@ -538,7 +543,15 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
             winnerOfRound = gameDetails.getPlayersInAGame().getPlayerTwo().getId();
         }
         else {
-            //TODO need to do the logic of counting the bouns card and goods card
+            winnerOfRound = GameUtils.resolveTieToFindWinner(gameDetails, goodsDetailsForARound);
+            if (winnerOfRound == gameDetails.getPlayersInAGame().getPlayerOne().getId()) {
+                playerOneSealOfExcellence.setVisibility(View.VISIBLE);
+                playerTwoSealOfExcellence.setVisibility(View.INVISIBLE);
+            }
+            else {
+                playerTwoSealOfExcellence.setVisibility(View.VISIBLE);
+                playerOneSealOfExcellence.setVisibility(View.INVISIBLE);
+            }
         }
     }
 

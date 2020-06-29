@@ -1,12 +1,17 @@
 package com.boardgames.jaipur.utils;
 
+import android.content.Intent;
+
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.entities.Round;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 
 
 public class GameUtils {
 
+    private static final String BONUS_CALCULATION_TYPE = "BONUS_CALCULATION";
+    private static final String GOODS_CALCULATION_TYPE = "GOODS_CALCULATION";
     public static final HashMap<String,String> goodsNameToGoodsItems;
     public static final HashMap<String, HashMap<String, Integer>> goodsToItemsToScore;
     public static final HashMap<String, HashMap<String, Integer>> goodsToItemsToImage;
@@ -252,6 +257,81 @@ public class GameUtils {
                 if (score != 0)
                     round.setCamelReceived('Y');
                 break;
+        }
+    }
+
+    public static long resolveTieToFindWinner(GameDetails gameDetails, GoodsDetailsForARound goodsDetailsForARound) {
+        goodsDetailsForARound.setPlayerOneBonusTokens(0);
+        goodsDetailsForARound.setPlayerTwoBonusTokens(0);
+        goodsDetailsForARound.setPlayerOneGoodsTokens(0);
+        goodsDetailsForARound.setPlayerTwoGoodsTokens(0);
+
+        long playerOneID = gameDetails.getPlayersInAGame().getPlayerOne().getId();
+
+        //Check for bonus tokens
+        if (goodsDetailsForARound.getThreeTokenDetail() != null && !goodsDetailsForARound.getThreeTokenDetail().trim().isEmpty()) {
+            computeTokenCount(playerOneID, goodsDetailsForARound, goodsDetailsForARound.getThreeTokenDetail(), BONUS_CALCULATION_TYPE, false);
+        }
+
+        if (goodsDetailsForARound.getFourTokenDetail() != null && !goodsDetailsForARound.getFourTokenDetail().trim().isEmpty()) {
+            computeTokenCount(playerOneID, goodsDetailsForARound, goodsDetailsForARound.getFourTokenDetail(), BONUS_CALCULATION_TYPE, false);
+        }
+
+        if (goodsDetailsForARound.getFiveTokenDetail() != null && !goodsDetailsForARound.getFiveTokenDetail().trim().isEmpty()) {
+            computeTokenCount(playerOneID, goodsDetailsForARound, goodsDetailsForARound.getFiveTokenDetail(), BONUS_CALCULATION_TYPE, false);
+        }
+
+        if (goodsDetailsForARound.getPlayerOneBonusTokens() > goodsDetailsForARound.getPlayerTwoBonusTokens())
+            return gameDetails.getPlayersInAGame().getPlayerOne().getId();
+        else if (goodsDetailsForARound.getPlayerOneBonusTokens() < goodsDetailsForARound.getPlayerTwoBonusTokens())
+            return gameDetails.getPlayersInAGame().getPlayerTwo().getId();
+
+        //Check for goods token only when bonus tokens count of the players match
+
+        if (goodsDetailsForARound.getDiamondGoodsDetail() != null && !goodsDetailsForARound.getDiamondGoodsDetail().trim().isEmpty())
+            computeTokenCount(playerOneID, goodsDetailsForARound, goodsDetailsForARound.getDiamondGoodsDetail(), GOODS_CALCULATION_TYPE, true);
+        if (goodsDetailsForARound.getGoldGoodsDetail() != null && !goodsDetailsForARound.getGoldGoodsDetail().trim().isEmpty())
+            computeTokenCount(playerOneID, goodsDetailsForARound, goodsDetailsForARound.getGoldGoodsDetail(), GOODS_CALCULATION_TYPE, true);
+        if (goodsDetailsForARound.getSilverGoodsDetail() != null && !goodsDetailsForARound.getSilverGoodsDetail().trim().isEmpty())
+            computeTokenCount(playerOneID, goodsDetailsForARound, goodsDetailsForARound.getSilverGoodsDetail(), GOODS_CALCULATION_TYPE, true);
+        if (goodsDetailsForARound.getClothGoodsDetail() != null && !goodsDetailsForARound.getClothGoodsDetail().trim().isEmpty())
+            computeTokenCount(playerOneID, goodsDetailsForARound, goodsDetailsForARound.getClothGoodsDetail(), GOODS_CALCULATION_TYPE, false);
+        if (goodsDetailsForARound.getSpiceGoodsDetail() != null && !goodsDetailsForARound.getSpiceGoodsDetail().trim().isEmpty())
+            computeTokenCount(playerOneID, goodsDetailsForARound, goodsDetailsForARound.getSpiceGoodsDetail(), GOODS_CALCULATION_TYPE, false);
+        if (goodsDetailsForARound.getLeatherGoodsDetail() != null && !goodsDetailsForARound.getLeatherGoodsDetail().trim().isEmpty())
+            computeTokenCount(playerOneID, goodsDetailsForARound, goodsDetailsForARound.getLeatherGoodsDetail(), GOODS_CALCULATION_TYPE, false);
+        if (goodsDetailsForARound.getCamelTokenDetail() != null && !goodsDetailsForARound.getCamelTokenDetail().trim().isEmpty())
+            computeTokenCount(playerOneID, goodsDetailsForARound, goodsDetailsForARound.getCamelTokenDetail(), GOODS_CALCULATION_TYPE, false);
+
+
+        if (goodsDetailsForARound.getPlayerOneGoodsTokens() > goodsDetailsForARound.getPlayerTwoGoodsTokens())
+            return gameDetails.getPlayersInAGame().getPlayerOne().getId();
+        else
+            return gameDetails.getPlayersInAGame().getPlayerTwo().getId();
+    }
+
+    private static void computeTokenCount(long playerOneID, GoodsDetailsForARound goodsDetailsForARound, String tokenDetails, String calculationType, boolean shouldCountTwo) {
+        StringTokenizer tokenizer = new StringTokenizer(tokenDetails, ApplicationConstants.SEPARATOR_OF_DATA);
+        int incrementValue = 1;
+        while (tokenizer.hasMoreTokens()) {
+            String[] splitData = tokenizer.nextToken().trim().split(ApplicationConstants.SEPARATOR_OF_VIEWS);
+
+            if (calculationType.equalsIgnoreCase(BONUS_CALCULATION_TYPE)) {
+                if (Long.parseLong(splitData[1]) == playerOneID)
+                    goodsDetailsForARound.setPlayerOneBonusTokens(goodsDetailsForARound.getPlayerOneBonusTokens() + incrementValue);
+                else
+                    goodsDetailsForARound.setPlayerTwoBonusTokens(goodsDetailsForARound.getPlayerTwoBonusTokens() + incrementValue);
+            }
+            else {
+
+                if (shouldCountTwo && (splitData[0].equalsIgnoreCase("1_7") || splitData[0].equalsIgnoreCase("1_6") || splitData[0].equalsIgnoreCase("1_5"))) {
+                    incrementValue = 2;
+                }
+                if (Long.parseLong(splitData[1]) == playerOneID)
+                    goodsDetailsForARound.setPlayerOneGoodsTokens(goodsDetailsForARound.getPlayerOneGoodsTokens() + incrementValue);
+                else
+                    goodsDetailsForARound.setPlayerTwoGoodsTokens(goodsDetailsForARound.getPlayerTwoGoodsTokens() + incrementValue);
+            }
         }
     }
 }

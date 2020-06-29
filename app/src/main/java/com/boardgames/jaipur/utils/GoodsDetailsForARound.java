@@ -17,6 +17,10 @@ public class GoodsDetailsForARound implements Parcelable, Serializable {
     private String fourTokenDetail;
     private String fiveTokenDetail;
     private String camelTokenDetail;
+    private int playerOneBonusTokens;
+    private int playerTwoBonusTokens;
+    private int playerOneGoodsTokens;
+    private int playerTwoGoodsTokens;
 
     public String getDiamondGoodsDetail() {
         return diamondGoodsDetail;
@@ -98,6 +102,38 @@ public class GoodsDetailsForARound implements Parcelable, Serializable {
         this.camelTokenDetail = camelTokenDetail;
     }
 
+    public int getPlayerOneBonusTokens() {
+        return playerOneBonusTokens;
+    }
+
+    public void setPlayerOneBonusTokens(int playerOneBonusTokens) {
+        this.playerOneBonusTokens = playerOneBonusTokens;
+    }
+
+    public int getPlayerTwoBonusTokens() {
+        return playerTwoBonusTokens;
+    }
+
+    public void setPlayerTwoBonusTokens(int playerTwoBonusTokens) {
+        this.playerTwoBonusTokens = playerTwoBonusTokens;
+    }
+
+    public int getPlayerOneGoodsTokens() {
+        return playerOneGoodsTokens;
+    }
+
+    public void setPlayerOneGoodsTokens(int playerOneGoodsTokens) {
+        this.playerOneGoodsTokens = playerOneGoodsTokens;
+    }
+
+    public int getPlayerTwoGoodsTokens() {
+        return playerTwoGoodsTokens;
+    }
+
+    public void setPlayerTwoGoodsTokens(int playerTwoGoodsTokens) {
+        this.playerTwoGoodsTokens = playerTwoGoodsTokens;
+    }
+
 
     @Override
     public int describeContents() {
@@ -116,6 +152,10 @@ public class GoodsDetailsForARound implements Parcelable, Serializable {
         dest.writeString(this.fourTokenDetail);
         dest.writeString(this.fiveTokenDetail);
         dest.writeString(this.camelTokenDetail);
+        dest.writeInt(this.playerOneBonusTokens);
+        dest.writeInt(this.playerTwoBonusTokens);
+        dest.writeInt(this.playerOneGoodsTokens);
+        dest.writeInt(this.playerTwoGoodsTokens);
     }
 
     public GoodsDetailsForARound() {
@@ -132,6 +172,10 @@ public class GoodsDetailsForARound implements Parcelable, Serializable {
         this.fourTokenDetail = in.readString();
         this.fiveTokenDetail = in.readString();
         this.camelTokenDetail = in.readString();
+        this.playerOneBonusTokens = in.readInt();
+        this.playerTwoBonusTokens = in.readInt();
+        this.playerOneGoodsTokens = in.readInt();
+        this.playerTwoGoodsTokens = in.readInt();
     }
 
     public static final Parcelable.Creator<GoodsDetailsForARound> CREATOR = new Parcelable.Creator<GoodsDetailsForARound>() {

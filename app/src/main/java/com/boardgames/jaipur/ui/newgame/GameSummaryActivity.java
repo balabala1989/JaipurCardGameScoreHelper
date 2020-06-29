@@ -201,6 +201,8 @@ public class GameSummaryActivity extends AppCompatActivity {
     }
 
     private void displayRoundTwoResults() {
+        findViewById(R.id.roundTwoPlayerOneView).setVisibility(View.VISIBLE);
+        findViewById(R.id.roundTwoPlayerTwoView).setVisibility(View.VISIBLE);
         TextView roundTwoPlayerOneTextView = findViewById(R.id.roundTwoPlayerOneScoreTextView);
         TextView roundTwoPlayerTwoTextView = findViewById(R.id.roundTwoPlayerTwoeScoreTextView);
 
@@ -237,8 +239,6 @@ public class GameSummaryActivity extends AppCompatActivity {
         else {
             gameDetails.setRoundInProgress(3);
             gameDetails.setRoundsCompleted(2);
-            findViewById(R.id.roundThreePlayerOneView).setVisibility(View.VISIBLE);
-            findViewById(R.id.roundThreePlayerTwoView).setVisibility(View.VISIBLE);
             findViewById(R.id.winnerPlayerOneSealOfExcellence).setVisibility(View.INVISIBLE);
             findViewById(R.id.winnerPlayerTwoSealOfExcellence).setVisibility(View.INVISIBLE);
             findViewById(R.id.winnerAnnouncementView).setVisibility(View.INVISIBLE);
@@ -246,6 +246,9 @@ public class GameSummaryActivity extends AppCompatActivity {
     }
 
     private void displayRoundThreeResults() {
+        findViewById(R.id.roundThreePlayerOneView).setVisibility(View.VISIBLE);
+        findViewById(R.id.roundThreePlayerTwoView).setVisibility(View.VISIBLE);
+
         TextView roundThreePlayerOneTextView = findViewById(R.id.roundThreePlayerOneScoreTextView);
         TextView roundThreePlayerTwoTextView = findViewById(R.id.roundThreePlayerTwoScoreTextView);
 
@@ -255,7 +258,7 @@ public class GameSummaryActivity extends AppCompatActivity {
         roundThreePlayerOneTextView.setText(String.valueOf(playerOneScore));
         roundThreePlayerTwoTextView.setText(String.valueOf(playerTwoScore));
 
-        if (gameDetails.getRoundWinners().get(2).getId() == gameDetails.getPlayersInAGame().getPlayerOne().getId()) {
+        if (gameDetails.getRoundWinners().get(3).getId() == gameDetails.getPlayersInAGame().getPlayerOne().getId()) {
             findViewById(R.id.roundThreePlayerOneSealOfExcellence).setVisibility(View.VISIBLE);
             findViewById(R.id.roundThreePlayerTwoSealOfExcellence).setVisibility(View.INVISIBLE);
         }
