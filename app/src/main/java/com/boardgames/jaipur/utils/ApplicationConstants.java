@@ -64,4 +64,11 @@ package com.boardgames.jaipur.utils;
         public static final long DEFAULT_PLAYER_ID = -1;
 
         public static final int ROUND_SUMMARY_ITEM_DISPLAY_REQUEST_IMAGE = 9002;
+        public static final String WIN_MESSAGE_PART_1 = "Won Round ";
+        public static final String WIN_MESSAGE_PART_2_BY_BONUS = "in tie by more number of Bonus tokens.";
+        public static final String WIN_MESSAGE_PART_2_BY_GOODS = "in tie by more number of Goods tokens.";
+        public static final String SPACE = " ";
+        public static final String GAME_OVER = " Game Over!!!!";
+
+        public static final String ROUND_CALC_SUMM_TO_GAME_SUMM_WIN_MESSAGE = "com.boardgames.jaipur.ui.newgame.newgamefragment.WIN_MESSAGE";
 }

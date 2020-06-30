@@ -33,6 +33,7 @@ public class GameSummaryActivity extends AppCompatActivity {
     private NewGameViewModel newGameViewModel;
     private AlertDialog dialog;
     private GameDetails gameDetails;
+    private boolean isGameOver = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,10 +77,8 @@ public class GameSummaryActivity extends AppCompatActivity {
         }
 
         findViewById(R.id.winnerAnnouncementView).setVisibility(View.INVISIBLE);
-        findViewById(R.id.roundTwoPlayerOneView).setVisibility(View.INVISIBLE);
-        findViewById(R.id.roundTwoPlayerTwoView).setVisibility(View.INVISIBLE);
-        findViewById(R.id.roundThreePlayerOneView).setVisibility(View.INVISIBLE);
-        findViewById(R.id.roundThreePlayerTwoView).setVisibility(View.INVISIBLE);
+        findViewById(R.id.roundTwoView).setVisibility(View.INVISIBLE);
+        findViewById(R.id.roundThreeView).setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -90,6 +89,14 @@ public class GameSummaryActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
        getMenuInflater().inflate(R.menu.activity_game_summary_menu, menu);
+
+       if (isGameOver) {
+           for (int i = 0; i < menu.size(); i++) {
+               MenuItem menuItem = menu.getItem(i);
+               if (menuItem.getItemId() == R.id.calculateButton)
+                   menuItem.setVisible(false);
+           }
+       }
        return super.onCreateOptionsMenu(menu);
     }
 
@@ -105,11 +112,6 @@ public class GameSummaryActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void computeRoundScore(int roundNumber) {
-        //Intent roundIntent = new Intent(GameSummaryActivity.this, RoundsCalculationActivity.class);
-
     }
 
     @Override
@@ -160,13 +162,13 @@ public class GameSummaryActivity extends AppCompatActivity {
     }
 
     private void startRoundCalculation() {
-        //Intent roundCalIntent = new Intent(GameSummaryActivity.this, RoundsCalculationActivity.class);
         Intent roundCalIntent = new Intent(GameSummaryActivity.this, RoundsCalculationSummaryActivity.class);
         roundCalIntent.putExtra(ApplicationConstants.STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME, gameDetails);
         startActivityForResult(roundCalIntent, ApplicationConstants.GAMESUMMARYACTIVITY_ROUNDCALCACTIVITY_REQUEST_CODE);
     }
 
     private void handleRoundCalculationResult(Intent data) {
+        String winMessage = data.getStringExtra(ApplicationConstants.ROUND_CALC_SUMM_TO_GAME_SUMM_WIN_MESSAGE);
         gameDetails = data.getParcelableExtra(ApplicationConstants.STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME);
         if (gameDetails.getRoundsCompleted() == 1)
             displayRoundOneResults();
@@ -174,6 +176,11 @@ public class GameSummaryActivity extends AppCompatActivity {
             displayRoundTwoResults();
         else if (gameDetails.getRoundsCompleted() == 3)
             displayRoundThreeResults();
+
+        if (isGameOver)
+            winMessage += ApplicationConstants.GAME_OVER;
+
+        Toast.makeText(this, winMessage, Toast.LENGTH_LONG).show();
     }
 
     private void displayRoundOneResults() {
@@ -195,16 +202,16 @@ public class GameSummaryActivity extends AppCompatActivity {
             findViewById(R.id.roundOnePlayerTwoSealOfExcellence).setVisibility(View.VISIBLE);
         }
 
+        isGameOver = false;
         gameDetails.setRoundInProgress(2);
         gameDetails.setRoundsCompleted(1);
 
     }
 
     private void displayRoundTwoResults() {
-        findViewById(R.id.roundTwoPlayerOneView).setVisibility(View.VISIBLE);
-        findViewById(R.id.roundTwoPlayerTwoView).setVisibility(View.VISIBLE);
+        findViewById(R.id.roundTwoView).setVisibility(View.VISIBLE);
         TextView roundTwoPlayerOneTextView = findViewById(R.id.roundTwoPlayerOneScoreTextView);
-        TextView roundTwoPlayerTwoTextView = findViewById(R.id.roundTwoPlayerTwoeScoreTextView);
+        TextView roundTwoPlayerTwoTextView = findViewById(R.id.roundTwoPlayerTwoScoreTextView);
 
         int playerOneScore = gameDetails.getPlayerOneRounds().get(2).getScore();
         int playerTwoScore = gameDetails.getPlayerTwoRounds().get(2).getScore();
@@ -223,31 +230,33 @@ public class GameSummaryActivity extends AppCompatActivity {
 
         //Decide if the third round is required
         if (gameDetails.getRoundWinners().get(1).getId() == gameDetails.getRoundWinners().get(2).getId()) {
-            findViewById(R.id.roundThreePlayerOneView).setVisibility(View.INVISIBLE);
-            findViewById(R.id.roundThreePlayerTwoView).setVisibility(View.INVISIBLE);
+            findViewById(R.id.roundThreeView).setVisibility(View.INVISIBLE);
             findViewById(R.id.winnerAnnouncementView).setVisibility(View.VISIBLE);
 
             if (gameDetails.getRoundWinners().get(1).getId() == gameDetails.getPlayersInAGame().getPlayerOne().getId()) {
-                findViewById(R.id.winnerPlayerOneSealOfExcellence).setVisibility(View.VISIBLE);
-                findViewById(R.id.winnerPlayerTwoSealOfExcellence).setVisibility(View.INVISIBLE);
+                findViewById(R.id.winnerPlayerOneSOE).setVisibility(View.VISIBLE);
+                findViewById(R.id.winnerPlayerTwoSOE).setVisibility(View.INVISIBLE);
             }
             else {
-                findViewById(R.id.winnerPlayerOneSealOfExcellence).setVisibility(View.INVISIBLE);
-                findViewById(R.id.winnerPlayerTwoSealOfExcellence).setVisibility(View.VISIBLE);
+                findViewById(R.id.winnerPlayerOneSOE).setVisibility(View.INVISIBLE);
+                findViewById(R.id.winnerPlayerTwoSOE).setVisibility(View.VISIBLE);
             }
+            isGameOver = true;
+            invalidateOptionsMenu();
         }
         else {
             gameDetails.setRoundInProgress(3);
             gameDetails.setRoundsCompleted(2);
-            findViewById(R.id.winnerPlayerOneSealOfExcellence).setVisibility(View.INVISIBLE);
-            findViewById(R.id.winnerPlayerTwoSealOfExcellence).setVisibility(View.INVISIBLE);
+            findViewById(R.id.winnerPlayerOneSOE).setVisibility(View.INVISIBLE);
+            findViewById(R.id.winnerPlayerTwoSOE).setVisibility(View.INVISIBLE);
             findViewById(R.id.winnerAnnouncementView).setVisibility(View.INVISIBLE);
+            isGameOver = false;
         }
     }
 
     private void displayRoundThreeResults() {
-        findViewById(R.id.roundThreePlayerOneView).setVisibility(View.VISIBLE);
-        findViewById(R.id.roundThreePlayerTwoView).setVisibility(View.VISIBLE);
+
+        findViewById(R.id.roundThreeView).setVisibility(View.VISIBLE);
 
         TextView roundThreePlayerOneTextView = findViewById(R.id.roundThreePlayerOneScoreTextView);
         TextView roundThreePlayerTwoTextView = findViewById(R.id.roundThreePlayerTwoScoreTextView);
@@ -277,15 +286,16 @@ public class GameSummaryActivity extends AppCompatActivity {
         }
 
         if (playerOneWinningCount > playerTwoWinningCount) {
-            findViewById(R.id.winnerPlayerOneSealOfExcellence).setVisibility(View.VISIBLE);
-            findViewById(R.id.winnerPlayerTwoSealOfExcellence).setVisibility(View.INVISIBLE);
+            findViewById(R.id.winnerPlayerOneSOE).setVisibility(View.VISIBLE);
+            findViewById(R.id.winnerPlayerTwoSOE).setVisibility(View.INVISIBLE);
         }
         else {
-            findViewById(R.id.winnerPlayerOneSealOfExcellence).setVisibility(View.INVISIBLE);
-            findViewById(R.id.winnerPlayerTwoSealOfExcellence).setVisibility(View.VISIBLE);
+            findViewById(R.id.winnerPlayerOneSOE).setVisibility(View.INVISIBLE);
+            findViewById(R.id.winnerPlayerTwoSOE).setVisibility(View.VISIBLE);
         }
 
         findViewById(R.id.winnerAnnouncementView).setVisibility(View.VISIBLE);
-
+        isGameOver = true;
+        invalidateOptionsMenu();
     }
 }

@@ -55,6 +55,7 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
     private TextView sumPlayerTwoTextView;
     private long winnerOfRound;
     private GamesAndRoundsRepository gamesAndRoundsRepository;
+    private boolean isTie = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -558,6 +559,7 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
     private void handleResultOk() {
         Round playerOneRound;
         Round playerTwoRound;
+        StringBuffer winMessage = new StringBuffer();
         if (gameDetails.getGoodsDetailsForARoundMap() == null)
             gameDetails.setGoodsDetailsForARoundMap(new HashMap<>());
         if (gameDetails.getGoodsDetailsForARoundMap().isEmpty() || !gameDetails.getGoodsDetailsForARoundMap().containsKey(gameDetails.getRoundInProgress()) || gameDetails.getGoodsDetailsForARoundMap().get(gameDetails.getRoundInProgress()) == null)
@@ -568,6 +570,24 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
         if (gameDetails.getRoundWinners().isEmpty() || !gameDetails.getRoundWinners().containsKey(gameDetails.getRoundInProgress()) || gameDetails.getRoundWinners().get(gameDetails.getRoundInProgress()) == null) {
             Player winnerPlayer = winnerOfRound == gameDetails.getPlayersInAGame().getPlayerOne().getId() ? gameDetails.getPlayersInAGame().getPlayerOne() : gameDetails.getPlayersInAGame().getPlayerTwo();
             gameDetails.getRoundWinners().put(gameDetails.getRoundInProgress(), winnerPlayer);
+        }
+
+        if (winnerOfRound == gameDetails.getPlayersInAGame().getPlayerOne().getId())
+            winMessage.append(gameDetails.getPlayersInAGame().getPlayerOne().getPlayerName())
+                    .append(ApplicationConstants.SPACE)
+                    .append(ApplicationConstants.WIN_MESSAGE_PART_1)
+                    .append(String.valueOf(gameDetails.getRoundInProgress()));
+        else
+            winMessage.append(gameDetails.getPlayersInAGame().getPlayerTwo().getPlayerName())
+                    .append(ApplicationConstants.SPACE)
+                    .append(ApplicationConstants.WIN_MESSAGE_PART_1)
+                    .append(String.valueOf(gameDetails.getRoundInProgress()));
+
+        if (gameDetails.getPlayerOneRounds().get(gameDetails.getRoundInProgress()).getScore() == gameDetails.getPlayerTwoRounds().get(gameDetails.getRoundInProgress()).getScore()) {
+            if (goodsDetailsForARound.getPlayerOneBonusTokens() != goodsDetailsForARound.getPlayerTwoBonusTokens())
+                winMessage.append(ApplicationConstants.SPACE).append(ApplicationConstants.WIN_MESSAGE_PART_2_BY_BONUS);
+            else
+                winMessage.append(ApplicationConstants.SPACE).append(ApplicationConstants.WIN_MESSAGE_PART_2_BY_GOODS);
         }
 
         playerOneRound = gameDetails.getPlayerOneRounds().get(gameDetails.getRoundInProgress());
@@ -581,6 +601,7 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
 
         Intent replyIntent = new Intent();
         replyIntent.putExtra(ApplicationConstants.STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME, gameDetails);
+        replyIntent.putExtra(ApplicationConstants.ROUND_CALC_SUMM_TO_GAME_SUMM_WIN_MESSAGE, winMessage.toString());
         setResult(RESULT_OK, replyIntent);
         finish();
     }
