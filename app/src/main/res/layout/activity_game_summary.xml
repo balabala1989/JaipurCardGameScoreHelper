@@ -45,12 +45,12 @@
                     android:id="@+id/winnerPlayerOneSOE"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
+                    android:layout_alignTop="@id/playerOneImageView"
                     android:layout_alignEnd="@id/playerOneImageView"
                     android:layout_alignRight="@id/playerOneImageView"
-                    android:layout_alignBottom="@id/playerOneImageView"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginRight="16dp"
                     android:contentDescription="@string/imageview_content_description_text_for_player"
                     android:scaleType="fitXY"
                     android:visibility="visible"
@@ -69,8 +69,7 @@
                 android:fontFamily="@font/biorhyme"
                 android:gravity="center"
                 android:textColor="#04289E"
-                android:textStyle="bold"
-                tools:text="Test" />
+                android:textStyle="bold" />
 
             <RelativeLayout
                 android:id="@+id/playerTwoDisplayView"
@@ -92,12 +91,12 @@
                     android:id="@+id/winnerPlayerTwoSOE"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
+                    android:layout_alignTop="@id/playerTwoImageView"
                     android:layout_alignEnd="@id/playerTwoImageView"
                     android:layout_alignRight="@id/playerTwoImageView"
-                    android:layout_alignBottom="@id/playerTwoImageView"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginRight="16dp"
                     android:contentDescription="@string/imageview_content_description_text_for_player"
                     android:scaleType="fitXY"
                     android:visibility="visible"
@@ -117,8 +116,7 @@
                 android:fontFamily="@font/biorhyme"
                 android:gravity="center"
                 android:textColor="#04289E"
-                android:textStyle="bold"
-                tools:text="Test" />
+                android:textStyle="bold" />
 
 
         </RelativeLayout>
@@ -395,7 +393,8 @@
         android:id="@+id/winnerAnnouncementView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal">
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="16dp">
 
         <Button
             android:id="@+id/resetGameButton"
