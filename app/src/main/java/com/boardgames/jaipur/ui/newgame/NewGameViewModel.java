@@ -42,4 +42,6 @@ public class NewGameViewModel extends AndroidViewModel {
     public void deleteAGame(Game game) {
         gamesAndRoundsRepository.deleteGame(game);
     }
+
+    public void updateAGame(Game game) { gamesAndRoundsRepository.updateGame(game); }
 }

@@ -42,6 +42,7 @@
     <string name="player_update_issue">Error!! Unable to update the player profile now...</string>
     <string name="edittext_playername_error">Player Name cannot be blank</string>
     <string name="playeractivity_external_path">profileImages</string>
+    <string name="gameactivity_external_path">gameImages</string>
     <string name="imagepickandcropactivity_cache_path">jaipurImages</string>
     <string name="empty_players_found">No Players Found!!!!</string>
 

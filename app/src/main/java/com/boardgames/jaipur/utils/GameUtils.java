@@ -1,11 +1,25 @@
 package com.boardgames.jaipur.utils;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+
+import androidx.core.content.FileProvider;
 
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.entities.Round;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.StringTokenizer;
+import java.util.logging.SimpleFormatter;
 
 
 public class GameUtils {
@@ -333,5 +347,29 @@ public class GameUtils {
                     goodsDetailsForARound.setPlayerTwoGoodsTokens(goodsDetailsForARound.getPlayerTwoGoodsTokens() + incrementValue);
             }
         }
+    }
+
+    public static File getAbsolutePathForImage(Context context, Bitmap bitmap) {
+        File storageDir = new File (context.getExternalFilesDir(null), context.getString(R.string.gameactivity_external_path));
+        if (!storageDir.exists()) {storageDir.mkdir();}
+        File imageFile = new File(storageDir, "IMG_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".jpg");
+        try {
+            imageFile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        byte[] imageByteArray = outputStream.toByteArray();
+        FileOutputStream fileOutputStream = null;
+        try {
+            fileOutputStream = new FileOutputStream(imageFile);
+            fileOutputStream.write(imageByteArray);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return imageFile;
     }
 }

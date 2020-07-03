@@ -130,7 +130,7 @@ public class PlayersManagementFragment extends Fragment {
             if (uri != null) {
                 File imageFile;
                 try {
-                    imageFile = PlayerUtils.getAvatarAbsolutePath(getContext(), uri);
+                    imageFile = PlayerUtils.getAvatarAbsolutePath(getContext(), uri, getString(R.string.playeractivity_external_path));
                     player.setPlayerAvatar(imageFile.getAbsolutePath());
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -22,8 +22,8 @@ package com.boardgames.jaipur.utils;
         public static final String PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PROFILE_IMAGE_URI_REPLY = "com.boardgames.jaipur.ui.playersmanagement.playeractivity.PROFILE_URI";
         public static final String PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PLAYER_NAME_REPLY = "com.boardgames.jaipur.ui.playersmanagement.playeractivity.PLAYER_NAME";
         public static final int PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_REQUEST_IMAGE = 9001;
-        public static final int PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_REQUEST_FOR_CAMERA_CAPTURE = 8002;
-        public static final int PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_REQUEST_FOR_GALLERY_CAPTURE = 8003;
+        public static final int PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_REQUEST_FOR_CAMERA_CAPTURE = 9002;
+        public static final int PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_REQUEST_FOR_GALLERY_CAPTURE = 9003;
         public static final String PLAYERACTIVITY_TITLE= "com.boardgames.jaipur.ui.playersmanagement.playeractivity.TITLE";
         public static final String PLAYERACTIVITY_REQUEST_TYPE_REPLY = "com.boardgames.jaipur.ui.playersmanagement.playeractivity.REQUEST_TYPE_REPLY";
         public static final String PLAYERACTIVITY_DELETE_OPERATION_REQUESTED = "com.boardgames.jaipur.ui.playersmanagement.playeractivity.DELETE_OPERATION_REQUESTED";
@@ -40,7 +40,7 @@ package com.boardgames.jaipur.utils;
 
         //StartingPlayerActivity constants
         public static final String STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME = "com.boardgames.jaipur.ui.newgame.startingplayeractivity.GAMEDETAILS";
-        public static final int GAMESUMMARYACTIVITY_ROUNDCALCACTIVITY_REQUEST_CODE = 8004;
+        public static final int GAMESUMMARYACTIVITY_ROUNDCALCACTIVITY_REQUEST_CODE = 9004;
         public static final String HYPEN = " - ";
         public static final String SEPARATOR_OF_VIEWS = "~";
         public static final String SEPARATOR_OF_DATA = "|";
@@ -63,12 +63,14 @@ package com.boardgames.jaipur.utils;
         public static final String SELECTED_PLAYER_FROM_SUMMARY_TO_ITEM_DETAILS = "SELECTED_PLAYER";
         public static final long DEFAULT_PLAYER_ID = -1;
 
-        public static final int ROUND_SUMMARY_ITEM_DISPLAY_REQUEST_IMAGE = 9002;
+        public static final int ROUND_SUMMARY_ITEM_DISPLAY_REQUEST_IMAGE = 9005;
         public static final String WIN_MESSAGE_PART_1 = "Won Round ";
         public static final String WIN_MESSAGE_PART_2_BY_BONUS = "in tie by more number of Bonus tokens.";
         public static final String WIN_MESSAGE_PART_2_BY_GOODS = "in tie by more number of Goods tokens.";
         public static final String SPACE = " ";
-        public static final String GAME_OVER = " Game Over!!!!";
+        public static final String GAME_OVER = " Won the game. Game Over!!!!";
 
         public static final String ROUND_CALC_SUMM_TO_GAME_SUMM_WIN_MESSAGE = "com.boardgames.jaipur.ui.newgame.newgamefragment.WIN_MESSAGE";
+
+        public static final int GAME_SUMMARY_CAMERA_REQUEST_IMAGE = 9006;
 }
