@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.StringTokenizer;
@@ -39,6 +40,7 @@ public class GameUtils {
     private static final String FOUR_TOKEN_ITEMS = "1_4_1~2_4_2~3_5_1~4_5_2~5_6_1~6_6_2";
     private static final String FIVE_TOKEN_ITEMS = "1_8_1~2_8_2~3_9_1~4_10_1~5_10_2";
     private static final String CAMEL_TOKEN_ITEMS = "1_5";
+    public static final ArrayList<String> goodsList;
 
     static  {
 
@@ -225,6 +227,19 @@ public class GameUtils {
         itemsToImage.put("1_5", R.drawable.a10_1_camel_token_5_imageview);
         goodsToItemsToScore.put(ApplicationConstants.ROUNDS_CALC_CAMEL_TOKEN,itemsToScore);
         goodsToItemsToImage.put(ApplicationConstants.ROUNDS_CALC_CAMEL_TOKEN, itemsToImage);
+
+        goodsList = new ArrayList<>();
+        goodsList.add(ApplicationConstants.ROUNDS_CALC_DIAMOND_GOODS);
+        goodsList.add(ApplicationConstants.ROUNDS_CALC_GOLD_GOODS);
+        goodsList.add(ApplicationConstants.ROUNDS_CALC_SILVER_GOODS);
+        goodsList.add(ApplicationConstants.ROUNDS_CALC_CLOTH_GOODS);
+        goodsList.add(ApplicationConstants.ROUNDS_CALC_SPICE_GOODS);
+        goodsList.add(ApplicationConstants.ROUNDS_CALC_LEATHER_GOODS);
+        goodsList.add(ApplicationConstants.ROUNDS_CALC_3_CARD_TOKEN);
+        goodsList.add(ApplicationConstants.ROUNDS_CALC_4_CARD_TOKEN);
+        goodsList.add(ApplicationConstants.ROUNDS_CALC_5_CARD_TOKEN);
+        goodsList.add(ApplicationConstants.ROUNDS_CALC_CAMEL_TOKEN);
+
     }
 
 

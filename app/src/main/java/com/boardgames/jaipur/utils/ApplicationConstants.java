@@ -73,4 +73,8 @@ package com.boardgames.jaipur.utils;
         public static final String ROUND_CALC_SUMM_TO_GAME_SUMM_WIN_MESSAGE = "com.boardgames.jaipur.ui.newgame.newgamefragment.WIN_MESSAGE";
 
         public static final int GAME_SUMMARY_CAMERA_REQUEST_IMAGE = 9006;
+        public static final String GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE = "EDIT_MODE";
+        public static final String GAME_SUMMARY_TO_ROUND_SUMMARY_NORMAL_MODE = "NORMAL_MODE";
+        public static final String GAME_SUMM_TO_ROUND_SUMM_MODE = "com.boardgames.jaipur.ui.newgame.newgamefragment.MODE";
+        public static final String GAME_SUMM_TO_ROUND_SUMM_ROUND_EDIT = "com.boardgames.jaipur.ui.newgame.newgamefragment.ROUND_IN_EDIT_MODE";
 }

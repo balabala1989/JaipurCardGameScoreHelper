@@ -57,7 +57,7 @@ public class GameSummaryActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.string.color_activity_actionbar))));
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setTitle(getString(R.string.game_summary_activity_title));
 
         newGameViewModel = new ViewModelProvider(this).get(NewGameViewModel.class);
@@ -87,9 +87,7 @@ public class GameSummaryActivity extends AppCompatActivity {
         Glide.with(getApplicationContext()).load(gameDetails.getPlayersInAGame().getPlayerTwoProfile()).override(width, width).into(playerTwoImageView);
         playerTwoTextView.setText(gameDetails.getPlayersInAGame().getPlayerTwo().getPlayerName());
 
-        if (gameDetails.getRoundInProgress() == 1) {
-            startRoundCalculation();
-        }
+
 
         findViewById(R.id.winnerAnnouncementView).setVisibility(View.INVISIBLE);
         findViewById(R.id.roundTwoView).setVisibility(View.INVISIBLE);
@@ -121,6 +119,52 @@ public class GameSummaryActivity extends AppCompatActivity {
                 handleResetButton();
             }
         });
+
+        findViewById(R.id.roundOnePlayerOneScoreTextView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startRoundCalculation(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE, 1);
+            }
+        });
+
+        findViewById(R.id.roundOnePlayerTwoScoreTextView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startRoundCalculation(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE, 1);
+            }
+        });
+
+        findViewById(R.id.roundTwoPlayerOneScoreTextView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startRoundCalculation(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE, 2);
+            }
+        });
+
+        findViewById(R.id.roundTwoPlayerTwoScoreTextView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startRoundCalculation(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE, 2);
+            }
+        });
+
+        findViewById(R.id.roundThreePlayerOneScoreTextView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startRoundCalculation(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE, 3);
+            }
+        });
+
+        findViewById(R.id.roundThreePlayerTwoScoreTextView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startRoundCalculation(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE, 3);
+            }
+        });
+
+        if (gameDetails.getRoundInProgress() == 1) {
+            startRoundCalculation(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_NORMAL_MODE, -1);
+        }
     }
 
     @Override
@@ -165,7 +209,7 @@ public class GameSummaryActivity extends AppCompatActivity {
         }
 
         else if (item.getItemId() == R.id.calculateButton) {
-            startRoundCalculation();
+            startRoundCalculation(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_NORMAL_MODE, -1);
         }
 
         else if (item.getItemId() == R.id.shareButton) {
@@ -186,7 +230,11 @@ public class GameSummaryActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == ApplicationConstants.GAMESUMMARYACTIVITY_ROUNDCALCACTIVITY_REQUEST_CODE) {
             if (data == null)
                 handleException();
-           handleRoundCalculationResult(data);
+            String operationMode = data.getStringExtra(ApplicationConstants.GAME_SUMM_TO_ROUND_SUMM_MODE);
+            if (operationMode.equalsIgnoreCase(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE))
+                handleEditOperation(data);
+            else
+                handleRoundCalculationResult(data);
         }
         else if (resultCode == RESULT_OK && requestCode == ApplicationConstants.GAME_SUMMARY_CAMERA_REQUEST_IMAGE) {
             File image;
@@ -196,6 +244,14 @@ public class GameSummaryActivity extends AppCompatActivity {
             } catch (IOException e) {
                 handleException();
             }
+        }
+        else if (resultCode == RESULT_CANCELED && requestCode == ApplicationConstants.GAMESUMMARYACTIVITY_ROUNDCALCACTIVITY_REQUEST_CODE) {
+            if (data == null)
+                handleException();
+            String operationMode = data.getStringExtra(ApplicationConstants.GAME_SUMM_TO_ROUND_SUMM_MODE);
+            gameDetails = data.getParcelableExtra(ApplicationConstants.STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME);
+            if (!operationMode.equalsIgnoreCase(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE) && gameDetails.getRoundInProgress() == 1)
+                findViewById(R.id.roundOneView).setVisibility(View.INVISIBLE);
         }
     }
 
@@ -229,8 +285,10 @@ public class GameSummaryActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void startRoundCalculation() {
+    private void startRoundCalculation(String mode, int roundForEdit) {
         Intent roundCalIntent = new Intent(GameSummaryActivity.this, RoundsCalculationSummaryActivity.class);
+        roundCalIntent.putExtra(ApplicationConstants.GAME_SUMM_TO_ROUND_SUMM_MODE, mode);
+        roundCalIntent.putExtra(ApplicationConstants.GAME_SUMM_TO_ROUND_SUMM_ROUND_EDIT, roundForEdit);
         roundCalIntent.putExtra(ApplicationConstants.STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME, gameDetails);
         startActivityForResult(roundCalIntent, ApplicationConstants.GAMESUMMARYACTIVITY_ROUNDCALCACTIVITY_REQUEST_CODE);
     }
@@ -239,13 +297,69 @@ public class GameSummaryActivity extends AppCompatActivity {
         String winMessage = data.getStringExtra(ApplicationConstants.ROUND_CALC_SUMM_TO_GAME_SUMM_WIN_MESSAGE);
         String textMessage = "";
         gameDetails = data.getParcelableExtra(ApplicationConstants.STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME);
-        if (gameDetails.getRoundsCompleted() == 1)
+        if (gameDetails.getRoundsCompleted() == 1) {
             displayRoundOneResults();
-        else if (gameDetails.getRoundsCompleted() == 2)
+            isGameOver = false;
+            gameDetails.setRoundInProgress(2);
+            gameDetails.setRoundsCompleted(1);
+        }
+        else if (gameDetails.getRoundsCompleted() == 2) {
             displayRoundTwoResults();
-        else if (gameDetails.getRoundsCompleted() == 3)
-            displayRoundThreeResults();
+            //Decide if the third round is required
+            if (gameDetails.getRoundWinners().get(1).getId() == gameDetails.getRoundWinners().get(2).getId()) {
+                findViewById(R.id.roundThreeView).setVisibility(View.INVISIBLE);
+                findViewById(R.id.winnerAnnouncementView).setVisibility(View.VISIBLE);
 
+                if (gameDetails.getRoundWinners().get(1).getId() == gameDetails.getPlayersInAGame().getPlayerOne().getId()) {
+                    findViewById(R.id.winnerPlayerOneSealOfExcellence).setVisibility(View.VISIBLE);
+                    findViewById(R.id.winnerPlayerTwoSealOfExcellence).setVisibility(View.INVISIBLE);
+                    gameDetails.getGame().setWinner(gameDetails.getPlayersInAGame().getPlayerOne().getId());
+                }
+                else {
+                    findViewById(R.id.winnerPlayerOneSealOfExcellence).setVisibility(View.INVISIBLE);
+                    findViewById(R.id.winnerPlayerTwoSealOfExcellence).setVisibility(View.VISIBLE);
+                    gameDetails.getGame().setWinner(gameDetails.getPlayersInAGame().getPlayerTwo().getId());
+                }
+                isGameOver = true;
+                invalidateOptionsMenu();
+            }
+            else {
+                gameDetails.setRoundInProgress(3);
+                gameDetails.setRoundsCompleted(2);
+                findViewById(R.id.winnerPlayerOneSealOfExcellence).setVisibility(View.INVISIBLE);
+                findViewById(R.id.winnerPlayerTwoSealOfExcellence).setVisibility(View.INVISIBLE);
+                findViewById(R.id.winnerAnnouncementView).setVisibility(View.INVISIBLE);
+                isGameOver = false;
+            }
+        }
+        else if (gameDetails.getRoundsCompleted() == 3) {
+            displayRoundThreeResults();
+            int playerOneWinningCount = 0, playerTwoWinningCount = 0;
+
+            for (Map.Entry<Integer, Player> entry : gameDetails.getRoundWinners().entrySet()) {
+                if (entry.getValue().getId() == gameDetails.getPlayersInAGame().getPlayerOne().getId())
+                    playerOneWinningCount++;
+                else
+                    playerTwoWinningCount++;
+            }
+
+            if (playerOneWinningCount > playerTwoWinningCount) {
+                findViewById(R.id.winnerPlayerOneSealOfExcellence).setVisibility(View.VISIBLE);
+                findViewById(R.id.winnerPlayerTwoSealOfExcellence).setVisibility(View.INVISIBLE);
+                gameDetails.getGame().setWinner(gameDetails.getPlayersInAGame().getPlayerOne().getId());
+            }
+            else {
+                findViewById(R.id.winnerPlayerOneSealOfExcellence).setVisibility(View.INVISIBLE);
+                findViewById(R.id.winnerPlayerTwoSealOfExcellence).setVisibility(View.VISIBLE);
+                gameDetails.getGame().setWinner(gameDetails.getPlayersInAGame().getPlayerTwo().getId());
+            }
+
+            gameDetails.setRoundsCompleted(3);
+            findViewById(R.id.winnerAnnouncementView).setVisibility(View.VISIBLE);
+            isGameOver = true;
+        }
+
+        invalidateOptionsMenu();
         if (isGameOver) {
             if (gameDetails.getGame().getWinner() == gameDetails.getPlayersInAGame().getPlayerOne().getId()) {
                 winMessage += "\n" +  gameDetails.getPlayersInAGame().getPlayerOne().getPlayerName();
@@ -282,9 +396,6 @@ public class GameSummaryActivity extends AppCompatActivity {
             findViewById(R.id.roundOnePlayerTwoSealOfExcellence).setVisibility(View.VISIBLE);
         }
 
-        isGameOver = false;
-        gameDetails.setRoundInProgress(2);
-        gameDetails.setRoundsCompleted(1);
 
     }
 
@@ -308,32 +419,7 @@ public class GameSummaryActivity extends AppCompatActivity {
             findViewById(R.id.roundTwoPlayerTwoSealOfExcellence).setVisibility(View.VISIBLE);
         }
 
-        //Decide if the third round is required
-        if (gameDetails.getRoundWinners().get(1).getId() == gameDetails.getRoundWinners().get(2).getId()) {
-            findViewById(R.id.roundThreeView).setVisibility(View.INVISIBLE);
-            findViewById(R.id.winnerAnnouncementView).setVisibility(View.VISIBLE);
 
-            if (gameDetails.getRoundWinners().get(1).getId() == gameDetails.getPlayersInAGame().getPlayerOne().getId()) {
-                findViewById(R.id.winnerPlayerOneSealOfExcellence).setVisibility(View.VISIBLE);
-                findViewById(R.id.winnerPlayerTwoSealOfExcellence).setVisibility(View.INVISIBLE);
-                gameDetails.getGame().setWinner(gameDetails.getPlayersInAGame().getPlayerOne().getId());
-            }
-            else {
-                findViewById(R.id.winnerPlayerOneSealOfExcellence).setVisibility(View.INVISIBLE);
-                findViewById(R.id.winnerPlayerTwoSealOfExcellence).setVisibility(View.VISIBLE);
-                gameDetails.getGame().setWinner(gameDetails.getPlayersInAGame().getPlayerTwo().getId());
-            }
-            isGameOver = true;
-            invalidateOptionsMenu();
-        }
-        else {
-            gameDetails.setRoundInProgress(3);
-            gameDetails.setRoundsCompleted(2);
-            findViewById(R.id.winnerPlayerOneSealOfExcellence).setVisibility(View.INVISIBLE);
-            findViewById(R.id.winnerPlayerTwoSealOfExcellence).setVisibility(View.INVISIBLE);
-            findViewById(R.id.winnerAnnouncementView).setVisibility(View.INVISIBLE);
-            isGameOver = false;
-        }
     }
 
     private void displayRoundThreeResults() {
@@ -357,31 +443,6 @@ public class GameSummaryActivity extends AppCompatActivity {
             findViewById(R.id.roundThreePlayerOneSealOfExcellence).setVisibility(View.INVISIBLE);
             findViewById(R.id.roundThreePlayerTwoSealOfExcellence).setVisibility(View.VISIBLE);
         }
-
-        int playerOneWinningCount = 0, playerTwoWinningCount = 0;
-
-        for (Map.Entry<Integer, Player> entry : gameDetails.getRoundWinners().entrySet()) {
-            if (entry.getValue().getId() == gameDetails.getPlayersInAGame().getPlayerOne().getId())
-                playerOneWinningCount++;
-            else
-                playerTwoWinningCount++;
-        }
-
-        if (playerOneWinningCount > playerTwoWinningCount) {
-            findViewById(R.id.winnerPlayerOneSealOfExcellence).setVisibility(View.VISIBLE);
-            findViewById(R.id.winnerPlayerTwoSealOfExcellence).setVisibility(View.INVISIBLE);
-            gameDetails.getGame().setWinner(gameDetails.getPlayersInAGame().getPlayerOne().getId());
-        }
-        else {
-            findViewById(R.id.winnerPlayerOneSealOfExcellence).setVisibility(View.INVISIBLE);
-            findViewById(R.id.winnerPlayerTwoSealOfExcellence).setVisibility(View.VISIBLE);
-            gameDetails.getGame().setWinner(gameDetails.getPlayersInAGame().getPlayerTwo().getId());
-        }
-
-        gameDetails.setRoundsCompleted(3);
-        findViewById(R.id.winnerAnnouncementView).setVisibility(View.VISIBLE);
-        isGameOver = true;
-        invalidateOptionsMenu();
     }
 
     private void finishGameAndGoBackToMainPage() {
@@ -440,7 +501,7 @@ public class GameSummaryActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 resetGameDetails();
-                startRoundCalculation();
+                startRoundCalculation(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_NORMAL_MODE, -1);
             }
         });
 
@@ -528,11 +589,36 @@ public class GameSummaryActivity extends AppCompatActivity {
         }
     }
 
+    //TODO need to call clearcache once the operatios is done
     private Uri getImageFile(String fileName) {
         File primaryStorageVolume = new File(getExternalCacheDir(), "jaipurImages");
         if (!primaryStorageVolume.exists())
             primaryStorageVolume.mkdir();
         File imageFile = new File(primaryStorageVolume, fileName);
         return FileProvider.getUriForFile(GameSummaryActivity.this, getPackageName() + ".provider", imageFile);
+    }
+
+    private void handleEditOperation(Intent data) {
+        gameDetails = data.getParcelableExtra(ApplicationConstants.STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME);
+        int editRound = data.getIntExtra(ApplicationConstants.GAME_SUMM_TO_ROUND_SUMM_ROUND_EDIT, -1);
+        int originalRoundInProgress = gameDetails.getRoundInProgress();
+        int originalRoundsCompleted = gameDetails.getRoundsCompleted();
+
+        if (editRound == 1)
+            displayRoundOneResults();
+        else if (editRound == 2)
+            displayRoundTwoResults();
+        else if (editRound == 3)
+            displayRoundThreeResults();
+
+        for (int i = 1; i <= originalRoundsCompleted; i++) {
+            gameDetails.setRoundsCompleted(i);
+            data.putExtra(ApplicationConstants.STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME, gameDetails);
+            handleRoundCalculationResult(data);
+        }
+
+        gameDetails.setRoundInProgress(originalRoundInProgress);
+        gameDetails.setRoundsCompleted(originalRoundsCompleted);
+        invalidateOptionsMenu();
     }
 }
