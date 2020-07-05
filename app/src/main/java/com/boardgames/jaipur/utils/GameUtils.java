@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.StringTokenizer;
+import java.util.TimeZone;
 import java.util.logging.SimpleFormatter;
 
 
@@ -386,5 +387,13 @@ public class GameUtils {
             e.printStackTrace();
         }
         return imageFile;
+    }
+
+    public static String convertTimeToDate(long time) {
+        TimeZone tz = TimeZone.getDefault();
+        Date gameDate = new Date(time);
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat("MMM d, yyyy");
+        sdf.setTimeZone(tz);
+        return sdf.format(gameDate);
     }
 }

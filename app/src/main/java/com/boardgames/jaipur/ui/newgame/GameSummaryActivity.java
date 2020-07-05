@@ -36,11 +36,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class GameSummaryActivity extends AppCompatActivity {
 
@@ -120,47 +125,7 @@ public class GameSummaryActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.roundOnePlayerOneScoreTextView).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startRoundCalculation(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE, 1);
-            }
-        });
-
-        findViewById(R.id.roundOnePlayerTwoScoreTextView).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startRoundCalculation(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE, 1);
-            }
-        });
-
-        findViewById(R.id.roundTwoPlayerOneScoreTextView).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startRoundCalculation(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE, 2);
-            }
-        });
-
-        findViewById(R.id.roundTwoPlayerTwoScoreTextView).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startRoundCalculation(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE, 2);
-            }
-        });
-
-        findViewById(R.id.roundThreePlayerOneScoreTextView).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startRoundCalculation(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE, 3);
-            }
-        });
-
-        findViewById(R.id.roundThreePlayerTwoScoreTextView).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startRoundCalculation(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE, 3);
-            }
-        });
+        ((TextView) findViewById(R.id.gameDateTextView)).setText(GameUtils.convertTimeToDate(gameDetails.getGame().getTimeCreated()));
 
         if (gameDetails.getRoundInProgress() == 1) {
             startRoundCalculation(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_NORMAL_MODE, -1);
@@ -230,11 +195,7 @@ public class GameSummaryActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == ApplicationConstants.GAMESUMMARYACTIVITY_ROUNDCALCACTIVITY_REQUEST_CODE) {
             if (data == null)
                 handleException();
-            String operationMode = data.getStringExtra(ApplicationConstants.GAME_SUMM_TO_ROUND_SUMM_MODE);
-            if (operationMode.equalsIgnoreCase(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE))
-                handleEditOperation(data);
-            else
-                handleRoundCalculationResult(data);
+            handleRoundCalculationResult(data);
         }
         else if (resultCode == RESULT_OK && requestCode == ApplicationConstants.GAME_SUMMARY_CAMERA_REQUEST_IMAGE) {
             File image;
@@ -242,7 +203,7 @@ public class GameSummaryActivity extends AppCompatActivity {
                 image = PlayerUtils.getAvatarAbsolutePath(this, getImageFile(photoName), getString(R.string.gameactivity_external_path));
                 gameDetails.getGame().setGamePhotoLocation(image.getAbsolutePath());
             } catch (IOException e) {
-                handleException();
+                Toast.makeText(this, getString(R.string.camera_error), Toast.LENGTH_LONG).show();
             }
         }
         else if (resultCode == RESULT_CANCELED && requestCode == ApplicationConstants.GAMESUMMARYACTIVITY_ROUNDCALCACTIVITY_REQUEST_CODE) {
@@ -359,6 +320,7 @@ public class GameSummaryActivity extends AppCompatActivity {
             isGameOver = true;
         }
 
+        enableEditForTheRound(gameDetails.getRoundsCompleted());
         invalidateOptionsMenu();
         if (isGameOver) {
             if (gameDetails.getGame().getWinner() == gameDetails.getPlayersInAGame().getPlayerOne().getId()) {
@@ -487,7 +449,7 @@ public class GameSummaryActivity extends AppCompatActivity {
 
         game.setPlayerTwoScores(playerScore.toString());
         game.setGamePlayStatus("C");
-        game.setTimeUpdated(System.currentTimeMillis()/100);
+        game.setTimeUpdated(System.currentTimeMillis());
         newGameViewModel.updateAGame(game);
     }
 
@@ -556,6 +518,7 @@ public class GameSummaryActivity extends AppCompatActivity {
             return;
         }
         findViewById(R.id.winnerAnnounceMentTextView).setVisibility(View.VISIBLE);
+        enableEditForTheRound(-1);
         View screenView = getWindow().getDecorView().getRootView().findViewById(R.id.screenViewLayout);
         Bitmap screenBitMap = Bitmap.createBitmap(screenView.getWidth(), screenView.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(screenBitMap);
@@ -563,6 +526,7 @@ public class GameSummaryActivity extends AppCompatActivity {
         screenView.draw(canvas);
 
         findViewById(R.id.winnerAnnounceMentTextView).setVisibility(View.INVISIBLE);
+        enableEditForTheRound(gameDetails.getRoundsCompleted());
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         screenBitMap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
@@ -598,27 +562,62 @@ public class GameSummaryActivity extends AppCompatActivity {
         return FileProvider.getUriForFile(GameSummaryActivity.this, getPackageName() + ".provider", imageFile);
     }
 
-    private void handleEditOperation(Intent data) {
-        gameDetails = data.getParcelableExtra(ApplicationConstants.STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME);
-        int editRound = data.getIntExtra(ApplicationConstants.GAME_SUMM_TO_ROUND_SUMM_ROUND_EDIT, -1);
-        int originalRoundInProgress = gameDetails.getRoundInProgress();
-        int originalRoundsCompleted = gameDetails.getRoundsCompleted();
+    private void enableEditForTheRound(int roundNumber) {
+        TextView roundOnePlayerOneTextView = findViewById(R.id.roundOnePlayerOneScoreTextView);
+        TextView roundOnePlayerTwoTextView = findViewById(R.id.roundOnePlayerTwoScoreTextView);
+        TextView roundTwoPlayerOneTextView = findViewById(R.id.roundTwoPlayerOneScoreTextView);
+        TextView roundTwoPlayerTwoTextView = findViewById(R.id.roundTwoPlayerTwoScoreTextView);
+        TextView roundThreePlayerOneTextView = findViewById(R.id.roundThreePlayerOneScoreTextView);
+        TextView roundThreePlayerTwoTextView = findViewById(R.id.roundThreePlayerTwoScoreTextView);
 
-        if (editRound == 1)
-            displayRoundOneResults();
-        else if (editRound == 2)
-            displayRoundTwoResults();
-        else if (editRound == 3)
-            displayRoundThreeResults();
-
-        for (int i = 1; i <= originalRoundsCompleted; i++) {
-            gameDetails.setRoundsCompleted(i);
-            data.putExtra(ApplicationConstants.STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME, gameDetails);
-            handleRoundCalculationResult(data);
+        if (roundNumber == 1) {
+            enableDisableIconAndClickableInTextView(roundOnePlayerOneTextView, true, roundNumber);
+            enableDisableIconAndClickableInTextView(roundOnePlayerTwoTextView, true, roundNumber);
+            enableDisableIconAndClickableInTextView(roundTwoPlayerOneTextView, false, roundNumber);
+            enableDisableIconAndClickableInTextView(roundTwoPlayerTwoTextView, false, roundNumber);
+            enableDisableIconAndClickableInTextView(roundThreePlayerOneTextView, false, roundNumber);
+            enableDisableIconAndClickableInTextView(roundThreePlayerTwoTextView, false, roundNumber);
         }
+        else if (roundNumber == 2) {
+            enableDisableIconAndClickableInTextView(roundOnePlayerOneTextView, false, roundNumber);
+            enableDisableIconAndClickableInTextView(roundOnePlayerTwoTextView, false, roundNumber);
+            enableDisableIconAndClickableInTextView(roundTwoPlayerOneTextView, true, roundNumber);
+            enableDisableIconAndClickableInTextView(roundTwoPlayerTwoTextView, true, roundNumber);
+            enableDisableIconAndClickableInTextView(roundThreePlayerOneTextView, false, roundNumber);
+            enableDisableIconAndClickableInTextView(roundThreePlayerTwoTextView, false, roundNumber);
+        }
+        else if (roundNumber == 3) {
+            enableDisableIconAndClickableInTextView(roundOnePlayerOneTextView, false, roundNumber);
+            enableDisableIconAndClickableInTextView(roundOnePlayerTwoTextView, false, roundNumber);
+            enableDisableIconAndClickableInTextView(roundTwoPlayerOneTextView, false, roundNumber);
+            enableDisableIconAndClickableInTextView(roundTwoPlayerTwoTextView, false, roundNumber);
+            enableDisableIconAndClickableInTextView(roundThreePlayerOneTextView, true, roundNumber);
+            enableDisableIconAndClickableInTextView(roundThreePlayerTwoTextView, true, roundNumber);
+        }
+        else if (roundNumber == -1) {
+            enableDisableIconAndClickableInTextView(roundOnePlayerOneTextView, false, roundNumber);
+            enableDisableIconAndClickableInTextView(roundOnePlayerTwoTextView, false, roundNumber);
+            enableDisableIconAndClickableInTextView(roundTwoPlayerOneTextView, false, roundNumber);
+            enableDisableIconAndClickableInTextView(roundTwoPlayerTwoTextView, false, roundNumber);
+            enableDisableIconAndClickableInTextView(roundThreePlayerOneTextView, false, roundNumber);
+            enableDisableIconAndClickableInTextView(roundThreePlayerTwoTextView, false, roundNumber);
+        }
+    }
 
-        gameDetails.setRoundInProgress(originalRoundInProgress);
-        gameDetails.setRoundsCompleted(originalRoundsCompleted);
-        invalidateOptionsMenu();
+    private void enableDisableIconAndClickableInTextView(TextView textView, boolean enable, int roundNumber) {
+        if (enable) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_mode_edit_black_24dp, 0, 0, 0);
+            textView.setClickable(true);
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startRoundCalculation(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE, roundNumber);
+                }
+            });
+        }
+        else {
+            textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            textView.setClickable(false);
+        }
     }
 }

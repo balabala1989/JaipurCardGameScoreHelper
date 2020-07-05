@@ -26,7 +26,7 @@ public interface GameDao {
     public void deleteGame(Game game);
 
     @Query("SELECT * FROM games ORDER BY time_created DESC")
-    public LiveData<List<Game>> getAllGames();
+    public List<Game> getAllGames();
 
     @Query("SELECT * FROM games where id = :gameId")
     public LiveData<Game> getAGame(long gameId);

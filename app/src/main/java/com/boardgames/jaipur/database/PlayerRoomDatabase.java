@@ -34,8 +34,8 @@ public abstract class PlayerRoomDatabase extends RoomDatabase {
                     Player player = new Player();
                     player.setPlayerName("Test player " + (i+1));
                     player.setPlayerAvatar("");
-                    player.setTimeCreated(System.currentTimeMillis() / 100);
-                    player.setTimeUpdated(System.currentTimeMillis() / 100);
+                    player.setTimeCreated(System.currentTimeMillis());
+                    player.setTimeUpdated(System.currentTimeMillis());
                     playerDao.insertPlayer(player);
                     player = null;
                 }

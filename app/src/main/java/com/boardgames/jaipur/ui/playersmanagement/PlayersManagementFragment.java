@@ -145,7 +145,7 @@ public class PlayersManagementFragment extends Fragment {
         }
 
         player.setPlayerName(dataIntent.getStringExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PLAYER_NAME_REPLY));
-        player.setTimeUpdated(System.currentTimeMillis()/100);
+        player.setTimeUpdated(System.currentTimeMillis());
 
         try {
             playersManagementViewModel.update(player);

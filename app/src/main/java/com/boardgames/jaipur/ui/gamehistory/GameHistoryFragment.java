@@ -10,9 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.boardgames.jaipur.R;
+import com.boardgames.jaipur.adapter.GamesItemAdapter;
 
 public class GameHistoryFragment extends Fragment {
 
@@ -20,16 +24,14 @@ public class GameHistoryFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        gameHistoryViewModel =
-                ViewModelProviders.of(this).get(GameHistoryViewModel.class);
+        gameHistoryViewModel = new ViewModelProvider(this).get(GameHistoryViewModel.class);
         View root = inflater.inflate(R.layout.fragment_game_history, container, false);
-        final TextView textView = root.findViewById(R.id.text_slideshow);
-        gameHistoryViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+
+        RecyclerView gameRecyclerView = root.findViewById(R.id.gameHistoryRecyclerView);
+        final GamesItemAdapter gamesItemAdapter = new GamesItemAdapter(this);
+        gameRecyclerView.setAdapter(gamesItemAdapter);
+        gameRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        gamesItemAdapter.setGamesList(gameHistoryViewModel.getAllGames());
         return root;
     }
 }

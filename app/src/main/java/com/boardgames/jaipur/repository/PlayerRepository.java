@@ -23,14 +23,14 @@ public class PlayerRepository {
         return playerDao.getAllPlayers();
     }
 
-    public LiveData<Player> getPlayer(long playerId) {
+    public Player getPlayer(long playerId) {
         return playerDao.getPlayer(playerId);
     }
 
     public long updatePlayerAvatar(long playerId, String playerAvatar) {
         final long[] updateStatus = {0};
         PlayerRoomDatabase.databaseWriterExecutor.execute(() -> {
-            updateStatus[0] = playerDao.updatePlayerAvatar(playerId, System.currentTimeMillis()/100, playerAvatar);
+            updateStatus[0] = playerDao.updatePlayerAvatar(playerId, System.currentTimeMillis(), playerAvatar);
         });
         return updateStatus[0];
     }

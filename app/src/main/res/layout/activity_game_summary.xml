@@ -13,6 +13,20 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/gameDateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:drawableStart="@drawable/ic_date_range_black_24dp"
+            android:drawablePadding="@dimen/textview_image_padding"
+            android:fontFamily="@font/biorhyme"
+            android:gravity="center"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:visibility="visible" />
+
         <RelativeLayout
             android:id="@+id/playersDisplay"
             android:layout_width="match_parent"
@@ -165,6 +179,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginRight="32dp"
+                android:drawablePadding="@dimen/textview_image_padding"
                 android:gravity="center"
                 android:textColor="#000000"
                 android:textSize="48sp"
@@ -199,6 +214,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginRight="32dp"
+                android:drawablePadding="@dimen/textview_image_padding"
                 android:gravity="center"
                 android:textColor="#000000"
                 android:textSize="48sp"
@@ -254,6 +270,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginRight="32dp"
+                android:drawablePadding="@dimen/textview_image_padding"
                 android:gravity="center"
                 android:textColor="#000000"
                 android:textSize="48sp"
@@ -288,6 +305,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginRight="32dp"
+                android:drawablePadding="@dimen/textview_image_padding"
                 android:gravity="center"
                 android:textColor="#000000"
                 android:textSize="48sp"
@@ -342,6 +360,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginRight="32dp"
+                android:drawablePadding="@dimen/textview_image_padding"
                 android:gravity="center"
                 android:textColor="#000000"
                 android:textSize="48sp"
@@ -376,6 +395,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginRight="32dp"
+                android:drawablePadding="@dimen/textview_image_padding"
                 android:gravity="center"
                 android:textColor="#000000"
                 android:textSize="48sp"

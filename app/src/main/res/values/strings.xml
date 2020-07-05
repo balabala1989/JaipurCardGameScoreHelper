@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Jaipur - Card Game - Score Helper</string>
+    <string name="app_name">Jaipur: Card Game - Score Helper</string>
     <string name="header_add_player_activity">New Player</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Jaipur: Card Game \n Score Helper</string>
@@ -75,7 +75,7 @@
     <string name="imageview_content_description_text_for_player">Player Profile</string>
     <string name="imageview_content_description_text_for_coins">Coins</string>
     <string name="round_calc_description">Drag &amp; Drop the coins to the player to add it\nClick the player to remove the coins</string>
-    <string name="drag_drop_error">Unsuccessful drop!!! Try dropping it again.</string>
+    <string name="camera_error">Unable to take picture at the moment!!! Please try again.</string>
 
     <string name="gamesummary_roundone_title">Round 1</string>
     <string name="gamesummary_roundtwo_title">Round 2</string>
@@ -91,6 +91,9 @@
     <string name="alert_title_for_dropped_items">Drag and Dropped Coins</string>
 
     <string name="default_score">0</string>
+
+    <string name="won_textview_message">Won</string>
+    <string name="empty_game_textview_message">No Games found!!!!</string>
 
 
 </resources>

@@ -11,6 +11,7 @@ import com.boardgames.jaipur.database.GamesRoomDatabase;
 import com.boardgames.jaipur.entities.Game;
 import com.boardgames.jaipur.entities.Round;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
@@ -30,7 +31,12 @@ public class GamesAndRoundsRepository {
 
     //Implementing GameDao functions
 
-    public LiveData<List<Game>> getAllGames() {return gameDao.getAllGames();}
+    public List<Game> getAllGames() {
+        List<Game> games = new ArrayList<>();
+        GamesRoomDatabase.databaseWriterExecutor.execute(() -> {
+            games = gameDao.getAllGames();
+        }
+    }
 
     public long insertGame(Game game) {
         semaphore = new Semaphore(0);

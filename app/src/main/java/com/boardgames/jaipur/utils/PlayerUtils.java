@@ -42,8 +42,8 @@ public class PlayerUtils {
                 newPlayer.setPlayerAvatar("");
             }
             newPlayer.setPlayerName(playerName);
-            newPlayer.setTimeCreated(System.currentTimeMillis()/100);
-            newPlayer.setTimeUpdated(System.currentTimeMillis()/100);
+            newPlayer.setTimeCreated(System.currentTimeMillis());
+            newPlayer.setTimeUpdated(System.currentTimeMillis());
             if (androidViewModel instanceof PlayersManagementViewModel) {
                 PlayersManagementViewModel playersManagementViewModel = (PlayersManagementViewModel) androidViewModel;
                 playersManagementViewModel.insert(newPlayer);

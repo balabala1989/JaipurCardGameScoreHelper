@@ -76,23 +76,17 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
             savedRound = gameDetails.getRoundInProgress();
             gameDetails.setRoundInProgress(editModeRound);
             goodsDetailsForARound = gameDetails.getGoodsDetailsForARoundMap().get(editModeRound);
+            enableSubmit = true;
+            invalidateOptionsMenu();
         }
         else {
             goodsDetailsForARound = new GoodsDetailsForARound();
         }
 
-
         ActionBar actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.string.color_activity_actionbar))));
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(computeRoundTitle(gameDetails.getRoundInProgress()));
-
-        /*if (gameDetails.getGoodsDetailsForARoundMap() == null)
-            gameDetails.setGoodsDetailsForARoundMap(new HashMap<>());
-        if (gameDetails.getGoodsDetailsForARoundMap().isEmpty() || !gameDetails.getGoodsDetailsForARoundMap().containsKey(gameDetails.getRoundInProgress()) || gameDetails.getGoodsDetailsForARoundMap().get(gameDetails.getRoundInProgress()) == null)
-           */
-
-
 
         ImageView playerOneImageView = findViewById(R.id.playerOneImageView);
         ImageView playerTwoImageView = findViewById(R.id.playerTwoImageView);
@@ -565,8 +559,8 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
         round.setFourCardTokenScore(0);
         round.setFiveCardTokenScore(0);
         round.setCamelReceived('N');
-        round.setTimeCreated(System.currentTimeMillis()/100);
-        round.setTimeUpdated(System.currentTimeMillis()/100);
+        round.setTimeCreated(System.currentTimeMillis());
+        round.setTimeUpdated(System.currentTimeMillis());
         round.setScore(0);
         return round;
     }
