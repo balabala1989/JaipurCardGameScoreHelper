@@ -4,9 +4,12 @@ import android.app.Application;
 import android.content.Context;
 import android.net.Uri;
 
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
 import com.boardgames.jaipur.R;
@@ -24,7 +27,7 @@ import java.util.List;
 
 public class GameHistoryViewModel extends AndroidViewModel {
 
-    private List<GameDetails> gameDetailsList;
+    private MediatorLiveData<List<GameDetails>> gameDetailsList;
     private GamesAndRoundsRepository gamesAndRoundsRepository;
     private PlayerRepository playerRepository;
     private Context context;
@@ -33,39 +36,46 @@ public class GameHistoryViewModel extends AndroidViewModel {
         super(application);
         gamesAndRoundsRepository = new GamesAndRoundsRepository(application);
         playerRepository = new PlayerRepository(application);
-        gameDetailsList = new ArrayList<>();
         context = application.getApplicationContext();
     }
 
-    public List<GameDetails> getAllGames() {
-        List<Game> games = gamesAndRoundsRepository.getAllGames();
+    public MutableLiveData<List<GameDetails>> getAllGames() {
+        if (gameDetailsList == null)
+            gameDetailsList = new MediatorLiveData<>();
 
-        for (Game game : games) {
-            GameDetails gameDetails = new GameDetails();
-            gameDetails.setGame(game);
-            Player playerOne = playerRepository.getPlayer(game.getPlayerOneID());
-            Player playerTwo = playerRepository.getPlayer(game.getPlayerTwoID());
+        LiveData<List<Game>> games = gamesAndRoundsRepository.getAllGames();
 
-            PlayersInAGame playersInAGame = new PlayersInAGame(playerOne, playerTwo);
+        gameDetailsList.addSource(games, new Observer<List<Game>>() {
+            @Override
+            public void onChanged(List<Game> games) {
+                ArrayList<GameDetails> gameDetailsArrayList = new ArrayList<>();
+                for (Game game : games) {
+                    GameDetails gameDetails = new GameDetails();
+                    gameDetails.setGame(game);
+                    Player playerOne = playerRepository.getPlayer(game.getPlayerOneID());
+                    Player playerTwo = playerRepository.getPlayer(game.getPlayerTwoID());
 
-            if (playerOne.getPlayerAvatar() == null || playerOne.getPlayerAvatar().trim().isEmpty())
-                playersInAGame.setPlayerOneProfile(PlayerUtils.getUriForDrawable(context, R.drawable.default_player_avatar));
-            else
-                playersInAGame.setPlayerOneProfile(Uri.fromFile(new File(playerOne.getPlayerAvatar())));
+                    PlayersInAGame playersInAGame = new PlayersInAGame(playerOne, playerTwo);
 
-            if (playerTwo.getPlayerAvatar() == null || playerTwo.getPlayerAvatar().trim().isEmpty())
-                playersInAGame.setPlayerTwoProfile(PlayerUtils.getUriForDrawable(context, R.drawable.default_player_avatar));
-            else
-                playersInAGame.setPlayerTwoProfile(Uri.fromFile(new File(playerTwo.getPlayerAvatar())));
+                    if (playerOne.getPlayerAvatar() == null || playerOne.getPlayerAvatar().trim().isEmpty())
+                        playersInAGame.setPlayerOneProfile(PlayerUtils.getUriForDrawable(context, R.drawable.default_player_avatar));
+                    else
+                        playersInAGame.setPlayerOneProfile(Uri.fromFile(new File(playerOne.getPlayerAvatar())));
 
-            gameDetails.setGame(game);
-            gameDetails.setPlayersInAGame(playersInAGame);
+                    if (playerTwo.getPlayerAvatar() == null || playerTwo.getPlayerAvatar().trim().isEmpty())
+                        playersInAGame.setPlayerTwoProfile(PlayerUtils.getUriForDrawable(context, R.drawable.default_player_avatar));
+                    else
+                        playersInAGame.setPlayerTwoProfile(Uri.fromFile(new File(playerTwo.getPlayerAvatar())));
 
-            gameDetailsList.add(gameDetails);
+                    gameDetails.setPlayersInAGame(playersInAGame);
 
-        }
+                    gameDetailsArrayList.add(gameDetails);
+                }
+                gameDetailsList.setValue(gameDetailsArrayList);
+            }
+        });
+
         return gameDetailsList;
     }
-
 
 }

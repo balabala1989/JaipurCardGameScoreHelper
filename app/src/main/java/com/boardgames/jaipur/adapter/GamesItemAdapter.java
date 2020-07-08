@@ -132,5 +132,6 @@ public class GamesItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public void setGamesList(List<GameDetails> gamesList) {
         this.gamesList = gamesList;
+        notifyDataSetChanged();
     }
 }

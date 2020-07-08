@@ -17,6 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.adapter.GamesItemAdapter;
+import com.boardgames.jaipur.utils.GameDetails;
+
+import java.util.List;
 
 public class GameHistoryFragment extends Fragment {
 
@@ -31,7 +34,12 @@ public class GameHistoryFragment extends Fragment {
         final GamesItemAdapter gamesItemAdapter = new GamesItemAdapter(this);
         gameRecyclerView.setAdapter(gamesItemAdapter);
         gameRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        gamesItemAdapter.setGamesList(gameHistoryViewModel.getAllGames());
+        gameHistoryViewModel.getAllGames().observe(getViewLifecycleOwner(), new Observer<List<GameDetails>>() {
+            @Override
+            public void onChanged(List<GameDetails> gameDetails) {
+                gamesItemAdapter.setGamesList(gameDetails);
+            }
+        });
         return root;
     }
 }

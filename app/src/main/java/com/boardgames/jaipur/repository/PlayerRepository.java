@@ -1,6 +1,7 @@
 package com.boardgames.jaipur.repository;
 
 import android.app.Application;
+import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
@@ -9,10 +10,13 @@ import com.boardgames.jaipur.database.PlayerRoomDatabase;
 import com.boardgames.jaipur.entities.Player;
 
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 public class PlayerRepository {
 
     private PlayerDao playerDao;
+    private Semaphore semaphore;
+    private Player singlePlayer;
 
     public PlayerRepository(Application application) {
         PlayerRoomDatabase playerRoomDatabase = PlayerRoomDatabase.getDatabase(application);
@@ -24,7 +28,15 @@ public class PlayerRepository {
     }
 
     public Player getPlayer(long playerId) {
-        return playerDao.getPlayer(playerId);
+        semaphore = new Semaphore(0);
+        new PlayerQueryAsyncTask().execute(playerId);
+        try {
+            semaphore.acquire();
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return singlePlayer;
     }
 
     public long updatePlayerAvatar(long playerId, String playerAvatar) {
@@ -54,5 +66,15 @@ public class PlayerRepository {
         PlayerRoomDatabase.databaseWriterExecutor.execute(() -> {
             playerDao.deletePlayer(player);
         });
+    }
+
+    private class PlayerQueryAsyncTask extends AsyncTask<Long, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Long... players) {
+            singlePlayer = playerDao.getPlayer(players[0]);
+            semaphore.release();
+            return null;
+        }
     }
 }
