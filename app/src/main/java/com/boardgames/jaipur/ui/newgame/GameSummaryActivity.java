@@ -529,7 +529,6 @@ public class GameSummaryActivity extends AppCompatActivity {
         GameUtils.initiateShareActivity(shareUri, this);
     }
 
-    //TODO need to call clearcache once the operatios is done
     private void takePhotoUsingCamera() {
         if (CheckForPermissionsState.requestStorageCameraPermissions(GameSummaryActivity.this)) {
             photoName = System.currentTimeMillis() + ".jpg";
@@ -634,6 +633,7 @@ public class GameSummaryActivity extends AppCompatActivity {
                 image = PlayerUtils.getAvatarAbsolutePath(this, imageUri, getString(R.string.gameactivity_external_path));
                 gameDetails.getGame().setGamePhotoLocation(image.getAbsolutePath());
                 gamePhotoStatusEnum = GamePhotoStatusEnum.DISPLAYONLY;
+                GameUtils.clearCache(getApplicationContext());
                 Toast.makeText(this, getString(R.string.camera_success), Toast.LENGTH_LONG).show();
             } catch (IOException e) {
                 Toast.makeText(this, getString(R.string.camera_error), Toast.LENGTH_LONG).show();

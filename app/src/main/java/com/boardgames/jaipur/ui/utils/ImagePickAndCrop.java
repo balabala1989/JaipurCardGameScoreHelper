@@ -228,14 +228,6 @@ public class ImagePickAndCrop extends AppCompatActivity {
                 .start(this);
     }
 
-    public static void clearCache(Context context) {
-        File primaryStorageVolume = new File(context.getExternalCacheDir(), "jaipurImages");
-        if (primaryStorageVolume.exists() && primaryStorageVolume.isDirectory()) {
-            for (File childFile : primaryStorageVolume.listFiles())
-                childFile.delete();
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();

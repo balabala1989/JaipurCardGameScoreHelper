@@ -462,12 +462,19 @@ public class GameUtils {
         context.startActivity(localIntent);
     }
 
-    //TODO need to call clearcache once the operatios is done
     public static Uri getImageFile(Context context, String fileName) {
         File primaryStorageVolume = new File(context.getExternalCacheDir(), "jaipurImages");
         if (!primaryStorageVolume.exists())
             primaryStorageVolume.mkdir();
         File imageFile = new File(primaryStorageVolume, fileName);
         return FileProvider.getUriForFile(context, context.getPackageName() + ".provider", imageFile);
+    }
+
+    public static void clearCache(Context context) {
+        File primaryStorageVolume = new File(context.getExternalCacheDir(), "jaipurImages");
+        if (primaryStorageVolume.exists() && primaryStorageVolume.isDirectory()) {
+            for (File childFile : primaryStorageVolume.listFiles())
+                childFile.delete();
+        }
     }
 }
