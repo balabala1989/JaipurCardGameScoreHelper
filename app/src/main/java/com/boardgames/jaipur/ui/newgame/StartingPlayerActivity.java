@@ -148,10 +148,13 @@ public class StartingPlayerActivity extends AppCompatActivity {
         game.setPlayerTwoID(playersInAGame.getPlayerTwo().getId());
         game.setRoundsCompleted(0);
         game.setGamePlayStatus("P");
+        game.setTimeCreated(System.currentTimeMillis());
+        game.setTimeUpdated(System.currentTimeMillis());
         gameId = newGameViewModel.createAGame(game);
 
         if (gameId == -1)
             handleException();
+        game.setId(gameId);
 
         gameDetails = new GameDetails();
         gameDetails.setGame(game);

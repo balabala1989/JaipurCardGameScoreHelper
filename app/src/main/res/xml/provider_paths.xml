@@ -7,4 +7,8 @@
        name="externalCache"
        path="jaipurImages"/>
 
+    <external-files-path
+        name="external_files"
+        path="gameImages"/>
+
 </paths>

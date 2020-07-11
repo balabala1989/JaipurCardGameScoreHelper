@@ -21,6 +21,7 @@ public class GamesAndRoundsRepository {
     private Semaphore semaphore;
     private long gameId = -1;
     private long roundId = -1;
+    private List<Round> rounds;
 
     public GamesAndRoundsRepository(Application application) {
         GamesRoomDatabase gamesRoomDatabase = GamesRoomDatabase.getDabase(application);
@@ -30,7 +31,9 @@ public class GamesAndRoundsRepository {
 
     //Implementing GameDao functions
 
-    public LiveData<List<Game>> getAllGames() {return gameDao.getAllGames();}
+    public LiveData<List<Game>> getAllGames() {
+        return gameDao.getAllGames();
+    }
 
     public long insertGame(Game game) {
         semaphore = new Semaphore(0);
@@ -90,7 +93,17 @@ public class GamesAndRoundsRepository {
 
     public LiveData<Round> getARound(long roundId) {return roundDao.getARound(roundId);}
 
-    public LiveData<List<Round>> getRoundsForAGame(long gameId) {return roundDao.getRoundsForAGame(gameId);}
+    public List<Round> getRoundsForAGame(long gameId) {
+        semaphore = new Semaphore(0);
+        new RoundFetchAllAsyncTask().execute(gameId);
+        try {
+            semaphore.acquire();
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return rounds;
+    }
 
 
     private class GameInsertAsyncTask extends AsyncTask<Game, Void, Void> {
@@ -108,6 +121,16 @@ public class GamesAndRoundsRepository {
         @Override
         protected Void doInBackground(Round... rounds) {
             roundId = roundDao.insertRound(rounds[0]);
+            semaphore.release();
+            return null;
+        }
+    }
+
+    private class RoundFetchAllAsyncTask extends AsyncTask<Long, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Long... longs) {
+            rounds = roundDao.getRoundsForAGame(longs[0]);
             semaphore.release();
             return null;
         }

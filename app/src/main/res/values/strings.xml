@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Jaipur - Card Game - Score Helper</string>
+    <string name="app_name">Jaipur: Card Game - Score Helper</string>
     <string name="header_add_player_activity">New Player</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Jaipur: Card Game \n Score Helper</string>
@@ -42,6 +42,7 @@
     <string name="player_update_issue">Error!! Unable to update the player profile now...</string>
     <string name="edittext_playername_error">Player Name cannot be blank</string>
     <string name="playeractivity_external_path">profileImages</string>
+    <string name="gameactivity_external_path">gameImages</string>
     <string name="imagepickandcropactivity_cache_path">jaipurImages</string>
     <string name="empty_players_found">No Players Found!!!!</string>
 
@@ -57,9 +58,6 @@
     <string name="retry_button_text">Try Again</string>
     <string name="game_create_issue">Error!! Unable to create a game...</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <string name="diamond_calculation_fragment_label">Diamond</string>
     <string name="gold_calculation_fragment_label">Gold</string>
     <string name="silver_calculation_fragment_label">Silver</string>
@@ -74,7 +72,9 @@
     <string name="imageview_content_description_text_for_player">Player Profile</string>
     <string name="imageview_content_description_text_for_coins">Coins</string>
     <string name="round_calc_description">Drag &amp; Drop the coins to the player to add it\nClick the player to remove the coins</string>
-    <string name="drag_drop_error">Unsuccessful drop!!! Try dropping it again.</string>
+    <string name="camera_error">Unable to take picture at the moment!!! Please try again.</string>
+    <string name="camera_success">Picture saved successfully!!!</string>
+    <string name="game_success">Game saved successfully!!!</string>
 
     <string name="gamesummary_roundone_title">Round 1</string>
     <string name="gamesummary_roundtwo_title">Round 2</string>
@@ -90,6 +90,10 @@
     <string name="alert_title_for_dropped_items">Drag and Dropped Coins</string>
 
     <string name="default_score">0</string>
+
+    <string name="won_textview_message">Won</string>
+    <string name="empty_game_textview_message">No Games found!!!!</string>
+    <string name="game_image_desc_message">Click on the image to change it</string>
 
 
 </resources>

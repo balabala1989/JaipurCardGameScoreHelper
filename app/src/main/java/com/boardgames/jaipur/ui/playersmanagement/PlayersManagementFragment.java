@@ -26,6 +26,7 @@ import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.adapter.PlayerListAdapater;
 import com.boardgames.jaipur.entities.Player;
 import com.boardgames.jaipur.utils.ApplicationConstants;
+import com.boardgames.jaipur.utils.GameUtils;
 import com.boardgames.jaipur.utils.PlayerUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -100,7 +101,6 @@ public class PlayersManagementFragment extends Fragment {
         Toast.makeText(getContext(), R.string.error_player_not_added, Toast.LENGTH_LONG).show();
     }
 
-    //TODO Need to call clearcache once the image is saved in intented location
     private void handleResultOKResponseForDeletePlayer(Intent dataIntent) {
         Player player = dataIntent.getParcelableExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS);
 
@@ -130,7 +130,7 @@ public class PlayersManagementFragment extends Fragment {
             if (uri != null) {
                 File imageFile;
                 try {
-                    imageFile = PlayerUtils.getAvatarAbsolutePath(getContext(), uri);
+                    imageFile = PlayerUtils.getAvatarAbsolutePath(getContext(), uri, getString(R.string.playeractivity_external_path));
                     player.setPlayerAvatar(imageFile.getAbsolutePath());
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -145,7 +145,7 @@ public class PlayersManagementFragment extends Fragment {
         }
 
         player.setPlayerName(dataIntent.getStringExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PLAYER_NAME_REPLY));
-        player.setTimeUpdated(System.currentTimeMillis()/100);
+        player.setTimeUpdated(System.currentTimeMillis());
 
         try {
             playersManagementViewModel.update(player);
@@ -156,6 +156,7 @@ public class PlayersManagementFragment extends Fragment {
             return;
         }
 
+        GameUtils.clearCache(getContext());
         Toast.makeText(getContext(), R.string.success_player_updated, Toast.LENGTH_LONG).show();
     }
 

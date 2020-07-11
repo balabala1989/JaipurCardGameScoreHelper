@@ -28,22 +28,21 @@ public class PlayerUtils {
     public static boolean isPlayerOneSelected = false;
     public static boolean isPlayerTwoSelected = false;
 
-    //TODO Need to call clearcache once the image is saved in intented location
     public static void handleResultOKResponseForNewPlayer(Context context, AndroidViewModel androidViewModel, Intent dataIntent) {
         Uri uri = dataIntent.getParcelableExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PROFILE_IMAGE_URI_REPLY);
         String playerName = dataIntent.getStringExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PLAYER_NAME_REPLY);
         Player newPlayer = new Player();
         try {
             if (uri != null) {
-                File imageFile = getAvatarAbsolutePath(context, uri);
+                File imageFile = getAvatarAbsolutePath(context, uri, context.getString(R.string.playeractivity_external_path));
                 newPlayer.setPlayerAvatar(imageFile.getAbsolutePath());
             }
             else {
                 newPlayer.setPlayerAvatar("");
             }
             newPlayer.setPlayerName(playerName);
-            newPlayer.setTimeCreated(System.currentTimeMillis()/100);
-            newPlayer.setTimeUpdated(System.currentTimeMillis()/100);
+            newPlayer.setTimeCreated(System.currentTimeMillis());
+            newPlayer.setTimeUpdated(System.currentTimeMillis());
             if (androidViewModel instanceof PlayersManagementViewModel) {
                 PlayersManagementViewModel playersManagementViewModel = (PlayersManagementViewModel) androidViewModel;
                 playersManagementViewModel.insert(newPlayer);
@@ -58,10 +57,11 @@ public class PlayerUtils {
             return;
         }
 
+        GameUtils.clearCache(context);
         Toast.makeText(context, R.string.success_player_added, Toast.LENGTH_LONG).show();
     }
 
-    public static File getAvatarAbsolutePath(Context context, Uri uri) throws IOException {
+    public static File getAvatarAbsolutePath(Context context, Uri uri, String filePath) throws IOException {
         //Reducing the scale and size of the image
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
@@ -71,7 +71,7 @@ public class PlayerUtils {
         options.inJustDecodeBounds = false;
         Bitmap image = BitmapFactory.decodeStream(context.getContentResolver().openInputStream(uri), null, options);
 
-        File storageDir = new File (context.getExternalFilesDir(null), context.getString(R.string.playeractivity_external_path));
+        File storageDir = new File (context.getExternalFilesDir(null), filePath);
         if (!storageDir.exists()) {storageDir.mkdir();}
         File imageFile = new File(storageDir, System.currentTimeMillis() + ".jpg");
         imageFile.createNewFile();
