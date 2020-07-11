@@ -29,7 +29,7 @@ public interface PlayerDao {
     public LiveData<List<Player>> getAllPlayers();
 
     @Query("SELECT * FROM players WHERE id = :playerId")
-    LiveData<Player> getPlayer(long playerId);
+    Player getPlayer(long playerId);
 
     @Transaction
     @Query("DELETE from players")

@@ -8,4 +8,5 @@
     <dimen name="nav_header_horizontal_spacing">8dp</dimen>
 
     <dimen name="gridview_image_margin_spacing">10dp</dimen>
+    <dimen name="textview_image_padding">8dp</dimen>
 </resources>

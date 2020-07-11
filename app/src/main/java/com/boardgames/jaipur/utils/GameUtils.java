@@ -1,11 +1,39 @@
 package com.boardgames.jaipur.utils;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.FileProvider;
 
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.entities.Round;
+import com.bumptech.glide.Glide;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.StringTokenizer;
+import java.util.TimeZone;
+import java.util.logging.SimpleFormatter;
 
 
 public class GameUtils {
@@ -25,6 +53,7 @@ public class GameUtils {
     private static final String FOUR_TOKEN_ITEMS = "1_4_1~2_4_2~3_5_1~4_5_2~5_6_1~6_6_2";
     private static final String FIVE_TOKEN_ITEMS = "1_8_1~2_8_2~3_9_1~4_10_1~5_10_2";
     private static final String CAMEL_TOKEN_ITEMS = "1_5";
+    public static final ArrayList<String> goodsList;
 
     static  {
 
@@ -211,6 +240,19 @@ public class GameUtils {
         itemsToImage.put("1_5", R.drawable.a10_1_camel_token_5_imageview);
         goodsToItemsToScore.put(ApplicationConstants.ROUNDS_CALC_CAMEL_TOKEN,itemsToScore);
         goodsToItemsToImage.put(ApplicationConstants.ROUNDS_CALC_CAMEL_TOKEN, itemsToImage);
+
+        goodsList = new ArrayList<>();
+        goodsList.add(ApplicationConstants.ROUNDS_CALC_DIAMOND_GOODS);
+        goodsList.add(ApplicationConstants.ROUNDS_CALC_GOLD_GOODS);
+        goodsList.add(ApplicationConstants.ROUNDS_CALC_SILVER_GOODS);
+        goodsList.add(ApplicationConstants.ROUNDS_CALC_CLOTH_GOODS);
+        goodsList.add(ApplicationConstants.ROUNDS_CALC_SPICE_GOODS);
+        goodsList.add(ApplicationConstants.ROUNDS_CALC_LEATHER_GOODS);
+        goodsList.add(ApplicationConstants.ROUNDS_CALC_3_CARD_TOKEN);
+        goodsList.add(ApplicationConstants.ROUNDS_CALC_4_CARD_TOKEN);
+        goodsList.add(ApplicationConstants.ROUNDS_CALC_5_CARD_TOKEN);
+        goodsList.add(ApplicationConstants.ROUNDS_CALC_CAMEL_TOKEN);
+
     }
 
 
@@ -332,6 +374,107 @@ public class GameUtils {
                 else
                     goodsDetailsForARound.setPlayerTwoGoodsTokens(goodsDetailsForARound.getPlayerTwoGoodsTokens() + incrementValue);
             }
+        }
+    }
+
+    public static File getAbsolutePathForImage(Context context, Bitmap bitmap) {
+        File storageDir = new File (context.getExternalFilesDir(null), context.getString(R.string.gameactivity_external_path));
+        if (!storageDir.exists()) {storageDir.mkdir();}
+        File imageFile = new File(storageDir, "IMG_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".jpg");
+        try {
+            imageFile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        byte[] imageByteArray = outputStream.toByteArray();
+        FileOutputStream fileOutputStream = null;
+        try {
+            fileOutputStream = new FileOutputStream(imageFile);
+            fileOutputStream.write(imageByteArray);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return imageFile;
+    }
+
+    public static String convertTimeToDate(long time) {
+        TimeZone tz = TimeZone.getDefault();
+        Date gameDate = new Date(time);
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat("MMM d, yyyy");
+        sdf.setTimeZone(tz);
+        return sdf.format(gameDate);
+    }
+
+    public static void loadUserDetailsInSummaryPage(Activity activity, Context context, GameDetails gameDetails) {
+        int width = PlayerUtils.getWidthforImageViewByOneThird(activity);
+        TextView playerOneTextView = activity.findViewById(R.id.playerOneTextView);
+        ImageView playerOneImageView = activity.findViewById(R.id.playerOneImageView);
+
+        Glide.with(context).load(gameDetails.getPlayersInAGame().getPlayerOneProfile()).override(width, width).into(playerOneImageView);
+        playerOneTextView.setText(gameDetails.getPlayersInAGame().getPlayerOne().getPlayerName());
+
+        TextView playerTwoTextView = activity.findViewById(R.id.playerTwoTextView);
+        ImageView playerTwoImageView = activity.findViewById(R.id.playerTwoImageView);
+
+        Glide.with(context).load(gameDetails.getPlayersInAGame().getPlayerTwoProfile()).override(width, width).into(playerTwoImageView);
+        playerTwoTextView.setText(gameDetails.getPlayersInAGame().getPlayerTwo().getPlayerName());
+    }
+
+    public static String computeRoundTitle(Context context, int roundInProgress) {
+        switch (roundInProgress) {
+            case 1:
+                return context.getString(R.string.gamesummary_roundone_title) + " Summary";
+            case 2:
+                return context.getString(R.string.gamesummary_roundtwo_title) + " Summary";
+            case 3:
+                return context.getString(R.string.gamesummary_roundthree_title) + " Summary";
+            default:
+                return "";
+        }
+
+    }
+
+    public static Uri getUriFromViewForScreenshot(View screenView, Context context) {
+        if (!CheckForPermissionsState.requestStorageCameraPermissions(context)) {
+            CheckForPermissionsState.deniedPermission(context);
+            return null;
+        }
+
+        Bitmap screenBitMap = Bitmap.createBitmap(screenView.getWidth(), screenView.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(screenBitMap);
+        canvas.drawColor(Color.WHITE);
+        screenView.draw(canvas);
+        Uri shareUri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", GameUtils.getAbsolutePathForImage(context, screenBitMap));
+        return shareUri;
+    }
+
+    public static void initiateShareActivity(Uri shareUri, Context context) {
+        Intent localIntent = new Intent();
+        localIntent.setAction("android.intent.action.SEND");
+        localIntent.putExtra("android.intent.extra.STREAM", shareUri);
+        localIntent.setType("image/jpg");
+        localIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        context.startActivity(localIntent);
+    }
+
+    public static Uri getImageFile(Context context, String fileName) {
+        File primaryStorageVolume = new File(context.getExternalCacheDir(), "jaipurImages");
+        if (!primaryStorageVolume.exists())
+            primaryStorageVolume.mkdir();
+        File imageFile = new File(primaryStorageVolume, fileName);
+        return FileProvider.getUriForFile(context, context.getPackageName() + ".provider", imageFile);
+    }
+
+    public static void clearCache(Context context) {
+        File primaryStorageVolume = new File(context.getExternalCacheDir(), "jaipurImages");
+        if (primaryStorageVolume.exists() && primaryStorageVolume.isDirectory()) {
+            for (File childFile : primaryStorageVolume.listFiles())
+                childFile.delete();
         }
     }
 }

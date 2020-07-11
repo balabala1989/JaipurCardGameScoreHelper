@@ -35,6 +35,6 @@ public interface RoundDao {
     @Query("DELETE FROM rounds")
     public void deleteAllRounds();
 
-    @Query("SELECT * FROM rounds where game_id = :gameId")
-    public LiveData<List<Round>> getRoundsForAGame(long gameId);
+    @Query("SELECT * FROM rounds where game_id = :gameId ORDER BY round_number ASC")
+    public List<Round> getRoundsForAGame(long gameId);
 }
