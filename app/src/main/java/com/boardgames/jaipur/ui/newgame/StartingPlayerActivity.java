@@ -154,6 +154,7 @@ public class StartingPlayerActivity extends AppCompatActivity {
 
         if (gameId == -1)
             handleException();
+        game.setId(gameId);
 
         gameDetails = new GameDetails();
         gameDetails.setGame(game);

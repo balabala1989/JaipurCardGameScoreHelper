@@ -15,6 +15,7 @@ import com.boardgames.jaipur.ui.rounds.RoundsCalculationSummaryActivity;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.CheckForPermissionsState;
 import com.boardgames.jaipur.utils.GameDetails;
+import com.boardgames.jaipur.utils.GamePhotoStatusEnum;
 import com.boardgames.jaipur.utils.GameUtils;
 import com.boardgames.jaipur.utils.PlayerUtils;
 import com.bumptech.glide.Glide;
@@ -28,6 +29,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,6 +56,7 @@ public class GameSummaryActivity extends AppCompatActivity {
     private GameDetails gameDetails;
     private boolean isGameOver = false;
     private String photoName;
+    private GamePhotoStatusEnum gamePhotoStatusEnum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,20 +82,7 @@ public class GameSummaryActivity extends AppCompatActivity {
                 || gameDetails.getPlayersInAGame().getPlayerTwo() == null)
             handleException();
 
-        int width = PlayerUtils.getWidthforImageViewByOneThird(GameSummaryActivity.this);
-        TextView playerOneTextView = findViewById(R.id.playerOneTextView);
-        ImageView playerOneImageView = findViewById(R.id.playerOneImageView);
-
-        Glide.with(getApplicationContext()).load(gameDetails.getPlayersInAGame().getPlayerOneProfile()).override(width, width).into(playerOneImageView);
-        playerOneTextView.setText(gameDetails.getPlayersInAGame().getPlayerOne().getPlayerName());
-
-        TextView playerTwoTextView = findViewById(R.id.playerTwoTextView);
-        ImageView playerTwoImageView = findViewById(R.id.playerTwoImageView);
-
-        Glide.with(getApplicationContext()).load(gameDetails.getPlayersInAGame().getPlayerTwoProfile()).override(width, width).into(playerTwoImageView);
-        playerTwoTextView.setText(gameDetails.getPlayersInAGame().getPlayerTwo().getPlayerName());
-
-
+        GameUtils.loadUserDetailsInSummaryPage(GameSummaryActivity.this, getApplicationContext(), gameDetails);
 
         findViewById(R.id.winnerAnnouncementView).setVisibility(View.INVISIBLE);
         findViewById(R.id.roundTwoView).setVisibility(View.INVISIBLE);
@@ -182,7 +172,15 @@ public class GameSummaryActivity extends AppCompatActivity {
         }
 
         else if (item.getItemId() == R.id.attachPhotoButton) {
-            takePhotoUsingCamera();
+            if (gameDetails.getGame().getGamePhotoLocation() == null || gameDetails.getGame().getGamePhotoLocation().isEmpty()) {
+                gamePhotoStatusEnum = GamePhotoStatusEnum.EMPTY;
+                takePhotoUsingCamera();
+            }
+            else {
+                Uri imageIUri = Uri.fromFile(new File(gameDetails.getGame().getGamePhotoLocation()));
+                gamePhotoStatusEnum = GamePhotoStatusEnum.DISPLAYONLY;
+                displayImage(imageIUri);
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -200,11 +198,18 @@ public class GameSummaryActivity extends AppCompatActivity {
         else if (resultCode == RESULT_OK && requestCode == ApplicationConstants.GAME_SUMMARY_CAMERA_REQUEST_IMAGE) {
             File image;
             try {
-                image = PlayerUtils.getAvatarAbsolutePath(this, getImageFile(photoName), getString(R.string.gameactivity_external_path));
+                image = PlayerUtils.getAvatarAbsolutePath(this, GameUtils.getImageFile(getApplicationContext(), photoName), getString(R.string.gameactivity_external_path));
                 gameDetails.getGame().setGamePhotoLocation(image.getAbsolutePath());
+                gamePhotoStatusEnum = GamePhotoStatusEnum.DISPLAYONLY;
+                Toast.makeText(this, getString(R.string.camera_success), Toast.LENGTH_LONG).show();
             } catch (IOException e) {
                 Toast.makeText(this, getString(R.string.camera_error), Toast.LENGTH_LONG).show();
             }
+        }
+        else if (resultCode == RESULT_OK && requestCode == ApplicationConstants.GAME_SUMMARY_CAMERA_EDIT_REQUEST_IMAGE) {
+            Uri imageUri = GameUtils.getImageFile(getApplicationContext(), photoName);
+            gamePhotoStatusEnum = GamePhotoStatusEnum.EDIT;
+            displayImage(imageUri);
         }
         else if (resultCode == RESULT_CANCELED && requestCode == ApplicationConstants.GAMESUMMARYACTIVITY_ROUNDCALCACTIVITY_REQUEST_CODE) {
             if (data == null)
@@ -451,6 +456,8 @@ public class GameSummaryActivity extends AppCompatActivity {
         game.setGamePlayStatus("C");
         game.setTimeUpdated(System.currentTimeMillis());
         newGameViewModel.updateAGame(game);
+
+        Toast.makeText(this, getString(R.string.game_success), Toast.LENGTH_LONG).show();
     }
 
     private void handleResetButton() {
@@ -513,54 +520,32 @@ public class GameSummaryActivity extends AppCompatActivity {
     }
 
     private void shareScreenShot() {
-        if (!CheckForPermissionsState.requestStorageCameraPermissions(GameSummaryActivity.this)) {
-            CheckForPermissionsState.deniedPermission(GameSummaryActivity.this);
-            return;
-        }
         findViewById(R.id.winnerAnnounceMentTextView).setVisibility(View.VISIBLE);
         enableEditForTheRound(-1);
-        View screenView = getWindow().getDecorView().getRootView().findViewById(R.id.screenViewLayout);
-        Bitmap screenBitMap = Bitmap.createBitmap(screenView.getWidth(), screenView.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(screenBitMap);
-        canvas.drawColor(Color.WHITE);
-        screenView.draw(canvas);
 
+        Uri shareUri = GameUtils.getUriFromViewForScreenshot(getWindow().getDecorView().getRootView().findViewById(R.id.screenViewLayout), this);
         findViewById(R.id.winnerAnnounceMentTextView).setVisibility(View.INVISIBLE);
         enableEditForTheRound(gameDetails.getRoundsCompleted());
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        screenBitMap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-
-        Uri shareUri = FileProvider.getUriForFile(this, getPackageName() + ".provider", GameUtils.getAbsolutePathForImage(getApplicationContext(), screenBitMap));
-        Intent localIntent = new Intent();
-        localIntent.setAction("android.intent.action.SEND");
-        localIntent.putExtra("android.intent.extra.STREAM", shareUri);
-        localIntent.setType("image/jpg");
-        localIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        startActivity(localIntent);
-
+        GameUtils.initiateShareActivity(shareUri, this);
     }
 
+    //TODO need to call clearcache once the operatios is done
     private void takePhotoUsingCamera() {
         if (CheckForPermissionsState.requestStorageCameraPermissions(GameSummaryActivity.this)) {
             photoName = System.currentTimeMillis() + ".jpg";
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,getImageFile(photoName));
-            startActivityForResult(takePictureIntent,ApplicationConstants.GAME_SUMMARY_CAMERA_REQUEST_IMAGE);
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,GameUtils.getImageFile(getApplicationContext(), photoName));
+            if (gamePhotoStatusEnum == GamePhotoStatusEnum.EMPTY)
+                startActivityForResult(takePictureIntent,ApplicationConstants.GAME_SUMMARY_CAMERA_REQUEST_IMAGE);
+            else if (gamePhotoStatusEnum == GamePhotoStatusEnum.EDIT)
+                startActivityForResult(takePictureIntent,ApplicationConstants.GAME_SUMMARY_CAMERA_EDIT_REQUEST_IMAGE);
         }
         else {
             CheckForPermissionsState.deniedPermission(GameSummaryActivity.this);
         }
     }
 
-    //TODO need to call clearcache once the operatios is done
-    private Uri getImageFile(String fileName) {
-        File primaryStorageVolume = new File(getExternalCacheDir(), "jaipurImages");
-        if (!primaryStorageVolume.exists())
-            primaryStorageVolume.mkdir();
-        File imageFile = new File(primaryStorageVolume, fileName);
-        return FileProvider.getUriForFile(GameSummaryActivity.this, getPackageName() + ".provider", imageFile);
-    }
+
 
     private void enableEditForTheRound(int roundNumber) {
         TextView roundOnePlayerOneTextView = findViewById(R.id.roundOnePlayerOneScoreTextView);
@@ -619,5 +604,64 @@ public class GameSummaryActivity extends AppCompatActivity {
             textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             textView.setClickable(false);
         }
+    }
+
+    private void displayImage(Uri imageUri) {
+        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+        View dialogView = inflater.inflate(R.layout.layout_game_image_display, null);
+        ImageView dialogImageView = dialogView.findViewById(R.id.gamePhotoImageView);
+        int width = PlayerUtils.getWidthforImageViewByHalf(this);
+        Glide.with(this).load(imageUri).override(width, width).into(dialogImageView);
+        Button saveButton = dialogView.findViewById(R.id.saveButton);
+        Button closeButton = dialogView.findViewById(R.id.closeButton);
+        Button cancelButton = dialogView.findViewById(R.id.cancelButton);
+
+        if (gamePhotoStatusEnum == GamePhotoStatusEnum.DISPLAYONLY) {
+            closeButton.setVisibility(View.VISIBLE);
+            saveButton.setVisibility(View.INVISIBLE);
+            cancelButton.setVisibility(View.INVISIBLE);
+        }
+        else if (gamePhotoStatusEnum == GamePhotoStatusEnum.EDIT) {
+            closeButton.setVisibility(View.INVISIBLE);
+            saveButton.setVisibility(View.VISIBLE);
+            cancelButton.setVisibility(View.VISIBLE);
+        }
+
+        saveButton.setOnClickListener(v -> {
+            dialog.dismiss();
+            File image;
+            try {
+                image = PlayerUtils.getAvatarAbsolutePath(this, imageUri, getString(R.string.gameactivity_external_path));
+                gameDetails.getGame().setGamePhotoLocation(image.getAbsolutePath());
+                gamePhotoStatusEnum = GamePhotoStatusEnum.DISPLAYONLY;
+                Toast.makeText(this, getString(R.string.camera_success), Toast.LENGTH_LONG).show();
+            } catch (IOException e) {
+                Toast.makeText(this, getString(R.string.camera_error), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        cancelButton.setOnClickListener(v -> {
+            dialog.dismiss();
+            gamePhotoStatusEnum = GamePhotoStatusEnum.DISPLAYONLY;
+        });
+
+        closeButton.setOnClickListener(v -> {
+            dialog.dismiss();
+            gamePhotoStatusEnum = GamePhotoStatusEnum.DISPLAYONLY;
+        });
+
+        dialogImageView.setOnClickListener(v -> {
+            dialog.dismiss();
+            gamePhotoStatusEnum = GamePhotoStatusEnum.EDIT;
+            takePhotoUsingCamera();
+        });
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.alertdialog_confirmation_title));
+        builder.setView(dialogView);
+
+        dialog = builder.create();
+        dialog.show();
     }
 }

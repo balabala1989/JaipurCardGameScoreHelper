@@ -1,14 +1,26 @@
 package com.boardgames.jaipur.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.net.Uri;
+import android.provider.MediaStore;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.entities.Round;
+import com.bumptech.glide.Glide;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -395,5 +407,67 @@ public class GameUtils {
         SimpleDateFormat sdf = new java.text.SimpleDateFormat("MMM d, yyyy");
         sdf.setTimeZone(tz);
         return sdf.format(gameDate);
+    }
+
+    public static void loadUserDetailsInSummaryPage(Activity activity, Context context, GameDetails gameDetails) {
+        int width = PlayerUtils.getWidthforImageViewByOneThird(activity);
+        TextView playerOneTextView = activity.findViewById(R.id.playerOneTextView);
+        ImageView playerOneImageView = activity.findViewById(R.id.playerOneImageView);
+
+        Glide.with(context).load(gameDetails.getPlayersInAGame().getPlayerOneProfile()).override(width, width).into(playerOneImageView);
+        playerOneTextView.setText(gameDetails.getPlayersInAGame().getPlayerOne().getPlayerName());
+
+        TextView playerTwoTextView = activity.findViewById(R.id.playerTwoTextView);
+        ImageView playerTwoImageView = activity.findViewById(R.id.playerTwoImageView);
+
+        Glide.with(context).load(gameDetails.getPlayersInAGame().getPlayerTwoProfile()).override(width, width).into(playerTwoImageView);
+        playerTwoTextView.setText(gameDetails.getPlayersInAGame().getPlayerTwo().getPlayerName());
+    }
+
+    public static String computeRoundTitle(Context context, int roundInProgress) {
+        switch (roundInProgress) {
+            case 1:
+                return context.getString(R.string.gamesummary_roundone_title) + " Summary";
+            case 2:
+                return context.getString(R.string.gamesummary_roundtwo_title) + " Summary";
+            case 3:
+                return context.getString(R.string.gamesummary_roundthree_title) + " Summary";
+            default:
+                return "";
+        }
+
+    }
+
+    public static Uri getUriFromViewForScreenshot(View screenView, Context context) {
+        if (!CheckForPermissionsState.requestStorageCameraPermissions(context)) {
+            CheckForPermissionsState.deniedPermission(context);
+            return null;
+        }
+
+        Bitmap screenBitMap = Bitmap.createBitmap(screenView.getWidth(), screenView.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(screenBitMap);
+        canvas.drawColor(Color.WHITE);
+        screenView.draw(canvas);
+        Uri shareUri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", GameUtils.getAbsolutePathForImage(context, screenBitMap));
+        return shareUri;
+    }
+
+    public static void initiateShareActivity(Uri shareUri, Context context) {
+        Intent localIntent = new Intent();
+        localIntent.setAction("android.intent.action.SEND");
+        localIntent.putExtra("android.intent.extra.STREAM", shareUri);
+        localIntent.setType("image/jpg");
+        localIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        context.startActivity(localIntent);
+    }
+
+    //TODO need to call clearcache once the operatios is done
+    public static Uri getImageFile(Context context, String fileName) {
+        File primaryStorageVolume = new File(context.getExternalCacheDir(), "jaipurImages");
+        if (!primaryStorageVolume.exists())
+            primaryStorageVolume.mkdir();
+        File imageFile = new File(primaryStorageVolume, fileName);
+        return FileProvider.getUriForFile(context, context.getPackageName() + ".provider", imageFile);
     }
 }

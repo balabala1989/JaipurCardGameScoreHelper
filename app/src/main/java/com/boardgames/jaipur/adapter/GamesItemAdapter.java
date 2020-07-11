@@ -1,6 +1,7 @@
 package com.boardgames.jaipur.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.entities.Game;
+import com.boardgames.jaipur.ui.gamehistory.GameDetailsActivity;
+import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.CheckForPermissionsState;
 import com.boardgames.jaipur.utils.GameDetails;
 import com.boardgames.jaipur.utils.GameUtils;
@@ -104,11 +107,12 @@ public class GamesItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 gameViewHolder.playerTwoWinnerFrameLayout.setVisibility(View.VISIBLE);
             }
 
-            //TODO start activity to game summary with that game item
             gameViewHolder.itemLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent intent = new Intent(contextObj, GameDetailsActivity.class);
+                    intent.putExtra(ApplicationConstants.STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME, gameDetails);
+                    parentFragment.startActivity(intent);
                 }
             });
         }

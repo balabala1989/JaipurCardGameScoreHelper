@@ -49,10 +49,10 @@ public abstract class PlayerRoomDatabase extends RoomDatabase {
             synchronized (PlayerRoomDatabase.class) {
                 if (INSTANCE == null) {
                     //TODO Need to delete the call back before publishing the app
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            PlayerRoomDatabase.class, "player_database").addCallback(playerRoomDatabaseCallback).build();
                     /*INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            PlayerRoomDatabase.class, "player_database").build(); */
+                            PlayerRoomDatabase.class, "player_database").addCallback(playerRoomDatabaseCallback).build();*/
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                            PlayerRoomDatabase.class, "player_database").build();
                 }
             }
 

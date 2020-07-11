@@ -86,7 +86,7 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.string.color_activity_actionbar))));
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(computeRoundTitle(gameDetails.getRoundInProgress()));
+        actionBar.setTitle(GameUtils.computeRoundTitle(this, gameDetails.getRoundInProgress()));
 
         ImageView playerOneImageView = findViewById(R.id.playerOneImageView);
         ImageView playerTwoImageView = findViewById(R.id.playerTwoImageView);
@@ -190,19 +190,7 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private String computeRoundTitle(int roundInProgress) {
-        switch (roundInProgress) {
-            case 1:
-                return getString(R.string.gamesummary_roundone_title) + " Summary";
-            case 2:
-                return getString(R.string.gamesummary_roundtwo_title) + " Summary";
-            case 3:
-                return getString(R.string.gamesummary_roundthree_title) + " Summary";
-            default:
-                return "";
-        }
 
-    }
 
     private void handleException(boolean isExceptionOccurred) {
         Intent replyIntent = new Intent();
@@ -643,15 +631,20 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
 
         playerOneRound = gameDetails.getPlayerOneRounds().get(gameDetails.getRoundInProgress());
         playerTwoRound = gameDetails.getPlayerTwoRounds().get(gameDetails.getRoundInProgress());
+        playerOneRound.setWinner(winnerOfRound);
+        playerTwoRound.setWinner(winnerOfRound);
         gamesAndRoundsRepository = new GamesAndRoundsRepository(getApplication());
 
-        gamesAndRoundsRepository.insertRound(playerOneRound);
-        gamesAndRoundsRepository.insertRound(playerTwoRound);
-
-        if (operationMode.equalsIgnoreCase(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE) && editModeRound != -1)
+        if (operationMode.equalsIgnoreCase(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE) && editModeRound != -1) {
             gameDetails.setRoundInProgress(savedRound);
-        else
+            gamesAndRoundsRepository.updateRound(playerOneRound);
+            gamesAndRoundsRepository.updateRound(playerTwoRound);
+        }
+        else {
             gameDetails.setRoundsCompleted(gameDetails.getRoundInProgress());
+            playerOneRound.setId(gamesAndRoundsRepository.insertRound(playerOneRound));
+            playerTwoRound.setId(gamesAndRoundsRepository.insertRound(playerTwoRound));
+        }
 
         Intent replyIntent = new Intent();
         replyIntent.putExtra(ApplicationConstants.GAME_SUMM_TO_ROUND_SUMM_MODE, operationMode);
