@@ -22,6 +22,7 @@ public class GamesAndRoundsRepository {
     private long gameId = -1;
     private long roundId = -1;
     private List<Round> rounds;
+    private long totalGamesCompleted = -1;
 
     public GamesAndRoundsRepository(Application application) {
         GamesRoomDatabase gamesRoomDatabase = GamesRoomDatabase.getDabase(application);
@@ -63,7 +64,7 @@ public class GamesAndRoundsRepository {
 
     public LiveData<List<Game>> getPendingGame() {return gameDao.getPendingGame();}
 
-    //Implementing RounDao functions
+    //Implementing RoundDao functions
 
     public LiveData<List<Round>> getAllRounds() {return roundDao.getAllRounds();}
 

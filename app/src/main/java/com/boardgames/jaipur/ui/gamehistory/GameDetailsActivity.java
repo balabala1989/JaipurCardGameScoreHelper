@@ -38,7 +38,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-
+/*TODO
+1. Instead of plus symbol have nomral symnbol
+2. Dont allow user to edit the photo
+* */
 public class GameDetailsActivity extends AppCompatActivity {
 
     private List<Round> roundsOfAGame;
@@ -98,6 +101,13 @@ public class GameDetailsActivity extends AppCompatActivity {
         findViewById(R.id.winnerAnnounceMentTextView).setVisibility(View.VISIBLE);
         ((TextView) findViewById(R.id.winnerAnnounceMentTextView)).setText(winnerMessage.append(ApplicationConstants.WON_MESSAGE).toString());
         //TODO check on playername coming on top of image
+
+        if (gameDetails.getGame().getGamePhotoLocation() == null || gameDetails.getGame().getGamePhotoLocation().isEmpty())
+            gamePhotoStatusEnum = GamePhotoStatusEnum.EMPTY;
+        else
+            gamePhotoStatusEnum = GamePhotoStatusEnum.DISPLAYONLY;
+
+        invalidateOptionsMenu();
     }
 
     private void makeItemsVisibleAndInvisible() {
@@ -238,11 +248,13 @@ public class GameDetailsActivity extends AppCompatActivity {
             } catch (IOException e) {
                 Toast.makeText(this, getString(R.string.camera_error), Toast.LENGTH_LONG).show();
             }
+            invalidateOptionsMenu();
         }
         else if (resultCode == RESULT_OK && requestCode == ApplicationConstants.GAME_SUMMARY_CAMERA_EDIT_REQUEST_IMAGE) {
             Uri imageUri = GameUtils.getImageFile(getApplicationContext(), photoName);
             gamePhotoStatusEnum = GamePhotoStatusEnum.EDIT;
             displayImage(imageUri);
+            invalidateOptionsMenu();
         }
     }
 
@@ -256,8 +268,20 @@ public class GameDetailsActivity extends AppCompatActivity {
                     menuItem.setVisible(false);
                 if (menuItem.getItemId() == R.id.shareButton)
                     menuItem.setVisible(true);
-                if (menuItem.getItemId() == R.id.attachPhotoButton)
-                    menuItem.setVisible(true);
+                if (menuItem.getItemId() == R.id.attachPhotoButton) {
+                    if (gamePhotoStatusEnum == GamePhotoStatusEnum.EMPTY) {
+                        menuItem.setVisible(true);
+                    }
+                    else {
+                        menuItem.setVisible(false);
+                    }
+                }
+                if (menuItem.getItemId() == R.id.displayPhotoButton) {
+                    if (gamePhotoStatusEnum != GamePhotoStatusEnum.EMPTY)
+                        menuItem.setVisible(true);
+                    else
+                        menuItem.setVisible(false);
+                }
             }
         return super.onCreateOptionsMenu(menu);
     }
@@ -277,16 +301,15 @@ public class GameDetailsActivity extends AppCompatActivity {
         }
 
         else if (item.getItemId() == R.id.attachPhotoButton) {
-            if (gameDetails.getGame().getGamePhotoLocation() == null || gameDetails.getGame().getGamePhotoLocation().isEmpty()) {
-                gamePhotoStatusEnum = GamePhotoStatusEnum.EMPTY;
-                takePhotoUsingCamera();
-            }
-            else {
+            gamePhotoStatusEnum = GamePhotoStatusEnum.EMPTY;
+            takePhotoUsingCamera();
+        }
+
+        else if (item.getItemId() == R.id.displayPhotoButton) {
                 Uri imageIUri = Uri.fromFile(new File(gameDetails.getGame().getGamePhotoLocation()));
                 gamePhotoStatusEnum = GamePhotoStatusEnum.DISPLAYONLY;
                 displayImage(imageIUri);
             }
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -320,6 +343,9 @@ public class GameDetailsActivity extends AppCompatActivity {
             closeButton.setVisibility(View.VISIBLE);
             saveButton.setVisibility(View.INVISIBLE);
             cancelButton.setVisibility(View.INVISIBLE);
+            //Remove the below code to make the image editable
+            dialogView.findViewById(R.id.gameImageDescTextView).setVisibility(View.INVISIBLE);
+            dialogView.findViewById(R.id.gameImageDescTextView).setClickable(false);
         }
         else if (gamePhotoStatusEnum == GamePhotoStatusEnum.EDIT) {
             closeButton.setVisibility(View.INVISIBLE);
@@ -351,11 +377,12 @@ public class GameDetailsActivity extends AppCompatActivity {
             gamePhotoStatusEnum = GamePhotoStatusEnum.DISPLAYONLY;
         });
 
-        dialogImageView.setOnClickListener(v -> {
+        //Remove the below code to make the image editable
+        /*dialogImageView.setOnClickListener(v -> {
             dialog.dismiss();
             gamePhotoStatusEnum = GamePhotoStatusEnum.EDIT;
             takePhotoUsingCamera();
-        });
+        });*/
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

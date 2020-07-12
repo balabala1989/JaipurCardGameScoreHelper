@@ -37,4 +37,5 @@ public interface GameDao {
 
     @Query("SELECT * FROM games where status = 'P'")
     public LiveData<List<Game>> getPendingGame();
+
 }

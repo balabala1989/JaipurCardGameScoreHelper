@@ -196,6 +196,7 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
         Intent replyIntent = new Intent();
         if (isExceptionOccurred)
             replyIntent.putExtra(ApplicationConstants.EXCEPTION_DUE_TO_UNAVAILABILITY_OF_INTENT,"Y");
+        replyIntent.putExtra(ApplicationConstants.GAME_SUMM_TO_ROUND_SUMM_MODE, operationMode);
         replyIntent.putExtra(ApplicationConstants.STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME, gameDetails);
         setResult(RESULT_CANCELED, replyIntent);
         finish();

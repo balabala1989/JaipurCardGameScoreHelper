@@ -120,6 +120,11 @@ public class GameSummaryActivity extends AppCompatActivity {
         if (gameDetails.getRoundInProgress() == 1) {
             startRoundCalculation(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_NORMAL_MODE, -1);
         }
+
+        if (gameDetails.getGame().getGamePhotoLocation() == null || gameDetails.getGame().getGamePhotoLocation().isEmpty())
+            gamePhotoStatusEnum = GamePhotoStatusEnum.EMPTY;
+        else
+            gamePhotoStatusEnum = GamePhotoStatusEnum.DISPLAYONLY;
     }
 
     @Override
@@ -138,8 +143,20 @@ public class GameSummaryActivity extends AppCompatActivity {
                    menuItem.setVisible(false);
                if (menuItem.getItemId() == R.id.shareButton)
                    menuItem.setVisible(true);
-               if (menuItem.getItemId() == R.id.attachPhotoButton)
-                   menuItem.setVisible(true);
+               if (menuItem.getItemId() == R.id.attachPhotoButton) {
+                   if (gamePhotoStatusEnum == GamePhotoStatusEnum.EMPTY) {
+                       menuItem.setVisible(true);
+                   }
+                   else {
+                       menuItem.setVisible(false);
+                   }
+               }
+               if (menuItem.getItemId() == R.id.displayPhotoButton) {
+                   if (gamePhotoStatusEnum != GamePhotoStatusEnum.EMPTY)
+                       menuItem.setVisible(true);
+                   else
+                       menuItem.setVisible(false);
+               }
            }
        }
        else {
@@ -150,6 +167,8 @@ public class GameSummaryActivity extends AppCompatActivity {
                if (menuItem.getItemId() == R.id.shareButton)
                    menuItem.setVisible(false);
                if (menuItem.getItemId() == R.id.attachPhotoButton)
+                   menuItem.setVisible(false);
+               if (menuItem.getItemId() == R.id.displayPhotoButton)
                    menuItem.setVisible(false);
            }
        }
@@ -172,15 +191,13 @@ public class GameSummaryActivity extends AppCompatActivity {
         }
 
         else if (item.getItemId() == R.id.attachPhotoButton) {
-            if (gameDetails.getGame().getGamePhotoLocation() == null || gameDetails.getGame().getGamePhotoLocation().isEmpty()) {
-                gamePhotoStatusEnum = GamePhotoStatusEnum.EMPTY;
-                takePhotoUsingCamera();
-            }
-            else {
+            gamePhotoStatusEnum = GamePhotoStatusEnum.EMPTY;
+            takePhotoUsingCamera();
+        }
+        else if (item.getItemId() == R.id.displayPhotoButton){
                 Uri imageIUri = Uri.fromFile(new File(gameDetails.getGame().getGamePhotoLocation()));
                 gamePhotoStatusEnum = GamePhotoStatusEnum.DISPLAYONLY;
                 displayImage(imageIUri);
-            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -205,11 +222,13 @@ public class GameSummaryActivity extends AppCompatActivity {
             } catch (IOException e) {
                 Toast.makeText(this, getString(R.string.camera_error), Toast.LENGTH_LONG).show();
             }
+            invalidateOptionsMenu();
         }
         else if (resultCode == RESULT_OK && requestCode == ApplicationConstants.GAME_SUMMARY_CAMERA_EDIT_REQUEST_IMAGE) {
             Uri imageUri = GameUtils.getImageFile(getApplicationContext(), photoName);
             gamePhotoStatusEnum = GamePhotoStatusEnum.EDIT;
             displayImage(imageUri);
+            invalidateOptionsMenu();
         }
         else if (resultCode == RESULT_CANCELED && requestCode == ApplicationConstants.GAMESUMMARYACTIVITY_ROUNDCALCACTIVITY_REQUEST_CODE) {
             if (data == null)
