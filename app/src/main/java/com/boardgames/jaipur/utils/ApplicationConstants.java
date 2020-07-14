@@ -79,4 +79,6 @@ package com.boardgames.jaipur.utils;
         public static final String GAME_SUMMARY_TO_ROUND_SUMMARY_NORMAL_MODE = "NORMAL_MODE";
         public static final String GAME_SUMM_TO_ROUND_SUMM_MODE = "com.boardgames.jaipur.ui.newgame.newgamefragment.MODE";
         public static final String GAME_SUMM_TO_ROUND_SUMM_ROUND_EDIT = "com.boardgames.jaipur.ui.newgame.newgamefragment.ROUND_IN_EDIT_MODE";
+
+        public static final String EMPTY_STATS_MESSAGE = "No Players found!!!!";
 }
