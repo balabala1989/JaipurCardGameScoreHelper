@@ -129,4 +129,11 @@ public class PlayerUtils {
                 + '/' + context.getResources().getResourceEntryName(drawableId) );
         return imageUri;
     }
+
+    public static int getHeightOfScreenByHalf(Activity activity) {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return (size.x) > (size.y) ? size.x/2 : size.y/2;
+    }
 }

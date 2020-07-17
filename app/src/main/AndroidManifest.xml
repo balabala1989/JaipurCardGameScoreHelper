@@ -19,7 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.gamehistory.RoundDetailsActivity"></activity>
+        <activity android:name=".ui.gamehistory.RoundDetailsActivity" />
         <activity android:name=".ui.gamehistory.GameDetailsActivity" />
         <activity android:name=".ui.rounds.RoundsCalculationSummaryActivity" />
         <activity android:name=".ui.rounds.ItemsDisplayActivity" />

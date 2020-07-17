@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity(tableName = "games", indices = {@Index("status")})
+@Entity(tableName = "games", indices = {@Index("status"), @Index("player_one_id"), @Index("player_two_id")})
 public class Game implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)

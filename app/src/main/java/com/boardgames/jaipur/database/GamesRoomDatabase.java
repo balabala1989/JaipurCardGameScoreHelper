@@ -17,7 +17,7 @@ import com.boardgames.jaipur.utils.ApplicationConstants;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Game.class, Round.class}, version = 2, exportSchema = false)
+@Database(entities = {Game.class, Round.class}, version = 3, exportSchema = false)
 public abstract class GamesRoomDatabase extends RoomDatabase {
 
     public abstract GameDao gameDao();

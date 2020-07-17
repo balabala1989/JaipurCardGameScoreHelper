@@ -28,14 +28,17 @@ public interface GameDao {
     @Query("SELECT * FROM games WHERE STATUS ='C' ORDER BY time_created DESC")
     public LiveData<List<Game>> getAllGames();
 
-    @Query("SELECT * FROM games where id = :gameId")
+    @Query("SELECT * FROM games WHERE id = :gameId")
     public LiveData<Game> getAGame(long gameId);
 
     @Transaction
     @Query("DELETE FROM games")
     public void deleteAllGames();
 
-    @Query("SELECT * FROM games where status = 'P'")
+    @Query("SELECT * FROM games WHERE status = 'P'")
     public LiveData<List<Game>> getPendingGame();
+
+    @Query("SELECT * FROM games WHERE status = 'C' AND (player_one_id = :playerId OR player_two_id = :playerId)")
+    public LiveData<List<Game>> getGamesForAPlayer(long playerId);
 
 }

@@ -65,12 +65,12 @@ public class PlayerStatsListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         if (viewType == EMPTY_VIEW) {
-            view = inflater.inflate(R.layout.layout_player_stats_item, parent, false);
-            return new PlayerStatsViewHolder(view);
-        }
-        else {
             view = inflater.inflate(R.layout.recycle_empty_game_view, parent, false);
             return new EmptyPlayerStatsViewHolder(view);
+        }
+        else {
+            view = inflater.inflate(R.layout.layout_player_stats_item, parent, false);
+            return new PlayerStatsViewHolder(view);
         }
     }
 
@@ -81,9 +81,10 @@ public class PlayerStatsListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             PlayerStatistics playerStatistics = playerStatisticsList.get(position);
             Glide.with(contextObj).load(playerStatistics.getPlayerProfile()).into(playerStatsViewHolder.playerImageView);
             playerStatsViewHolder.playerNameTextView.setText(playerStatistics.getPlayer().getPlayerName());
-            double winPercentage = playerStatistics.getGamesWon() / playerStatistics.getGamesPlayed();
-            DecimalFormat decimalFormat = new DecimalFormat("##0.00");
-            playerStatsViewHolder.playerWinPercentageTextView.setText(decimalFormat.format(winPercentage));
+            double winPercentage = 0.00;
+            if (playerStatistics.getGamesPlayed() != 0 )
+                winPercentage = (double) (playerStatistics.getGamesWon() * 100 ) / playerStatistics.getGamesPlayed() ;
+            playerStatsViewHolder.playerWinPercentageTextView.setText(String.format("%.2f", winPercentage));
             playerStatsViewHolder.playerGamesPlayedTextView.setText(String.valueOf(playerStatistics.getGamesPlayed()));
         }
         else if (holder instanceof EmptyPlayerStatsViewHolder) {

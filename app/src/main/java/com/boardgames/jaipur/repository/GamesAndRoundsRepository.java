@@ -64,6 +64,8 @@ public class GamesAndRoundsRepository {
 
     public LiveData<List<Game>> getPendingGame() {return gameDao.getPendingGame();}
 
+    public LiveData<List<Game>> getGamesForAPlayer(long playerId) {return  gameDao.getGamesForAPlayer(playerId);}
+
     //Implementing RoundDao functions
 
     public LiveData<List<Round>> getAllRounds() {return roundDao.getAllRounds();}

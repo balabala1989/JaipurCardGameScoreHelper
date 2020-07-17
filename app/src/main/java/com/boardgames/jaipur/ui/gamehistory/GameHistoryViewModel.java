@@ -45,11 +45,9 @@ public class GameHistoryViewModel extends AndroidViewModel {
 
         LiveData<List<Game>> games = gamesAndRoundsRepository.getAllGames();
 
-        gameDetailsList.addSource(games, new Observer<List<Game>>() {
-            @Override
-            public void onChanged(List<Game> games) {
+        gameDetailsList.addSource(games, gamesList -> {
                 ArrayList<GameDetails> gameDetailsArrayList = new ArrayList<>();
-                for (Game game : games) {
+                for (Game game : gamesList) {
                     GameDetails gameDetails = new GameDetails();
                     gameDetails.setGame(game);
                     Player playerOne = playerRepository.getPlayer(game.getPlayerOneID());
@@ -72,7 +70,6 @@ public class GameHistoryViewModel extends AndroidViewModel {
                     gameDetailsArrayList.add(gameDetails);
                 }
                 gameDetailsList.setValue(gameDetailsArrayList);
-            }
         });
 
         return gameDetailsList;

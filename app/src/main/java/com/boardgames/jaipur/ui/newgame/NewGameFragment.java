@@ -135,13 +135,13 @@ public class NewGameFragment extends Fragment {
             Intent startIntent = new Intent(getActivity(), StartingPlayerActivity.class);
             PlayersInAGame playersInAGame = new PlayersInAGame(playerOne, playerTwo);
 
-            if (playerOne.getPlayerAvatar() != null && playerOne.getPlayerAvatar().equalsIgnoreCase(""))
+            if (playerOne.getPlayerAvatar() == null || playerOne.getPlayerAvatar().equalsIgnoreCase(""))
                 playersInAGame.setPlayerOneProfile(PlayerUtils.getUriForDrawable(getContext(), R.drawable.default_player_avatar));
             else {
                 playersInAGame.setPlayerOneProfile(Uri.fromFile(new File(playerOne.getPlayerAvatar())));
             }
 
-            if (playerTwo.getPlayerAvatar() != null && playerTwo.getPlayerAvatar().equalsIgnoreCase(""))
+            if (playerTwo.getPlayerAvatar() == null || playerTwo.getPlayerAvatar().equalsIgnoreCase(""))
                 playersInAGame.setPlayerTwoProfile(PlayerUtils.getUriForDrawable(getContext(), R.drawable.default_player_avatar));
             else {
                 playersInAGame.setPlayerTwoProfile(Uri.fromFile(new File(playerTwo.getPlayerAvatar())));
