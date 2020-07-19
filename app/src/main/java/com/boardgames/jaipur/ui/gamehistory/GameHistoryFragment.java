@@ -18,12 +18,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.adapter.GamesItemAdapter;
 import com.boardgames.jaipur.utils.GameDetails;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.util.List;
 
 public class GameHistoryFragment extends Fragment {
 
     private GameHistoryViewModel gameHistoryViewModel;
+    private AdView mAdView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -40,6 +46,15 @@ public class GameHistoryFragment extends Fragment {
                 gamesItemAdapter.setGamesList(gameDetails);
             }
         });
+
+        MobileAds.initialize(getActivity(), new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        mAdView = root.findViewById(R.id.gameHistoryAdView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
         return root;
     }
 }

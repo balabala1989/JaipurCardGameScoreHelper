@@ -13,6 +13,11 @@ import com.boardgames.jaipur.utils.GameUtils;
 import com.boardgames.jaipur.utils.GoodsDetailsForARound;
 import com.boardgames.jaipur.utils.PlayerUtils;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -58,6 +63,7 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
     private int savedRound, editModeRound;
     private String operationMode;
     private boolean enableSubmit = false;
+    private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +130,14 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
             gameDetails.getPlayerTwoRounds().put(gameDetails.getRoundInProgress(), initializeRoundWithPlayer(gameDetails.getPlayersInAGame().getPlayerTwo().getId()));
         }
 
-
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        mAdView = findViewById(R.id.roundSummaryAdView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
     }
 

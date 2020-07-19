@@ -43,6 +43,8 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.MPPointF;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class StatisticsFragment extends Fragment implements OnChartValueSelectedListener {
@@ -63,6 +65,12 @@ public class StatisticsFragment extends Fragment implements OnChartValueSelected
         playerStatsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         statisticsViewModel.getAllPlayersStats().observe(getViewLifecycleOwner(), playerStatistics -> {
+            Collections.sort(playerStatistics, new Comparator<PlayerStatistics>() {
+                @Override
+                public int compare(PlayerStatistics o1, PlayerStatistics o2) {
+                    return o1.getPlayer().getPlayerName().compareToIgnoreCase(o2.getPlayer().getPlayerName());
+                }
+            });
             playerStatsListAdapter.setPlayerStatisticsList(playerStatistics);
             setDataForChart(playerStatistics);
         });

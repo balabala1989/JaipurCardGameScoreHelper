@@ -13,20 +13,20 @@
             android:icon="@drawable/players"
             android:title="@string/menu_players_management" />
         <item
-            android:id="@+id/nav_stats"
-            android:icon="@android:drawable/ic_menu_sort_by_size"
-            android:title="@string/menu_stats" />
-        <item
             android:id="@+id/nav_game_history"
             android:icon="@android:drawable/ic_menu_recent_history"
             android:title="@string/menu_game_history" />
         <item
+            android:id="@+id/nav_stats"
+            android:icon="@android:drawable/ic_menu_sort_by_size"
+            android:title="@string/menu_stats" />
+       <!-- <item
             android:id="@+id/nav_feedback_support"
             android:icon="@android:drawable/ic_dialog_email"
             android:title="@string/menu_feedback_support" />
         <item
             android:id="@+id/nav_rate_me"
             android:icon="@android:drawable/btn_star"
-            android:title="@string/menu_rate_me" />
+            android:title="@string/menu_rate_me" />-->
     </group>
 </menu>

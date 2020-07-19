@@ -6,11 +6,12 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity(tableName = "players")
+@Entity(tableName = "players", indices = {@Index("name")})
 public class Player implements Parcelable, Serializable {
 
     @PrimaryKey(autoGenerate = true)

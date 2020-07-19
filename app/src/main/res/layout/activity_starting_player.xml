@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
@@ -23,14 +24,14 @@
         android:id="@+id/startingPlayerDisplayImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:contentDescription="@string/starting_player_activity_title"
-        app:srcCompat="@drawable/default_player_avatar"
-        android:layout_gravity="center_horizontal"/>
+        app:srcCompat="@drawable/default_player_avatar" />
 
     <TextView
         android:id="@+id/startingPlayerTextView"
@@ -62,5 +63,18 @@
         android:background="@drawable/button_shape"
         android:text="@string/retry_button_text"
         android:textColor="#FFFFFF" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="128dp"
+        tools:visibility="invisible" />
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/startingPlayerActivityAdView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="@string/starting_player_activity_adUnit_Id"
+        android:layout_gravity="bottom|center_horizontal" />
 
 </LinearLayout>

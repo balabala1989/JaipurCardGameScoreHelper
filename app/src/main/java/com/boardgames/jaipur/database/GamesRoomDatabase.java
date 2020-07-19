@@ -14,6 +14,7 @@ import com.boardgames.jaipur.entities.Game;
 import com.boardgames.jaipur.entities.Round;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -35,6 +36,31 @@ public abstract class GamesRoomDatabase extends RoomDatabase {
                 RoundDao roundDao = INSTANCE.roundDao();
                 gameDao.deleteAllGames();
                 roundDao.deleteAllRounds();
+                long playerOneId = 163;
+                long playerTwoId = 164;
+                Random rand = new Random();
+                for (int i = 0; i < 51; i++) {
+                    Game game = new Game();
+                    if (i % 2 == 0) {
+                        game.setPlayerOneID(playerOneId);
+                        game.setPlayerTwoID(playerTwoId);
+                    }
+                    else {
+                        game.setPlayerOneID(playerTwoId);
+                        game.setPlayerTwoID(playerOneId);
+                    }
+                    if (new Random().nextBoolean()) {
+                        game.setWinner(playerOneId);
+                        game.setRoundsCompleted(3);
+                    }
+                    else {
+                        game.setWinner(playerTwoId);
+                        game.setRoundsCompleted(2);
+                    }
+                    game.setGamePlayStatus("C");
+                    game.setTimeCreated(System.currentTimeMillis());
+                    gameDao.insertGame(game);
+                }
             });
         }
     };
@@ -43,16 +69,15 @@ public abstract class GamesRoomDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (GamesRoomDatabase.class) {
                 if (INSTANCE == null) {
-                    //TODO Need to delete the call back before publishing the app
-                    /*INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             GamesRoomDatabase.class, "games_database")
                             .addCallback(gamesDatabaseCallback)
                             .fallbackToDestructiveMigration()
-                            .build();*/
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                            .build();
+                    /*INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             GamesRoomDatabase.class, "games_database")
                             .fallbackToDestructiveMigration()
-                            .build();
+                            .build();*/
                 }
             }
         }

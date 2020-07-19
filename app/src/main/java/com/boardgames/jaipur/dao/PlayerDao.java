@@ -29,7 +29,7 @@ public interface PlayerDao {
     public LiveData<List<Player>> getAllPlayers();
 
     @Query("SELECT * FROM players WHERE id = :playerId")
-    Player getPlayer(long playerId);
+    public Player getPlayer(long playerId);
 
     @Transaction
     @Query("DELETE from players")
@@ -37,4 +37,7 @@ public interface PlayerDao {
 
     @Query("UPDATE players SET player_avatar = :playerAvatar, time_updated = :timeUpdated WHERE id = :playerId")
     public int updatePlayerAvatar(long playerId, long timeUpdated, String playerAvatar);
+
+    @Query("SELECT * FROM players WHERE upper(name) = :playerName")
+    public Player getPlayerByName(String playerName);
 }

@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:id="@+id/roundScrollView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -644,5 +645,15 @@
                 app:layout_constraintStart_toEndOf="@+id/sumDisplayImagview"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/roundSummaryAdView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            ads:adSize="SMART_BANNER"
+            ads:adUnitId="@string/round_summary_activity_adUnit_Id"
+            android:layout_gravity="bottom|center_horizontal"/>
     </LinearLayout>
 </ScrollView>

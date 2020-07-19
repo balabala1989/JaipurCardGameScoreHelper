@@ -39,6 +39,18 @@ public class PlayerRepository {
         return singlePlayer;
     }
 
+    public Player getPlayerByName(String playerName) {
+        semaphore = new Semaphore(0);
+        new PlayerQueryByNameAsyncTask().execute(playerName);
+        try {
+            semaphore.acquire();
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return singlePlayer;
+    }
+
     public long updatePlayerAvatar(long playerId, String playerAvatar) {
         final long[] updateStatus = {0};
         PlayerRoomDatabase.databaseWriterExecutor.execute(() -> {
@@ -47,7 +59,6 @@ public class PlayerRepository {
         return updateStatus[0];
     }
 
-    //TODO check for the name existence and then insert the value. Duplicate names are being inserted
     public long insert(final Player player) {
         final long[] updateStatus = {0};
         PlayerRoomDatabase.databaseWriterExecutor.execute(() -> {
@@ -73,6 +84,16 @@ public class PlayerRepository {
         @Override
         protected Void doInBackground(Long... players) {
             singlePlayer = playerDao.getPlayer(players[0]);
+            semaphore.release();
+            return null;
+        }
+    }
+
+    private class PlayerQueryByNameAsyncTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... players) {
+            singlePlayer = playerDao.getPlayerByName(players[0]);
             semaphore.release();
             return null;
         }

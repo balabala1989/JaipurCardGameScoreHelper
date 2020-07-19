@@ -7,12 +7,19 @@ import androidx.core.content.ContextCompat;
 
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.entities.Player;
+import com.boardgames.jaipur.repository.PlayerRepository;
 import com.boardgames.jaipur.ui.utils.ImagePickAndCrop;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.CheckForPermissionsState;
 import com.boardgames.jaipur.utils.PlayerUtils;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -27,7 +34,9 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -41,11 +50,11 @@ public class PlayerActivity extends AppCompatActivity {
     private boolean isProfileImageChanged = false;
     private boolean isDeleteConfirmed;
     private AlertDialog dialog;
+    private AdView mAdView;
 
     //TODO for update profile give option to remove the profile and keep default value
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //TODO when name is typed, out of click of the text box, the qwerty keyboard still displays. Remove it
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 
@@ -94,6 +103,14 @@ public class PlayerActivity extends AppCompatActivity {
         if (requestType == ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_FOR_UPDATE_PLAYER)
             handleUpdatePlayerRequest(receivedIntent);
 
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        mAdView = findViewById(R.id.playerAddUpdateActivityAdView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     @Override
@@ -129,7 +146,15 @@ public class PlayerActivity extends AppCompatActivity {
 
         EditText nameEditText = (EditText) findViewById(R.id.playerNameEditText);
         if (nameEditText.getText().toString().trim().equalsIgnoreCase("")) {
-            nameEditText.setError(getErrorMessageWithColor());
+            nameEditText.setError(getErrorMessageWithColor(getString(R.string.edittext_playername_error)));
+            nameEditText.requestFocus();
+            return super.onOptionsItemSelected(item);
+        }
+
+        PlayerRepository playerRepository = new PlayerRepository(getApplication());
+        Player player = playerRepository.getPlayerByName(nameEditText.getText().toString().trim().toUpperCase());
+        if (player != null) {
+            nameEditText.setError(getErrorMessageWithColor(getString(R.string.edittext_playername_exists_error)));
             nameEditText.requestFocus();
             return super.onOptionsItemSelected(item);
         }
@@ -220,8 +245,7 @@ public class PlayerActivity extends AppCompatActivity {
         startActivityForResult(intent, ApplicationConstants.PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_REQUEST_IMAGE);
     }
 
-    private SpannableStringBuilder getErrorMessageWithColor() {
-        String errorMessage = getString(R.string.edittext_playername_error);
+    private SpannableStringBuilder getErrorMessageWithColor(String errorMessage) {
         final int version = Build.VERSION.SDK_INT;
         int errorColor;
 
@@ -255,5 +279,13 @@ public class PlayerActivity extends AppCompatActivity {
        Glide.with(this).load(imageMap).override(width, width).into(playerAvatarImageView);
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
 
 }

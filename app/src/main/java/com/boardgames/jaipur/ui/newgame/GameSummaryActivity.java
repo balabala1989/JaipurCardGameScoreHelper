@@ -19,6 +19,9 @@ import com.boardgames.jaipur.utils.GamePhotoStatusEnum;
 import com.boardgames.jaipur.utils.GameUtils;
 import com.boardgames.jaipur.utils.PlayerUtils;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -57,6 +60,7 @@ public class GameSummaryActivity extends AppCompatActivity {
     private boolean isGameOver = false;
     private String photoName;
     private GamePhotoStatusEnum gamePhotoStatusEnum;
+    private InterstitialAd saveGameAdUnit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +129,16 @@ public class GameSummaryActivity extends AppCompatActivity {
             gamePhotoStatusEnum = GamePhotoStatusEnum.EMPTY;
         else
             gamePhotoStatusEnum = GamePhotoStatusEnum.DISPLAYONLY;
+
+        saveGameAdUnit = new InterstitialAd(this);
+        saveGameAdUnit.setAdUnitId(getString(R.string.save_game_inter_adUnit_Id));
+        saveGameAdUnit.loadAd(new AdRequest.Builder().build());
+        saveGameAdUnit.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                saveGameAdUnit.loadAd(new AdRequest.Builder().build());
+            }
+        });
     }
 
     @Override
@@ -432,6 +446,8 @@ public class GameSummaryActivity extends AppCompatActivity {
     }
 
     private void finishGameAndGoBackToMainPage() {
+        if (saveGameAdUnit.isLoaded())
+            saveGameAdUnit.show();
         Intent resetIntent = new Intent(GameSummaryActivity.this, MainActivity.class);
         resetIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(resetIntent);
@@ -439,6 +455,8 @@ public class GameSummaryActivity extends AppCompatActivity {
     }
 
     private void finishGameAndDoRematchPage() {
+        if (saveGameAdUnit.isLoaded())
+            saveGameAdUnit.show();
         Intent startIntent = new Intent(GameSummaryActivity.this, StartingPlayerActivity.class);
         startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startIntent.putExtra(ApplicationConstants.NEWGAMEFRAGMENT_TO_STARTINGPLAYERACTIVITY_PLAYERS_IN_A_GAME, gameDetails.getPlayersInAGame());

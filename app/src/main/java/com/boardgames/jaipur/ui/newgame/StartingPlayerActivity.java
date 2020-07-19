@@ -12,6 +12,11 @@ import com.boardgames.jaipur.utils.GameDetails;
 import com.boardgames.jaipur.utils.PlayerUtils;
 import com.boardgames.jaipur.utils.PlayersInAGame;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -41,6 +46,7 @@ public class StartingPlayerActivity extends AppCompatActivity {
     private Game game;
     private PlayersInAGame playersInAGame;
     private GameDetails gameDetails;
+    private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +81,15 @@ public class StartingPlayerActivity extends AppCompatActivity {
             }
         });
         findStartingPlayer();
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        mAdView = findViewById(R.id.startingPlayerActivityAdView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     @Override

@@ -41,6 +41,7 @@
     <string name="image_picker_issue">Error!! Unable to set profile picture...</string>
     <string name="player_update_issue">Error!! Unable to update the player profile now...</string>
     <string name="edittext_playername_error">Player Name cannot be blank</string>
+    <string name="edittext_playername_exists_error">Player Name already exists!!!</string>
     <string name="playeractivity_external_path">profileImages</string>
     <string name="gameactivity_external_path">gameImages</string>
     <string name="imagepickandcropactivity_cache_path">jaipurImages</string>
@@ -96,4 +97,10 @@
     <string name="game_image_desc_message">Click on the image to change it</string>
 
 
+    <string name="manage_players_main_activity_adUnit_Id">ca-app-pub-4504001719511985/9098149955</string>
+    <string name="player_add_update_activity_adUnit_Id">ca-app-pub-4504001719511985/8391750553</string>
+    <string name="starting_player_activity_adUnit_Id">ca-app-pub-4504001719511985/8008607175</string>
+    <string name="round_summary_activity_adUnit_Id">ca-app-pub-4504001719511985/6503953818</string>
+    <string name="game_history_activity_adUnit_Id">ca-app-pub-4504001719511985/3877790470</string>
+    <string name="save_game_inter_adUnit_Id">ca-app-pub-4504001719511985/6093832229</string>
 </resources>
