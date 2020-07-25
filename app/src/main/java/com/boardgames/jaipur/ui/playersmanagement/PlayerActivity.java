@@ -120,10 +120,10 @@ public class PlayerActivity extends AppCompatActivity {
         else
             getMenuInflater().inflate(R.menu.activity_player_update_menu, menu);
 
-        for(int i = 0; i < menu.size(); i++) {
+        /*for(int i = 0; i < menu.size(); i++) {
             if (menu.getItem(i).getItemId() == R.id.updatePlayerDeleteButton)
                 menu.getItem(i).setVisible(false);
-        }
+        }*/
         return super.onCreateOptionsMenu(menu);
     }
 

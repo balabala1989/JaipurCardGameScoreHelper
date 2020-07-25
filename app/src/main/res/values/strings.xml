@@ -13,6 +13,8 @@
     <string name="menu_game_history">Game History</string>
     <string name="menu_feedback_support">Support</string>
     <string name="menu_rate_me">Rate Me</string>
+    <string name="menu_rules">Game Rule</string>
+    <string name="menu_about">About</string>
 
     <string name="playeractivity_title_for_add_player">Add Player</string>
     <string name="playeractivity_title_for_edit_player">Edit Player</string>
@@ -26,7 +28,7 @@
     <string name="error_player_not_saved">Error while saving Player!!! Please try again. Apologies for the inconvenience caused.</string>
 
     <string name="alertdialog_confirmation_title">Confirm</string>
-    <string name="alertdialog_confirmation_message">Are you sure to delete this player?</string>
+    <string name="alertdialog_confirmation_message">Deleting this player, will delete all game history associated with the player.\nAre you sure to delete this player?</string>
     <string name="alertdialog_confirmation_positive_button">Yes</string>
     <string name="alertdialog_confirmation_negative_button">No</string>
 
@@ -103,4 +105,9 @@
     <string name="round_summary_activity_adUnit_Id">ca-app-pub-4504001719511985/6503953818</string>
     <string name="game_history_activity_adUnit_Id">ca-app-pub-4504001719511985/3877790470</string>
     <string name="save_game_inter_adUnit_Id">ca-app-pub-4504001719511985/6093832229</string>
+    <string name="about_game_adunit_id">ca-app-pub-4504001719511985/8434523714</string>
+    <string name="icon_url">https://www.flaticon.com/</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

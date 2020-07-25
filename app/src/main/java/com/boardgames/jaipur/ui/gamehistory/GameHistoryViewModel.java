@@ -49,9 +49,14 @@ public class GameHistoryViewModel extends AndroidViewModel {
                 ArrayList<GameDetails> gameDetailsArrayList = new ArrayList<>();
                 for (Game game : gamesList) {
                     GameDetails gameDetails = new GameDetails();
-                    gameDetails.setGame(game);
                     Player playerOne = playerRepository.getPlayer(game.getPlayerOneID());
                     Player playerTwo = playerRepository.getPlayer(game.getPlayerTwoID());
+
+                    if (playerOne == null || playerTwo == null)
+                        continue;
+
+                    gameDetails.setGame(game);
+
 
                     PlayersInAGame playersInAGame = new PlayersInAGame(playerOne, playerTwo);
 

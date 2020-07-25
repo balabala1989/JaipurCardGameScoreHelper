@@ -5,8 +5,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -17,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,9 +34,7 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -123,7 +120,9 @@ public class PlayersManagementFragment extends Fragment {
         }
 
         try {
-            playersManagementViewModel.delete(player);
+            playersManagementViewModel.deleteAPlayerWithGamesRounds(player).observe(getViewLifecycleOwner(), deletedRowsCount ->  {
+                Log.e("Rows deleted - " + String.valueOf(deletedRowsCount), "DELETE_PLAYER");
+            });
         }
         catch (Exception e) {
             e.printStackTrace();

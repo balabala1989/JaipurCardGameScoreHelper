@@ -88,12 +88,17 @@ public class StatisticsViewModel extends AndroidViewModel {
        }
 
        if (gameList != null) {
-           totalGamesPlayed.setValue(gameList.size());
+           int gamesTotal = 0;
            for (Game game : gameList) {
+               if (!playerStatisticsHashMap.containsKey(game.getPlayerOneID()) || !playerStatisticsHashMap.containsKey(game.getPlayerTwoID())) {
+                   continue;
+               }
+               gamesTotal++;
                playerStatisticsHashMap.get(game.getPlayerOneID()).setGamesPlayed(playerStatisticsHashMap.get(game.getPlayerOneID()).getGamesPlayed() + 1);
                playerStatisticsHashMap.get(game.getPlayerTwoID()).setGamesPlayed(playerStatisticsHashMap.get(game.getPlayerTwoID()).getGamesPlayed() + 1);
                playerStatisticsHashMap.get(game.getWinner()).setGamesWon(playerStatisticsHashMap.get(game.getWinner()).getGamesWon() + 1);
            }
+           totalGamesPlayed.setValue(gamesTotal);
        }
 
        for (Map.Entry<Long, PlayerStatistics> entry : playerStatisticsHashMap.entrySet()) {

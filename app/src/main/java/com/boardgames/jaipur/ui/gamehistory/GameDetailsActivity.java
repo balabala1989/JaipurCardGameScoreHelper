@@ -38,10 +38,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-/*TODO
-1. Instead of plus symbol have nomral symnbol
-2. Dont allow user to edit the photo
-* */
+
 public class GameDetailsActivity extends AppCompatActivity {
 
     private List<Round> roundsOfAGame;

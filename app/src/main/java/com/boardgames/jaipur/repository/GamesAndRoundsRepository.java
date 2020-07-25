@@ -13,6 +13,7 @@ import com.boardgames.jaipur.entities.Round;
 
 import java.util.List;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class GamesAndRoundsRepository {
 
@@ -106,6 +107,14 @@ public class GamesAndRoundsRepository {
             e.printStackTrace();
         }
         return rounds;
+    }
+
+    public long deleteAllRoundsForAGame(long gameId) {
+        AtomicLong count = new AtomicLong();
+        GamesRoomDatabase.databaseWriterExecutor.execute(() -> {
+            count.set(roundDao.deleteAllRoundsForAGame(gameId));
+        });
+        return count.get();
     }
 
 

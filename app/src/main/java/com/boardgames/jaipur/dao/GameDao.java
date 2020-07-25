@@ -38,6 +38,7 @@ public interface GameDao {
     @Query("SELECT * FROM games WHERE status = 'P'")
     public LiveData<List<Game>> getPendingGame();
 
+    @Transaction
     @Query("SELECT * FROM games WHERE status = 'C' AND (player_one_id = :playerId OR player_two_id = :playerId)")
     public LiveData<List<Game>> getGamesForAPlayer(long playerId);
 

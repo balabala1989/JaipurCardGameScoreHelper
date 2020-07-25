@@ -21,6 +21,13 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
 
     //TODO handle all updates and insert return and throw error gracefully
+    /*
+        TODO:-
+        Next feature on the list
+        1. Filter for stats - date filter and player filter
+        2. Game rule in tabbed way
+        3. Other to dos
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_new_game, R.id.nav_players_management, R.id.nav_stats, R.id.nav_game_history, R.id.nav_feedback_support, R.id.nav_rate_me)
+                R.id.nav_new_game, R.id.nav_players_management, R.id.nav_stats, R.id.nav_game_history, R.id.nav_feedback_support, R.id.nav_rate_me,
+                R.id.nav_game_rule, R.id.nav_about)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);

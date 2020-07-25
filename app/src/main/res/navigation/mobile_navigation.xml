@@ -40,4 +40,16 @@
         android:name="com.boardgames.jaipur.ui.rateme.RateMeFragment"
         android:label="@string/menu_rate_me"
         tools:layout="@layout/fragment_rate_me" />
+
+    <fragment
+        android:id="@+id/nav_game_rule"
+        android:name="com.boardgames.jaipur.ui.gamerule.GameRuleFragment"
+        android:label="@string/menu_rules"
+        tools:layout="@layout/fragment_game_rule" />
+
+    <fragment
+        android:id="@+id/nav_about"
+        android:name="com.boardgames.jaipur.ui.about.AboutFragment"
+        android:label="@string/menu_about"
+        tools:layout="@layout/fragment_about" />
 </navigation>
