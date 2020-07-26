@@ -14,11 +14,11 @@
             android:title="@string/menu_players_management" />
         <item
             android:id="@+id/nav_game_history"
-            android:icon="@android:drawable/ic_menu_recent_history"
+            android:icon="@drawable/ic_history_gray_24dp"
             android:title="@string/menu_game_history" />
         <item
             android:id="@+id/nav_stats"
-            android:icon="@android:drawable/ic_menu_sort_by_size"
+            android:icon="@drawable/ic_sort_black_24dp"
             android:title="@string/menu_stats" />
        <!-- <item
             android:id="@+id/nav_feedback_support"

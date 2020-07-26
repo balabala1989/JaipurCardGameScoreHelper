@@ -54,7 +54,7 @@ public class GameDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_details);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.string.color_activity_actionbar))));
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.appBarColor)));
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(getString(R.string.game_summary_activity_title));
 
@@ -97,7 +97,6 @@ public class GameDetailsActivity extends AppCompatActivity {
 
         findViewById(R.id.winnerAnnounceMentTextView).setVisibility(View.VISIBLE);
         ((TextView) findViewById(R.id.winnerAnnounceMentTextView)).setText(winnerMessage.append(ApplicationConstants.WON_MESSAGE).toString());
-        //TODO check on playername coming on top of image
 
         if (gameDetails.getGame().getGamePhotoLocation() == null || gameDetails.getGame().getGamePhotoLocation().isEmpty())
             gamePhotoStatusEnum = GamePhotoStatusEnum.EMPTY;

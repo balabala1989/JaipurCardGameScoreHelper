@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
         1. Filter for stats - date filter and player filter
         2. Game rule in tabbed way
         3. Other to dos
+        4. Delete game from game history
+        5. Choose photo from gallery for game summary
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -89,7 +89,7 @@ public class NewGameFragment extends Fragment {
             }
         });
 
-        FloatingActionButton addPlayerButton = root.findViewById(R.id.addPlayerButton);
+        /*FloatingActionButton addPlayerButton = root.findViewById(R.id.addPlayerButton);
         addPlayerButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -100,15 +100,16 @@ public class NewGameFragment extends Fragment {
                 intent.putExtra(ApplicationConstants.PLAYERACTIVITY_TITLE, getString(R.string.playeractivity_title_for_add_player));
                 startActivityForResult(intent,ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_CODE);
             }
-        });
+        });*/
         RecyclerView playerRecyclerView = root.findViewById(R.id.playerListNewGameRecyclerView);
-        final PlayerListAdapater adapater = new PlayerListAdapater(this, root);
-        playerRecyclerView.setAdapter(adapater);
+        final PlayerListAdapater adapter = new PlayerListAdapater(this, root);
+        playerRecyclerView.setAdapter(adapter);
         playerRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_GRIDLAYOUT_NUMBER_OF_COLUMNS));
-        newGameViewModel.getAllPlayers().observe(this, new Observer<List<Player>>() {
+        newGameViewModel.getAllPlayers().observe(getViewLifecycleOwner(), new Observer<List<Player>>() {
             @Override
             public void onChanged(List<Player> players) {
-                adapater.setPlayersList(players);
+                players.add(PlayerUtils.defaultPlayer);
+                adapter.setPlayersList(players);
             }
         });
 
@@ -222,5 +223,13 @@ public class NewGameFragment extends Fragment {
         startMenuItem.setVisible(false);
         Glide.with(getContext()).load(R.drawable.player_question).into(playerImageView);
         playerTextView.setText(getString(R.string.new_game_fragment_select_player_textView));
+    }
+
+    public void startActivityForPlayerHandling() {
+        Intent intent = new Intent(getActivity(), PlayerActivity.class);
+        intent.putExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_TYPE,
+                ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_FOR_NEW_PLAYER);
+        intent.putExtra(ApplicationConstants.PLAYERACTIVITY_TITLE, getString(R.string.playeractivity_title_for_add_player));
+        startActivityForResult(intent,ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_CODE);
     }
 }

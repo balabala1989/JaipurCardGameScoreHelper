@@ -90,7 +90,7 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
         }
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.string.color_activity_actionbar))));
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.appBarColor)));
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(GameUtils.computeRoundTitle(this, gameDetails.getRoundInProgress()));
 
@@ -183,7 +183,12 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
         AlertDialog dialog;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.alertdialog_confirmation_title));
-        builder.setMessage(getString(R.string.alertdialog_backbutton_press_round_calc_msg));
+        if (!operationMode.equalsIgnoreCase(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE) && gameDetails.getRoundInProgress() == 1) {
+            builder.setMessage(getString(R.string.alertdialog_backbutton_press_round_calc_round_one_msg));
+        }
+        else {
+            builder.setMessage(getString(R.string.alertdialog_backbutton_press_round_calc_msg));
+        }
         builder.setPositiveButton(getString(R.string.alertdialog_confirmation_positive_button), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -225,6 +230,9 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
                 gameDetails.getGoodsDetailsForARoundMap().put(gameDetails.getRoundInProgress(), null);
             if (gameDetails.getRoundWinners() != null)
                 gameDetails.getRoundWinners().put(gameDetails.getRoundInProgress(), null);
+        }
+        else {
+            gameDetails.setRoundInProgress(savedRound);
         }
 
         handleException(false);
@@ -615,15 +623,15 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
         StringBuffer winMessage = new StringBuffer();
         if (gameDetails.getGoodsDetailsForARoundMap() == null)
             gameDetails.setGoodsDetailsForARoundMap(new HashMap<>());
-        if (gameDetails.getGoodsDetailsForARoundMap().isEmpty() || !gameDetails.getGoodsDetailsForARoundMap().containsKey(gameDetails.getRoundInProgress()) || gameDetails.getGoodsDetailsForARoundMap().get(gameDetails.getRoundInProgress()) == null)
-            gameDetails.getGoodsDetailsForARoundMap().put(gameDetails.getRoundInProgress(), goodsDetailsForARound);
+       // if (gameDetails.getGoodsDetailsForARoundMap().isEmpty() || !gameDetails.getGoodsDetailsForARoundMap().containsKey(gameDetails.getRoundInProgress()) || gameDetails.getGoodsDetailsForARoundMap().get(gameDetails.getRoundInProgress()) == null)
+        gameDetails.getGoodsDetailsForARoundMap().put(gameDetails.getRoundInProgress(), goodsDetailsForARound);
 
         if (gameDetails.getRoundWinners() == null )
             gameDetails.setRoundWinners(new HashMap<>());
-        if (gameDetails.getRoundWinners().isEmpty() || !gameDetails.getRoundWinners().containsKey(gameDetails.getRoundInProgress()) || gameDetails.getRoundWinners().get(gameDetails.getRoundInProgress()) == null || operationMode.equalsIgnoreCase(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE)) {
+        //if (gameDetails.getRoundWinners().isEmpty() || !gameDetails.getRoundWinners().containsKey(gameDetails.getRoundInProgress()) || gameDetails.getRoundWinners().get(gameDetails.getRoundInProgress()) == null || operationMode.equalsIgnoreCase(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE)) {
             Player winnerPlayer = winnerOfRound == gameDetails.getPlayersInAGame().getPlayerOne().getId() ? gameDetails.getPlayersInAGame().getPlayerOne() : gameDetails.getPlayersInAGame().getPlayerTwo();
             gameDetails.getRoundWinners().put(gameDetails.getRoundInProgress(), winnerPlayer);
-        }
+        //}
 
         if (winnerOfRound == gameDetails.getPlayersInAGame().getPlayerOne().getId())
             winMessage.append(gameDetails.getPlayersInAGame().getPlayerOne().getPlayerName())

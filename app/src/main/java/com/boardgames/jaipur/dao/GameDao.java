@@ -35,7 +35,7 @@ public interface GameDao {
     @Query("DELETE FROM games")
     public void deleteAllGames();
 
-    @Query("SELECT * FROM games WHERE status = 'P'")
+    @Query("SELECT * FROM games")
     public LiveData<List<Game>> getPendingGame();
 
     @Transaction

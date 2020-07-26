@@ -217,15 +217,17 @@ public class ImagePickAndCrop extends AppCompatActivity {
             primaryStorageVolume.mkdir();
         Uri destinationUri = Uri.fromFile(new File(primaryStorageVolume, System.currentTimeMillis() + ".jpg"));
         UCrop.Options options = new UCrop.Options();
-        options.setCompressionQuality(80);
-        options.setToolbarColor(ContextCompat.getColor(this, R.color.colorAccent));
-        options.setStatusBarColor(ContextCompat.getColor(this, R.color.colorAccent));
-        options.setActiveControlsWidgetColor(ContextCompat.getColor(this, R.color.colorAccent));
+        //options.setCompressionQuality(80);
+        options.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        options.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        options.setActiveControlsWidgetColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
         options.withAspectRatio(1, 1);
-        options.withMaxResultSize(100, 100);
+        //options.withMaxResultSize(200, 200);
         UCrop.of(sourceUri, destinationUri)
                 .withOptions(options)
                 .start(this);
+       /* UCrop.of(sourceUri, destinationUri)
+                .start(this);*/
     }
 
     @Override

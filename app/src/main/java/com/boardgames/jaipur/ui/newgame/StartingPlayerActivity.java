@@ -55,7 +55,7 @@ public class StartingPlayerActivity extends AppCompatActivity {
 
         newGameViewModel = new ViewModelProvider(this).get(NewGameViewModel.class);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.string.color_activity_actionbar))));
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.appBarColor)));
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(getString(R.string.starting_player_activity_title));
 

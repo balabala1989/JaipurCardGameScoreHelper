@@ -7,6 +7,11 @@ import com.boardgames.jaipur.entities.Round;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.GameDetails;
 import com.boardgames.jaipur.utils.GameUtils;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -21,6 +26,7 @@ public class RoundDetailsActivity extends AppCompatActivity {
 
     private GameDetails gameDetails;
     private int roundInDisplay;
+    private AdView mAdView;
 
 
     @Override
@@ -41,7 +47,7 @@ public class RoundDetailsActivity extends AppCompatActivity {
             handleException();
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.string.color_activity_actionbar))));
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.appBarColor)));
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(GameUtils.computeRoundTitle(this, roundInDisplay));
 
@@ -56,6 +62,14 @@ public class RoundDetailsActivity extends AppCompatActivity {
         }
 
         setScores();
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        mAdView = findViewById(R.id.roundSummaryAdView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     @Override

@@ -72,7 +72,7 @@ public class PlayerActivity extends AppCompatActivity {
                 getString(R.string.playeractivity_title_for_add_player) :
                 getString(R.string.playeractivity_title_for_edit_player);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.string.color_activity_actionbar))));
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.appBarColor)));
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(activityTitle);
 
@@ -151,12 +151,15 @@ public class PlayerActivity extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
         }
 
-        PlayerRepository playerRepository = new PlayerRepository(getApplication());
-        Player player = playerRepository.getPlayerByName(nameEditText.getText().toString().trim().toUpperCase());
-        if (player != null) {
-            nameEditText.setError(getErrorMessageWithColor(getString(R.string.edittext_playername_exists_error)));
-            nameEditText.requestFocus();
-            return super.onOptionsItemSelected(item);
+        if (requestType == ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_FOR_NEW_PLAYER ||
+                (nameEditText.getText() != null && !nameEditText.getText().toString().equalsIgnoreCase(updatePlayer.getPlayerName()))) {
+            PlayerRepository playerRepository = new PlayerRepository(getApplication());
+            Player player = playerRepository.getPlayerByName(nameEditText.getText().toString().trim().toUpperCase());
+            if (player != null) {
+                nameEditText.setError(getErrorMessageWithColor(getString(R.string.edittext_playername_exists_error)));
+                nameEditText.requestFocus();
+                return super.onOptionsItemSelected(item);
+            }
         }
 
         replyTent.putExtra(ApplicationConstants.PLAYERACTIVITY_DELETE_OPERATION_REQUESTED, false);

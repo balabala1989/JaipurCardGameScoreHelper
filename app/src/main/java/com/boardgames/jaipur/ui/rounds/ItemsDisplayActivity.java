@@ -52,7 +52,7 @@ public class ItemsDisplayActivity extends AppCompatActivity {
         selectedPlayerID = receivedIntent.getLongExtra(ApplicationConstants.SELECTED_PLAYER_FROM_SUMMARY_TO_ITEM_DETAILS, (int) ApplicationConstants.DEFAULT_PLAYER_ID);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.string.color_activity_actionbar))));
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.appBarColor)));
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(computeRoundTitle());
 

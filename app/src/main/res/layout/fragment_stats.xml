@@ -15,7 +15,7 @@
         android:layout_marginTop="8dp"
         android:fontFamily="@font/quando"
         android:gravity="center"
-        android:text="Games Played by Players"
+        android:text="Games Played"
         android:textColor="#000000"
         android:textSize="18sp" />
 
@@ -50,7 +50,7 @@
                 android:fontFamily="@font/quando"
                 android:text="Player Name"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -66,24 +66,27 @@
                 android:fontFamily="@font/quando"
                 android:text="Win %"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/playerNameHeaderTextView"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/playerGamesPLayedHeadetTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="75dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
                 android:fontFamily="@font/quando"
                 android:text="Games"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/playerWinPercentageHeaderTextView"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>

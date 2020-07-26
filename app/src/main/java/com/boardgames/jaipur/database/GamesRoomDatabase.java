@@ -36,7 +36,7 @@ public abstract class GamesRoomDatabase extends RoomDatabase {
                 RoundDao roundDao = INSTANCE.roundDao();
                 gameDao.deleteAllGames();
                 roundDao.deleteAllRounds();
-                long playerOneId = 178;
+                /*long playerOneId = 178;
                 long playerTwoId = 179;
                 Random rand = new Random();
                 for (int i = 0; i < 51; i++) {
@@ -60,7 +60,7 @@ public abstract class GamesRoomDatabase extends RoomDatabase {
                     game.setGamePlayStatus("C");
                     game.setTimeCreated(System.currentTimeMillis());
                     gameDao.insertGame(game);
-                }
+                }*/
             });
         }
     };
@@ -69,15 +69,15 @@ public abstract class GamesRoomDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (GamesRoomDatabase.class) {
                 if (INSTANCE == null) {
-                    /*INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             GamesRoomDatabase.class, "games_database")
                             .addCallback(gamesDatabaseCallback)
                             .fallbackToDestructiveMigration()
-                            .build();*/
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                            .build();
+                    /*INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             GamesRoomDatabase.class, "games_database")
                             .fallbackToDestructiveMigration()
-                            .build();
+                            .build();*/
                 }
             }
         }

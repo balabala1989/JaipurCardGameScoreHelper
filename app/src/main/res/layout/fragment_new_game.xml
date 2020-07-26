@@ -13,7 +13,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
         android:isScrollContainer="false"
         android:scrollbars="none">
 
@@ -24,8 +23,11 @@
             android:layout_marginStart="32dp"
             android:layout_marginLeft="32dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:contentDescription="@string/new_game_fragment_select_player_textView"
             android:src="@drawable/player_question"
+            app:layout_constraintEnd_toStartOf="@+id/vsTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,8 +35,8 @@
             android:id="@+id/playerOneTextView"
             android:layout_width="143dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif-black"
             android:gravity="center"
@@ -42,44 +44,45 @@
             android:textColor="#000000"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/vsTextView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/playerOneImageView"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toBottomOf="@+id/playerOneImageView" />
 
         <TextView
             android:id="@+id/vsTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
             android:layout_marginTop="75dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
             android:fontFamily="sans-serif-black"
             android:text="@string/new_game_fragment_vs_textView"
             android:textColor="#000000"
-            app:layout_constraintEnd_toStartOf="@+id/playerTwoImageView"
-            app:layout_constraintStart_toEndOf="@+id/playerOneImageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/playerTwoImageView"
             android:layout_width="143dp"
             android:layout_height="128dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
             android:contentDescription="@string/new_game_fragment_select_player_textView"
             android:src="@drawable/player_question"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/vsTextView"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/playerTwoTextView"
             android:layout_width="143dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="62dp"
-            android:layout_marginLeft="62dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
             android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif-black"
             android:gravity="center"
@@ -87,7 +90,8 @@
             android:textColor="#000000"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/playerOneTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/vsTextView"
             app:layout_constraintTop_toBottomOf="@+id/playerTwoImageView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -108,7 +112,7 @@
             tools:listitem="@layout/recyclerview_players_list" />
 
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+       <!-- <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addPlayerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -119,7 +123,7 @@
             android:contentDescription="@string/playeractivity_title_for_add_player"
             android:src="@drawable/ic_add_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent" />-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

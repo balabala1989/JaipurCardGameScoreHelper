@@ -34,7 +34,7 @@
         app:layout_constraintTop_toBottomOf="@+id/managePlayermainActivityAdView"
         tools:listitem="@layout/recyclerview_players_list" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+   <!-- <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addPlayerButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,6 +42,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:contentDescription="@string/playeractivity_title_for_add_player"
-        android:src="@drawable/ic_add_black_24dp"/>
+        android:src="@drawable/ic_add_black_24dp"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -49,7 +49,7 @@ public class PlayersManagementFragment extends Fragment {
         playersManagementViewModel =
                 new ViewModelProvider(this).get(PlayersManagementViewModel.class);
         View root = inflater.inflate(R.layout.fragment_players_management, container, false);
-        FloatingActionButton addPlayerButton = root.findViewById(R.id.addPlayerButton);
+       /* FloatingActionButton addPlayerButton = root.findViewById(R.id.addPlayerButton);
         addPlayerButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -60,7 +60,7 @@ public class PlayersManagementFragment extends Fragment {
                 intent.putExtra(ApplicationConstants.PLAYERACTIVITY_TITLE, getString(R.string.playeractivity_title_for_add_player));
                 startActivityForResult(intent,ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_CODE);
             }
-        });
+        });*/
         RecyclerView playerRecyclerView = root.findViewById(R.id.playersRecyclerView);
         final PlayerListAdapater adapater = new PlayerListAdapater(this, root);
         playerRecyclerView.setAdapter(adapater);
@@ -68,6 +68,7 @@ public class PlayersManagementFragment extends Fragment {
         playersManagementViewModel.getAllPlayers().observe(getViewLifecycleOwner(), new Observer<List<Player>>() {
             @Override
             public void onChanged(List<Player> players) {
+                players.add(PlayerUtils.defaultPlayer);
                 adapater.setPlayersList(players);
             }
         });
@@ -179,5 +180,13 @@ public class PlayersManagementFragment extends Fragment {
         updateIntent.putExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS, (Parcelable) player);
         updateIntent.putExtra(ApplicationConstants.PLAYERACTIVITY_TITLE, getString(R.string.playeractivity_title_for_edit_player));
         startActivityForResult(updateIntent, ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_CODE);
+    }
+
+    public void  startActivityForPlayerHandling() {
+        Intent intent = new Intent(getActivity(), PlayerActivity.class);
+        intent.putExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_TYPE,
+                ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_FOR_NEW_PLAYER);
+        intent.putExtra(ApplicationConstants.PLAYERACTIVITY_TITLE, getString(R.string.playeractivity_title_for_add_player));
+        startActivityForResult(intent,ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_CODE);
     }
 }

@@ -68,7 +68,7 @@ public class GameSummaryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_summary);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.string.color_activity_actionbar))));
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.appBarColor)));
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setTitle(getString(R.string.game_summary_activity_title));
 
@@ -249,8 +249,10 @@ public class GameSummaryActivity extends AppCompatActivity {
                 handleException();
             String operationMode = data.getStringExtra(ApplicationConstants.GAME_SUMM_TO_ROUND_SUMM_MODE);
             gameDetails = data.getParcelableExtra(ApplicationConstants.STARTINGPLAYERACTIVITY_TO_ROUNDCALC_GAME);
-            if (!operationMode.equalsIgnoreCase(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE) && gameDetails.getRoundInProgress() == 1)
-                findViewById(R.id.roundOneView).setVisibility(View.INVISIBLE);
+            if (!operationMode.equalsIgnoreCase(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE) && gameDetails.getRoundInProgress() == 1) {
+                newGameViewModel.deleteAGame(gameDetails.getGame());
+                finishGameAndGoBackToMainPage();
+            }
         }
     }
 
@@ -492,7 +494,7 @@ public class GameSummaryActivity extends AppCompatActivity {
         game.setPlayerTwoScores(playerScore.toString());
         game.setGamePlayStatus("C");
         game.setTimeUpdated(System.currentTimeMillis());
-        newGameViewModel.updateAGame(game);
+        newGameViewModel.createAGame(game);
 
         Toast.makeText(this, getString(R.string.game_success), Toast.LENGTH_LONG).show();
     }
@@ -695,7 +697,7 @@ public class GameSummaryActivity extends AppCompatActivity {
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.alertdialog_confirmation_title));
+        builder.setTitle("Image");
         builder.setView(dialogView);
 
         dialog = builder.create();
