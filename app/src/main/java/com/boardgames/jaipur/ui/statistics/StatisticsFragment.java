@@ -99,7 +99,7 @@ public class StatisticsFragment extends Fragment implements OnChartValueSelected
         pieChart.setCenterText(generateCenterSpannableText("0"));
 
         pieChart.setDrawHoleEnabled(true);
-        pieChart.setHoleColor(Color.WHITE);
+        pieChart.setHoleColor(Color.TRANSPARENT);
 
         pieChart.setTransparentCircleColor(Color.WHITE);
         pieChart.setTransparentCircleAlpha(110);

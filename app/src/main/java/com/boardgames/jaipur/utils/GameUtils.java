@@ -10,8 +10,10 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -417,6 +419,7 @@ public class GameUtils {
         Glide.with(context).load(gameDetails.getPlayersInAGame().getPlayerOneProfile()).override(width, width).into(playerOneImageView);
         playerOneTextView.setText(gameDetails.getPlayersInAGame().getPlayerOne().getPlayerName());
 
+
         TextView playerTwoTextView = activity.findViewById(R.id.playerTwoTextView);
         ImageView playerTwoImageView = activity.findViewById(R.id.playerTwoImageView);
 
@@ -438,13 +441,14 @@ public class GameUtils {
 
     }
 
-    public static Uri getUriFromViewForScreenshot(View screenView, Context context) {
+    public static Uri getUriFromViewForScreenshot(ScrollView screenView, Context context) {
         if (!CheckForPermissionsState.requestStorageCameraPermissions(context)) {
             CheckForPermissionsState.deniedPermission(context);
             return null;
         }
 
-        Bitmap screenBitMap = Bitmap.createBitmap(screenView.getWidth(), screenView.getHeight(), Bitmap.Config.ARGB_8888);
+
+        Bitmap screenBitMap = Bitmap.createBitmap(screenView.getChildAt(0).getWidth(), screenView.getChildAt(0).getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(screenBitMap);
         canvas.drawColor(Color.WHITE);
         screenView.draw(canvas);

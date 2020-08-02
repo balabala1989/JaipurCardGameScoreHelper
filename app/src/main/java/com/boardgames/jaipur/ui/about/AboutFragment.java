@@ -15,6 +15,7 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,7 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 
 public class AboutFragment extends Fragment {
 
-    private String iconText = "Icons made by <a href=\"https://www.flaticon.com/authors/popcorns-arts\" title=\"Icon Pond\">Icon Pond</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\"> www.flaticon.com</a>";
+    private String iconText = "Icons made by <a href=\"https://www.flaticon.com/authors/popcorns-arts\" title=\"Icon Pond\" style=\"color:black\">Icon Pond</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\"> www.flaticon.com</a>";
     private AdView mAdView;
 
     @Override
@@ -47,13 +48,17 @@ public class AboutFragment extends Fragment {
         ((TextView) root.findViewById(R.id.appNameTextView)).setText(getString(R.string.app_name).replaceAll("-","\n"));
         ((TextView) root.findViewById(R.id. versionTextView)).setText("Version:- " + BuildConfig.VERSION_NAME);
 
-        SpannableString spannableString = new SpannableString("developed by  Balaji Rajagopal");
-        spannableString.setSpan(new RelativeSizeSpan(.8f), 0, spannableString.length() - 16, 0);
-        spannableString.setSpan(new StyleSpan(Typeface.NORMAL), 0, spannableString.length() - 16, 0);
-        spannableString.setSpan(new ForegroundColorSpan(Color.GRAY), 0, spannableString.length() - 16, 0);
-        spannableString.setSpan(new RelativeSizeSpan(1.2f), 14, spannableString.length(), 0);
-        spannableString.setSpan(new StyleSpan(Typeface.BOLD_ITALIC), 14, spannableString.length(), 0);
-        spannableString.setSpan(new ForegroundColorSpan(ColorTemplate.getHoloBlue()), 14, spannableString.length(), 0);
+        SpannableString spannableString = new SpannableString("developed by  Balaji Rajagopal\nboardgamesdeveloper@gmail.com");
+        spannableString.setSpan(new RelativeSizeSpan(.8f), 0, 14, 0);
+        spannableString.setSpan(new StyleSpan(Typeface.NORMAL), 0, 14, 0);
+        spannableString.setSpan(new ForegroundColorSpan(Color.GRAY), 0, 14, 0);
+        spannableString.setSpan(new RelativeSizeSpan(1.2f), 14, 30, 0);
+        spannableString.setSpan(new StyleSpan(Typeface.BOLD_ITALIC), 14, 30, 0);
+        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.appBarColor)), 14, 30, 0);
+        spannableString.setSpan(new RelativeSizeSpan(.8f), 31, spannableString.length(), 0);
+        spannableString.setSpan(new UnderlineSpan(), 31, spannableString.length(), 0);
+        spannableString.setSpan(new StyleSpan(Typeface.ITALIC), 31, spannableString.length(), 0);
+        spannableString.setSpan(new ForegroundColorSpan(Color.BLACK), 31, spannableString.length(), 0);
 
         ((TextView) root.findViewById(R.id. developerTextView)).setText(spannableString);
 

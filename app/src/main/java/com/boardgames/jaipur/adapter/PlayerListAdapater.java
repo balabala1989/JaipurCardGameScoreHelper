@@ -96,7 +96,7 @@ public class PlayerListAdapater extends RecyclerView.Adapter<RecyclerView.ViewHo
                 viewHolder.playerItemTextView.setText(player.getPlayerName());
                 if (player.getId() == PlayerUtils.DEFAULT_PLAYER_ID) {
                     Glide.with(contextObj).load(R.drawable.add_player_icon).into(viewHolder.playerItemImageView);
-                    viewHolder.playerItemTextView.setTextColor(Color.RED);
+                    viewHolder.playerItemTextView.setTextColor(contextObj.getResources().getColor(R.color.appBarColor));
                     viewHolder.playerItemImageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

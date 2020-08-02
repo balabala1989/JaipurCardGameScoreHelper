@@ -322,6 +322,7 @@ public class GameSummaryActivity extends AppCompatActivity {
                     gameDetails.getGame().setWinner(gameDetails.getPlayersInAGame().getPlayerTwo().getId());
                 }
                 isGameOver = true;
+                findViewById(R.id.roundThreeView).setVisibility(View.GONE);
                 invalidateOptionsMenu();
             }
             else {
@@ -375,6 +376,7 @@ public class GameSummaryActivity extends AppCompatActivity {
             textMessage += ApplicationConstants.GAME_OVER;
         }
         ((TextView)findViewById(R.id.winnerAnnounceMentTextView)).setText(textMessage);
+        findViewById(R.id.winnerAnnounceMentTextView).setVisibility(View.VISIBLE);
         Toast.makeText(this, winMessage, Toast.LENGTH_LONG).show();
     }
 
@@ -559,11 +561,10 @@ public class GameSummaryActivity extends AppCompatActivity {
     }
 
     private void shareScreenShot() {
-        findViewById(R.id.winnerAnnounceMentTextView).setVisibility(View.VISIBLE);
         enableEditForTheRound(-1);
-
-        Uri shareUri = GameUtils.getUriFromViewForScreenshot(getWindow().getDecorView().getRootView().findViewById(R.id.screenViewLayout), this);
-        findViewById(R.id.winnerAnnounceMentTextView).setVisibility(View.INVISIBLE);
+        findViewById(R.id.winnerAnnouncementView).setVisibility(View.INVISIBLE);
+        Uri shareUri = GameUtils.getUriFromViewForScreenshot(findViewById(R.id.screenScrollView), this);
+        findViewById(R.id.winnerAnnouncementView).setVisibility(View.VISIBLE);
         enableEditForTheRound(gameDetails.getRoundsCompleted());
         GameUtils.initiateShareActivity(shareUri, this);
     }

@@ -97,6 +97,7 @@ public class GameDetailsActivity extends AppCompatActivity {
 
         findViewById(R.id.winnerAnnounceMentTextView).setVisibility(View.VISIBLE);
         ((TextView) findViewById(R.id.winnerAnnounceMentTextView)).setText(winnerMessage.append(ApplicationConstants.WON_MESSAGE).toString());
+        //Toast.makeText(this, winnerMessage.append(ApplicationConstants.WON_MESSAGE).toString(),Toast.LENGTH_LONG).show();
 
         if (gameDetails.getGame().getGamePhotoLocation() == null || gameDetails.getGame().getGamePhotoLocation().isEmpty())
             gamePhotoStatusEnum = GamePhotoStatusEnum.EMPTY;
@@ -151,9 +152,9 @@ public class GameDetailsActivity extends AppCompatActivity {
             playerTwoScore = findViewById(R.id.roundOnePlayerTwoScoreTextView);
 
             playerOneScore.setText(String.valueOf(playerOneRound.getScore()));
-            playerOneScore.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp,0,0,0);
+            playerOneScore.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_open_in_new_black_24dp,0,0,0);
             playerTwoScore.setText(String.valueOf(playerTwoRound.getScore()));
-            playerTwoScore.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp,0,0,0);
+            playerTwoScore.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
 
             if (playerOneRound.getPlayerID() == playerOneRound.getWinner()) {
                 findViewById(R.id.roundOnePlayerOneSealOfExcellence).setVisibility(View.VISIBLE);
@@ -176,9 +177,9 @@ public class GameDetailsActivity extends AppCompatActivity {
             playerTwoScore = findViewById(R.id.roundTwoPlayerTwoScoreTextView);
 
             playerOneScore.setText(String.valueOf(playerOneRound.getScore()));
-            playerOneScore.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp,0,0,0);
+            playerOneScore.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_open_in_new_black_24dp,0,0,0);
             playerTwoScore.setText(String.valueOf(playerTwoRound.getScore()));
-            playerTwoScore.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp,0,0,0);
+            playerTwoScore.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
 
             if (playerOneRound.getPlayerID() == playerOneRound.getWinner()) {
                 findViewById(R.id.roundTwoPlayerOneSealOfExcellence).setVisibility(View.VISIBLE);
@@ -200,9 +201,9 @@ public class GameDetailsActivity extends AppCompatActivity {
             playerTwoScore = findViewById(R.id.roundThreePlayerTwoScoreTextView);
 
             playerOneScore.setText(String.valueOf(playerOneRound.getScore()));
-            playerOneScore.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp,0,0,0);
+            playerOneScore.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_open_in_new_black_24dp,0,0,0);
             playerTwoScore.setText(String.valueOf(playerTwoRound.getScore()));
-            playerTwoScore.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp,0,0,0);
+            playerTwoScore.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
 
             if (playerOneRound.getPlayerID() == playerOneRound.getWinner()) {
                 findViewById(R.id.roundThreePlayerOneSealOfExcellence).setVisibility(View.VISIBLE);
@@ -291,7 +292,7 @@ public class GameDetailsActivity extends AppCompatActivity {
 
         else if (item.getItemId() == R.id.shareButton) {
             enableDisableIconsOfTextView(false);
-            Uri shareUri = GameUtils.getUriFromViewForScreenshot(getWindow().getDecorView().getRootView().findViewById(R.id.screenViewLayout), this);
+            Uri shareUri = GameUtils.getUriFromViewForScreenshot(findViewById(R.id.screenScrollView), this);
             enableDisableIconsOfTextView(true);
             GameUtils.initiateShareActivity(shareUri, this);
         }
@@ -382,7 +383,7 @@ public class GameDetailsActivity extends AppCompatActivity {
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.alertdialog_confirmation_title));
+        builder.setTitle("Image");
         builder.setView(dialogView);
 
         dialog = builder.create();
@@ -391,12 +392,12 @@ public class GameDetailsActivity extends AppCompatActivity {
 
     private void enableDisableIconsOfTextView(boolean enable) {
         if (enable) {
-            ((TextView) findViewById(R.id.roundOnePlayerOneScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp, 0, 0, 0);
-            ((TextView) findViewById(R.id.roundOnePlayerTwoScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp, 0, 0, 0);
-            ((TextView) findViewById(R.id.roundTwoPlayerOneScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp, 0, 0, 0);
-            ((TextView) findViewById(R.id.roundTwoPlayerTwoScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp, 0, 0, 0);
-            ((TextView) findViewById(R.id.roundThreePlayerOneScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp, 0, 0, 0);
-            ((TextView) findViewById(R.id.roundThreePlayerTwoScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp, 0, 0, 0);
+            ((TextView) findViewById(R.id.roundOnePlayerOneScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_open_in_new_black_24dp, 0, 0, 0);
+            ((TextView) findViewById(R.id.roundOnePlayerTwoScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            ((TextView) findViewById(R.id.roundTwoPlayerOneScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_open_in_new_black_24dp, 0, 0, 0);
+            ((TextView) findViewById(R.id.roundTwoPlayerTwoScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            ((TextView) findViewById(R.id.roundThreePlayerOneScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_open_in_new_black_24dp, 0, 0, 0);
+            ((TextView) findViewById(R.id.roundThreePlayerTwoScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
         else {
             ((TextView) findViewById(R.id.roundOnePlayerOneScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);

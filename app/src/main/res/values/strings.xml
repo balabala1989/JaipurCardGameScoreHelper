@@ -93,7 +93,7 @@
 
     <string name="default_score">0</string>
 
-    <string name="won_textview_message">Won</string>
+    <string name="won_textview_message">Winner</string>
     <string name="empty_game_textview_message">No Games found!!!!</string>
     <string name="game_image_desc_message">Click on the image to change it</string>
 
@@ -107,6 +107,6 @@
     <string name="about_game_adunit_id">ca-app-pub-4504001719511985/8434523714</string>
     <string name="icon_url">https://www.flaticon.com/</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment">Hello blank</string>
+
 </resources>

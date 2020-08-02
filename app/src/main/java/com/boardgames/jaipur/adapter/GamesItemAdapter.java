@@ -44,8 +44,8 @@ public class GamesItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             gameDateTextView = view.findViewById(R.id.gameDateTextView);
             playerOneImageView = view.findViewById(R.id.playerOneImageView);
             playerTwoImageView = view.findViewById(R.id.playerTwoImageView);
-            playerOneNameTextView = view.findViewById(R.id.playerOneTextView);
-            playerTwoNameTextView = view.findViewById(R.id.playerTwoTextView);
+            playerOneNameTextView = view.findViewById(R.id.playerOnenameTextView);
+            playerTwoNameTextView = view.findViewById(R.id.playerTwoNameTextView);
             playerOneWinnerFrameLayout = view.findViewById(R.id.playerOneWinnerFrameLayout);
             playerTwoWinnerFrameLayout = view.findViewById(R.id.playerTwoWinnerFrameLayout);
             itemLayout = view.findViewById(R.id.itemHolderLayout);
@@ -97,7 +97,6 @@ public class GamesItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             Glide.with(contextObj).load(gameDetails.getPlayersInAGame().getPlayerTwoProfile()).into(gameViewHolder.playerTwoImageView);
             gameViewHolder.playerOneNameTextView.setText(gameDetails.getPlayersInAGame().getPlayerOne().getPlayerName());
             gameViewHolder.playerTwoNameTextView.setText(gameDetails.getPlayersInAGame().getPlayerTwo().getPlayerName());
-
             if (gameDetails.getGame().getWinner() == gameDetails.getPlayersInAGame().getPlayerOne().getId()) {
                 gameViewHolder.playerOneWinnerFrameLayout.setVisibility(View.VISIBLE);
                 gameViewHolder.playerTwoWinnerFrameLayout.setVisibility(View.INVISIBLE);

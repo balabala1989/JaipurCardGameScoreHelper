@@ -21,7 +21,6 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Menu;
@@ -31,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.HashMap;
+import java.util.StringTokenizer;
 
 public class RoundsCalculationSummaryActivity extends AppCompatActivity {
 
@@ -99,9 +99,6 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
         TextView playerOneTextView = findViewById(R.id.playerOneTextView);
         TextView playerTwoTextView = findViewById(R.id.playerTwoTextView);
 
-        playerOneTextView.setText(gameDetails.getPlayersInAGame().getPlayerOne().getPlayerName());
-        playerTwoTextView.setText(gameDetails.getPlayersInAGame().getPlayerTwo().getPlayerName());
-
         int width = PlayerUtils.getWidthforImageViewByOneThird(this);
         Glide.with(this)
                 .load(gameDetails.getPlayersInAGame().getPlayerOneProfile())
@@ -111,6 +108,9 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
                 .load(gameDetails.getPlayersInAGame().getPlayerTwoProfile())
                 .override(width, width)
                 .into(playerTwoImageView);
+
+        playerOneTextView.setText(gameDetails.getPlayersInAGame().getPlayerOne().getPlayerName());
+        playerTwoTextView.setText(gameDetails.getPlayersInAGame().getPlayerTwo().getPlayerName());
 
         initializeAllTextViewClickListeners();
 
@@ -264,26 +264,28 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
 
         //Initialize the score of the goods
         if (operationMode.equalsIgnoreCase(ApplicationConstants.GAME_SUMMARY_TO_ROUND_SUMMARY_EDIT_MODE)) {
-            long selectedPlayerID = gameDetails.getPlayersInAGame().getPlayerOne().getId();
+            int playerOneSum = 0, playerTwoSum = 0;
             for(String goodsNameReceived : GameUtils.goodsList) {
                 String goodsDatReceived = getGoodsDetailFromGoods(goodsNameReceived);
-                updateGoodsDetailsForARoundAndScore(goodsNameReceived, goodsDatReceived, selectedPlayerID);
+                String sum = reComputeScoreFromGoodsForEdit(goodsNameReceived, goodsDatReceived);
+                String[] splitSum = sum.split(ApplicationConstants.SEPARATOR_OF_VIEWS);
+                playerOneSum += Integer.parseInt(splitSum[0]);
+                playerTwoSum += Integer.parseInt(splitSum[1]);
             }
 
-            if (gameDetails.getRoundWinners().get(editModeRound).getId() == selectedPlayerID)
+            if (gameDetails.getRoundWinners().get(editModeRound).getId() == gameDetails.getPlayersInAGame().getPlayerOne().getId()) {
                 findViewById(R.id.winnerPlayerOneSealOfExcellence).setVisibility(View.VISIBLE);
-            sumPlayerOneTextView.setText(String.valueOf(gameDetails.getPlayerOneRounds().get(editModeRound).getScore()));
-
-            selectedPlayerID = gameDetails.getPlayersInAGame().getPlayerTwo().getId();
-            for(String goodsNameReceived : GameUtils.goodsList) {
-                String goodsDatReceived = getGoodsDetailFromGoods(goodsNameReceived);
-                updateGoodsDetailsForARoundAndScore(goodsNameReceived, goodsDatReceived, selectedPlayerID);
+                findViewById(R.id.winnerPlayerTwoSealOfExcellence).setVisibility(View.INVISIBLE);
             }
+            sumPlayerOneTextView.setText(String.valueOf(playerOneSum));
+            gameDetails.getPlayerOneRounds().get(editModeRound).setScore(playerOneSum);
 
-            if (gameDetails.getRoundWinners().get(editModeRound).getId() == selectedPlayerID)
+            if (gameDetails.getRoundWinners().get(editModeRound).getId() == gameDetails.getPlayersInAGame().getPlayerTwo().getId()) {
+                findViewById(R.id.winnerPlayerOneSealOfExcellence).setVisibility(View.INVISIBLE);
                 findViewById(R.id.winnerPlayerTwoSealOfExcellence).setVisibility(View.VISIBLE);
-            sumPlayerTwoTextView.setText(String.valueOf(gameDetails.getPlayerTwoRounds().get(editModeRound).getScore()));
-
+            }
+            sumPlayerTwoTextView.setText(String.valueOf(playerTwoSum));
+            gameDetails.getPlayerTwoRounds().get(editModeRound).setScore(playerTwoSum);
 
         }
 
@@ -675,5 +677,95 @@ public class RoundsCalculationSummaryActivity extends AppCompatActivity {
         replyIntent.putExtra(ApplicationConstants.ROUND_CALC_SUMM_TO_GAME_SUMM_WIN_MESSAGE, winMessage.toString());
         setResult(RESULT_OK, replyIntent);
         finish();
+    }
+
+    private void setScoreToPlayers (TextView playerOneTextView, int playerOneScore, TextView playerTwoTextView, int playerTwoScore) {
+        playerOneTextView.setText(String.valueOf(playerOneScore));
+        playerTwoTextView.setText(String.valueOf(playerTwoScore));
+    }
+
+    private String reComputeScoreFromGoodsForEdit(String goodsNameReceived, String goodsDataReceived) {
+        String playerScoreSum;
+        int playerOneScore = 0, playerTwoScore = 0;
+        Round playerOneRound = gameDetails.getPlayerOneRounds().get(editModeRound);
+        Round playerTwoRound = gameDetails.getPlayerTwoRounds().get(editModeRound);
+
+        if (goodsDataReceived != null && !goodsDataReceived.isEmpty()) {
+            StringTokenizer stringTokenizer = new StringTokenizer(goodsDataReceived, ApplicationConstants.SEPARATOR_OF_DATA);
+            while (stringTokenizer.hasMoreTokens()) {
+                String goodToPlayer = stringTokenizer.nextToken();
+                String[] splitData = goodToPlayer.split(ApplicationConstants.SEPARATOR_OF_VIEWS);
+                if (Long.parseLong(splitData[1]) == gameDetails.getPlayersInAGame().getPlayerOne().getId())
+                    playerOneScore += GameUtils.goodsToItemsToScore.get(goodsNameReceived).get(splitData[0]);
+                else if (Long.parseLong(splitData[1]) == gameDetails.getPlayersInAGame().getPlayerTwo().getId())
+                    playerTwoScore += GameUtils.goodsToItemsToScore.get(goodsNameReceived).get(splitData[0]);
+            }
+        }
+
+        switch(goodsNameReceived) {
+            case ApplicationConstants.ROUNDS_CALC_DIAMOND_GOODS:
+                setScoreToPlayers(diamondPlayerOneTextView, playerOneScore, diamondPlayerTwoTextView, playerTwoScore);
+                playerOneRound.setDiamondScore(playerOneScore);
+                playerTwoRound.setDiamondScore(playerTwoScore);
+                break;
+            case ApplicationConstants.ROUNDS_CALC_GOLD_GOODS:
+                setScoreToPlayers(goldPlayerOneTextView, playerOneScore, goldPlayerTwoTextView, playerTwoScore);
+                playerOneRound.setGoldScore(playerOneScore);
+                playerTwoRound.setGoldScore(playerTwoScore);
+                break;
+            case ApplicationConstants.ROUNDS_CALC_SILVER_GOODS:
+                setScoreToPlayers(silverPlayerOneTextView, playerOneScore, silverPlayerTwoTextView, playerTwoScore);
+                playerOneRound.setSilverScore(playerOneScore);
+                playerTwoRound.setSilverScore(playerTwoScore);
+                break;
+            case ApplicationConstants.ROUNDS_CALC_CLOTH_GOODS:
+                setScoreToPlayers(clothPlayerOneTextView, playerOneScore, clothPlayerTwoTextView, playerTwoScore);
+                playerOneRound.setClothScore(playerOneScore);
+                playerTwoRound.setClothScore(playerTwoScore);
+                break;
+            case ApplicationConstants.ROUNDS_CALC_SPICE_GOODS:
+                setScoreToPlayers(spicePlayerOneTextView, playerOneScore, spicePlayerTwoTextView, playerTwoScore);
+                playerOneRound.setSpiceScore(playerOneScore);
+                playerTwoRound.setSpiceScore(playerTwoScore);
+                break;
+            case ApplicationConstants.ROUNDS_CALC_LEATHER_GOODS:
+                setScoreToPlayers(leatherPlayerOneTextView, playerOneScore, leatherPlayerTwoTextView, playerTwoScore);
+                playerOneRound.setLeatherScore(playerOneScore);
+                playerTwoRound.setLeatherScore(playerTwoScore);
+                break;
+            case ApplicationConstants.ROUNDS_CALC_3_CARD_TOKEN:
+                setScoreToPlayers(threeTokenPlayerOneTextView, playerOneScore, threeTokenPlayerTwoTextView, playerTwoScore);
+                playerOneRound.setThreeCardTokenScore(playerOneScore);
+                playerTwoRound.setThreeCardTokenScore(playerTwoScore);
+                break;
+            case ApplicationConstants.ROUNDS_CALC_4_CARD_TOKEN:
+                setScoreToPlayers(fourTokenPlayerOneTextView, playerOneScore, fourTokenPlayerTwoTextView, playerTwoScore);
+                playerOneRound.setFourCardTokenScore(playerOneScore);
+                playerTwoRound.setFourCardTokenScore(playerTwoScore);
+                break;
+            case ApplicationConstants.ROUNDS_CALC_5_CARD_TOKEN:
+                setScoreToPlayers(fiveTokenPlayerOneTextView, playerOneScore, fiveTokenPlayerTwoTextView, playerTwoScore);
+                playerOneRound.setFiveCardTokenScore(playerOneScore);
+                playerTwoRound.setFiveCardTokenScore(playerTwoScore);
+                break;
+            case ApplicationConstants.ROUNDS_CALC_CAMEL_TOKEN:
+                setScoreToPlayers(camelTokenPlayerOneTextView, playerOneScore, camelTokenPlayerTwoTextView, playerTwoScore);
+                if (playerOneScore > playerTwoScore) {
+                    playerOneRound.setCamelReceived('Y');
+                    playerTwoRound.setCamelReceived('N');
+                }
+                else if (playerTwoScore > playerOneScore) {
+                    playerOneRound.setCamelReceived('N');
+                    playerTwoRound.setCamelReceived('Y');
+                }
+                else {
+                    playerOneRound.setCamelReceived('N');
+                    playerTwoRound.setCamelReceived('N');
+                }
+                break;
+        }
+
+        playerScoreSum = String.valueOf(playerOneScore) + ApplicationConstants.SEPARATOR_OF_VIEWS + String.valueOf(playerTwoScore);
+        return playerScoreSum;
     }
 }
