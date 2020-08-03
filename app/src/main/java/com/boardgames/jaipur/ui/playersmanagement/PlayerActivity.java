@@ -214,11 +214,11 @@ public class PlayerActivity extends AppCompatActivity {
         Glide.with(this).load(R.drawable.default_player_avatar).into(playerAvatarImageView);
     }
 
-    @Override
+   /* @Override
     public void onResume() {
         super.onResume();
         isPermissionGranted = CheckForPermissionsState.requestStorageCameraPermissions(PlayerActivity.this);
-    }
+    }*/
 
     private void launchCameraIntent() {
         Intent intent = new Intent(PlayerActivity.this, ImagePickAndCrop.class);

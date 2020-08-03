@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -442,15 +443,11 @@ public class GameUtils {
     }
 
     public static Uri getUriFromViewForScreenshot(ScrollView screenView, Context context) {
-        if (!CheckForPermissionsState.requestStorageCameraPermissions(context)) {
-            CheckForPermissionsState.deniedPermission(context);
-            return null;
-        }
-
-
         Bitmap screenBitMap = Bitmap.createBitmap(screenView.getChildAt(0).getWidth(), screenView.getChildAt(0).getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(screenBitMap);
-        canvas.drawColor(Color.WHITE);
+        /*Drawable backGround = context.getResources().getDrawable(R.drawable.background_activity);
+        backGround.draw(canvas);*/
+        canvas.drawColor(Color.parseColor("#c7a87e"));
         screenView.draw(canvas);
         Uri shareUri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", GameUtils.getAbsolutePathForImage(context, screenBitMap));
         return shareUri;

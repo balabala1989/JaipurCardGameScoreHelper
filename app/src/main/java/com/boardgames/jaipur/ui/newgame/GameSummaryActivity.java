@@ -203,7 +203,10 @@ public class GameSummaryActivity extends AppCompatActivity {
         }
 
         else if (item.getItemId() == R.id.shareButton) {
-            shareScreenShot();
+            if (CheckForPermissionsState.requestStorageCameraPermissions(this))
+                shareScreenShot();
+            else
+                CheckForPermissionsState.deniedPermission(this);
         }
 
         else if (item.getItemId() == R.id.attachPhotoButton) {
@@ -384,34 +387,6 @@ public class GameSummaryActivity extends AppCompatActivity {
     }
 
     private void displayWinnerAlert(long winnerPlayer, String winMessage) {
-        /*AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.alertdialog_winner_title));
-
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.layout_winner_alert, null);
-        builder.setView(dialogView);
-
-        Button shareButton = (Button) dialogView.findViewById(R.id.shareGameButton);
-        shareButton.setOnClickListener(view -> {
-            dialog.dismiss();
-            shareScreenShot();
-        });
-
-        Button okButton = (Button) dialogView.findViewById(R.id.okGameButton);
-        okButton.setOnClickListener(view -> {
-            dialog.dismiss();
-        });
-
-        ImageView playerImageView = (ImageView) dialogView.findViewById(R.id.winnerPlayerImageView);
-        if (winnerPlayer == gameDetails.getPlayersInAGame().getPlayerOne().getId())
-            Glide.with(this).load(gameDetails.getPlayersInAGame().getPlayerOneProfile()).into(playerImageView);
-        else
-            Glide.with(this).load(gameDetails.getPlayersInAGame().getPlayerTwoProfile()).into(playerImageView);
-
-        TextView winnerTextView = (TextView) dialogView.findViewById(R.id.winnerMessageTextView);
-        winnerTextView.setText(winMessage);
-        dialog = builder.create();
-        dialog.show();*/
-
         LottieAnimationView animationView = findViewById(R.id.winnerAnimation);
         animationView.playAnimation();
 

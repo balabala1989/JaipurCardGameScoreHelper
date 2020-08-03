@@ -86,17 +86,12 @@ public class PlayerListAdapater extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof PlayerViewHolder) {
             if (playersList != null) {
-              /* if (!isFloatingButtonVisible) {
-                    FloatingActionButton addFloatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.addPlayerButton);
-                    addFloatingActionButton.setVisibility(View.VISIBLE);
-                    isFloatingButtonVisible = true;
-                }*/
                 PlayerViewHolder viewHolder = (PlayerViewHolder) holder;
                 Player player = playersList.get(position);
                 viewHolder.playerItemTextView.setText(player.getPlayerName());
                 if (player.getId() == PlayerUtils.DEFAULT_PLAYER_ID) {
                     Glide.with(contextObj).load(R.drawable.add_player_icon).into(viewHolder.playerItemImageView);
-                    viewHolder.playerItemTextView.setTextColor(contextObj.getResources().getColor(R.color.appBarColor));
+                    viewHolder.playerItemTextView.setTextColor(Color.parseColor("#F44336"));
                     viewHolder.playerItemImageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

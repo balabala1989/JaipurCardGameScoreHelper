@@ -190,6 +190,7 @@ public class GameDetailsActivity extends AppCompatActivity {
                 findViewById(R.id.roundTwoPlayerTwoSealOfExcellence).setVisibility(View.VISIBLE);
             }
             enableClickForTextView(findViewById(R.id.roundTwoView), 2);
+            findViewById(R.id.roundThreeView).setVisibility(View.GONE);
         }
 
         //Round three
@@ -291,10 +292,15 @@ public class GameDetailsActivity extends AppCompatActivity {
         }
 
         else if (item.getItemId() == R.id.shareButton) {
-            enableDisableIconsOfTextView(false);
-            Uri shareUri = GameUtils.getUriFromViewForScreenshot(findViewById(R.id.screenScrollView), this);
-            enableDisableIconsOfTextView(true);
-            GameUtils.initiateShareActivity(shareUri, this);
+            if (CheckForPermissionsState.requestStorageCameraPermissions(this)) {
+                enableDisableIconsOfTextView(false);
+                Uri shareUri = GameUtils.getUriFromViewForScreenshot(findViewById(R.id.screenScrollView), this);
+                enableDisableIconsOfTextView(true);
+                GameUtils.initiateShareActivity(shareUri, this);
+            }
+            else {
+                CheckForPermissionsState.deniedPermission(this);
+            }
         }
 
         else if (item.getItemId() == R.id.attachPhotoButton) {
