@@ -47,14 +47,14 @@ public abstract class PlayerRoomDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (PlayerRoomDatabase.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                    /*INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             PlayerRoomDatabase.class, "player_database").addCallback(playerRoomDatabaseCallback)
                             .fallbackToDestructiveMigration()
-                            .build();
-                    /*INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                            .build();*/
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             PlayerRoomDatabase.class, "player_database")
                             .fallbackToDestructiveMigration()
-                            .build();*/
+                            .build();
                 }
             }
 

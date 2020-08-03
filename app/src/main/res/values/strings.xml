@@ -31,6 +31,7 @@
     <string name="alertdialog_confirmation_message">Deleting this player, will delete all game history associated with the player.\nAre you sure to delete this player?</string>
     <string name="alertdialog_confirmation_positive_button">Yes</string>
     <string name="alertdialog_confirmation_negative_button">No</string>
+    <string name="alertdialog_winner_title">Congrats!!!!</string>
 
     <string name="home_second">Home Second</string>
     <string name="title_activity_add_player">New Player</string>
@@ -90,6 +91,8 @@
     <string name="reset_button_text">Reset</string>
     <string name="rematch_button_text">Rematch</string>
     <string name="save_button_text">Save</string>
+    <string name="share_button_text">Share</string>
+    <string name="ok_button_text">Ok</string>
 
     <string name="default_score">0</string>
 

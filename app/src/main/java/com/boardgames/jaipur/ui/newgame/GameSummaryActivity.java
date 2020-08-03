@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.boardgames.jaipur.MainActivity;
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.entities.Game;
@@ -37,6 +38,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -374,10 +376,45 @@ public class GameSummaryActivity extends AppCompatActivity {
             }
             winMessage += ApplicationConstants.GAME_OVER;
             textMessage += ApplicationConstants.GAME_OVER;
+            displayWinnerAlert(gameDetails.getGame().getWinner(), winMessage);
         }
         ((TextView)findViewById(R.id.winnerAnnounceMentTextView)).setText(textMessage);
         findViewById(R.id.winnerAnnounceMentTextView).setVisibility(View.VISIBLE);
         Toast.makeText(this, winMessage, Toast.LENGTH_LONG).show();
+    }
+
+    private void displayWinnerAlert(long winnerPlayer, String winMessage) {
+        /*AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.alertdialog_winner_title));
+
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.layout_winner_alert, null);
+        builder.setView(dialogView);
+
+        Button shareButton = (Button) dialogView.findViewById(R.id.shareGameButton);
+        shareButton.setOnClickListener(view -> {
+            dialog.dismiss();
+            shareScreenShot();
+        });
+
+        Button okButton = (Button) dialogView.findViewById(R.id.okGameButton);
+        okButton.setOnClickListener(view -> {
+            dialog.dismiss();
+        });
+
+        ImageView playerImageView = (ImageView) dialogView.findViewById(R.id.winnerPlayerImageView);
+        if (winnerPlayer == gameDetails.getPlayersInAGame().getPlayerOne().getId())
+            Glide.with(this).load(gameDetails.getPlayersInAGame().getPlayerOneProfile()).into(playerImageView);
+        else
+            Glide.with(this).load(gameDetails.getPlayersInAGame().getPlayerTwoProfile()).into(playerImageView);
+
+        TextView winnerTextView = (TextView) dialogView.findViewById(R.id.winnerMessageTextView);
+        winnerTextView.setText(winMessage);
+        dialog = builder.create();
+        dialog.show();*/
+
+        LottieAnimationView animationView = findViewById(R.id.winnerAnimation);
+        animationView.playAnimation();
+
     }
 
     private void displayRoundOneResults() {

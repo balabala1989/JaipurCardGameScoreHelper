@@ -89,18 +89,6 @@ public class NewGameFragment extends Fragment {
             }
         });
 
-        /*FloatingActionButton addPlayerButton = root.findViewById(R.id.addPlayerButton);
-        addPlayerButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), PlayerActivity.class);
-                intent.putExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_TYPE,
-                        ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_FOR_NEW_PLAYER);
-                intent.putExtra(ApplicationConstants.PLAYERACTIVITY_TITLE, getString(R.string.playeractivity_title_for_add_player));
-                startActivityForResult(intent,ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_CODE);
-            }
-        });*/
         RecyclerView playerRecyclerView = root.findViewById(R.id.playerListNewGameRecyclerView);
         final PlayerListAdapater adapter = new PlayerListAdapater(this, root);
         playerRecyclerView.setAdapter(adapter);

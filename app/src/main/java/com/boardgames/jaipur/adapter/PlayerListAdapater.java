@@ -52,7 +52,7 @@ public class PlayerListAdapater extends RecyclerView.Adapter<RecyclerView.ViewHo
     private final LayoutInflater inflater;
     private List<Player> playersList;
     private Context contextObj;
-    private boolean isPermissionGranted;
+    //private boolean isPermissionGranted;
     private Fragment parentFragment;
     public static final int EMPTY_VIEW = 10;
     private boolean isFloatingButtonVisible = true;
@@ -62,7 +62,7 @@ public class PlayerListAdapater extends RecyclerView.Adapter<RecyclerView.ViewHo
         parentFragment = fragment;
         contextObj = fragment.getContext();
         inflater = LayoutInflater.from(contextObj);
-        isPermissionGranted = CheckForPermissionsState.requestStorageCameraPermissions(contextObj);
+        //isPermissionGranted = CheckForPermissionsState.requestStorageCameraPermissions(contextObj);
         this.rootView = rootView;
 
     }
@@ -128,9 +128,13 @@ public class PlayerListAdapater extends RecyclerView.Adapter<RecyclerView.ViewHo
                             }
                         }
                     });
-                    if (player.getPlayerAvatar() != null && player.getPlayerAvatar().equals("") || !isPermissionGranted) {
+                   /* if (player.getPlayerAvatar() != null && player.getPlayerAvatar().equals("") || !isPermissionGranted) {
                         Glide.with(contextObj).load(R.drawable.default_player_avatar).into(viewHolder.playerItemImageView);
-                    } else {
+                    }*/
+                    if (player.getPlayerAvatar() != null && player.getPlayerAvatar().equals("")) {
+                        Glide.with(contextObj).load(R.drawable.default_player_avatar).into(viewHolder.playerItemImageView);
+                    }
+                    else {
                         Bitmap imageMap = BitmapFactory.decodeFile(player.getPlayerAvatar());
                         Glide.with(contextObj).load(imageMap).into(viewHolder.playerItemImageView);
                     }

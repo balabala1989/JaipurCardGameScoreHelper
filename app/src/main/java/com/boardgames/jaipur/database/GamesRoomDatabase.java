@@ -69,15 +69,15 @@ public abstract class GamesRoomDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (GamesRoomDatabase.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                    /*INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             GamesRoomDatabase.class, "games_database")
                             .addCallback(gamesDatabaseCallback)
                             .fallbackToDestructiveMigration()
-                            .build();
-                   /* INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                            .build();*/
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             GamesRoomDatabase.class, "games_database")
                             .fallbackToDestructiveMigration()
-                            .build();*/
+                            .build();
                 }
             }
         }

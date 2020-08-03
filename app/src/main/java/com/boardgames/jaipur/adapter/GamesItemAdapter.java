@@ -61,7 +61,6 @@ public class GamesItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private final LayoutInflater inflater;
     private List<GameDetails> gamesList;
     private Context contextObj;
-    private boolean isPermissionGranted;
     private Fragment parentFragment;
     public static final int EMPTY_VIEW = 10;
 
@@ -69,7 +68,6 @@ public class GamesItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         parentFragment = fragment;
         contextObj = fragment.getContext();
         inflater = LayoutInflater.from(contextObj);
-        isPermissionGranted = CheckForPermissionsState.requestStorageCameraPermissions(contextObj);
     }
 
     @NonNull

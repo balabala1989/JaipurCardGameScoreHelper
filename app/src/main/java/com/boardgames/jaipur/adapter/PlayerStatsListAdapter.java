@@ -49,7 +49,6 @@ public class PlayerStatsListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private final LayoutInflater inflater;
     private List<PlayerStatistics> playerStatisticsList;
     private Context contextObj;
-    private boolean isPermissionGranted;
     private Fragment parentFragment;
     public static final int EMPTY_VIEW = 10;
 
@@ -57,7 +56,6 @@ public class PlayerStatsListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         parentFragment = fragment;
         contextObj = fragment.getContext();
         inflater = LayoutInflater.from(contextObj);
-        isPermissionGranted = CheckForPermissionsState.requestStorageCameraPermissions(contextObj);
     }
 
     @NonNull
