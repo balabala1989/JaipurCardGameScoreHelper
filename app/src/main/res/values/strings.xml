@@ -13,6 +13,8 @@
     <string name="menu_game_history">Game History</string>
     <string name="menu_feedback_support">Support</string>
     <string name="menu_rate_me">Rate Me</string>
+    <string name="menu_rules">Game Rule</string>
+    <string name="menu_about">About</string>
 
     <string name="playeractivity_title_for_add_player">Add Player</string>
     <string name="playeractivity_title_for_edit_player">Edit Player</string>
@@ -26,9 +28,10 @@
     <string name="error_player_not_saved">Error while saving Player!!! Please try again. Apologies for the inconvenience caused.</string>
 
     <string name="alertdialog_confirmation_title">Confirm</string>
-    <string name="alertdialog_confirmation_message">Are you sure to delete this player?</string>
+    <string name="alertdialog_confirmation_message">Deleting this player, will delete all game history associated with the player.\nAre you sure to delete this player?</string>
     <string name="alertdialog_confirmation_positive_button">Yes</string>
     <string name="alertdialog_confirmation_negative_button">No</string>
+    <string name="alertdialog_winner_title">Congrats!!!!</string>
 
     <string name="home_second">Home Second</string>
     <string name="title_activity_add_player">New Player</string>
@@ -41,6 +44,7 @@
     <string name="image_picker_issue">Error!! Unable to set profile picture...</string>
     <string name="player_update_issue">Error!! Unable to update the player profile now...</string>
     <string name="edittext_playername_error">Player Name cannot be blank</string>
+    <string name="edittext_playername_exists_error">Player Name already exists!!!</string>
     <string name="playeractivity_external_path">profileImages</string>
     <string name="gameactivity_external_path">gameImages</string>
     <string name="imagepickandcropactivity_cache_path">jaipurImages</string>
@@ -80,20 +84,32 @@
     <string name="gamesummary_roundtwo_title">Round 2</string>
     <string name="gamesummary_roundthree_title">Round 3</string>
     <string name="game_summary_activity_title">Game Summary</string>
-    <string name="alertdialog_backbutton_press_game_summary_msg">Current game data will be lost!!! Do you want to continue?</string>
-    <string name="alertdialog_backbutton_press_round_calc_msg">Current round data will be lost!!! Do you want to continue?</string>
-    <string name="alertdialog_backbutton_press_item_calc_msg">Current selection will be lost!!! Do you want to continue?</string>
+    <string name="alertdialog_backbutton_press_game_summary_msg">Current game data will be lost!!! \nDo you want to continue?</string>
+    <string name="alertdialog_backbutton_press_round_calc_msg">Current round data will be lost!!! \nDo you want to continue?</string>
+    <string name="alertdialog_backbutton_press_item_calc_msg">Current selection will be lost!!! \nDo you want to continue?</string>
+    <string name="alertdialog_backbutton_press_round_calc_round_one_msg">Current round and game data will be lost!!! \nDo you want to continue?</string>
     <string name="reset_button_text">Reset</string>
     <string name="rematch_button_text">Rematch</string>
     <string name="save_button_text">Save</string>
-    <string name="empty_dragged_item_data">No items drag and dropped yet!!!</string>
-    <string name="alert_title_for_dropped_items">Drag and Dropped Coins</string>
+    <string name="share_button_text">Share</string>
+    <string name="ok_button_text">Ok</string>
 
     <string name="default_score">0</string>
 
-    <string name="won_textview_message">Won</string>
+    <string name="won_textview_message">Winner</string>
     <string name="empty_game_textview_message">No Games found!!!!</string>
     <string name="game_image_desc_message">Click on the image to change it</string>
 
+
+    <string name="manage_players_main_activity_adUnit_Id">ca-app-pub-4504001719511985/9098149955</string>
+    <string name="player_add_update_activity_adUnit_Id">ca-app-pub-4504001719511985/8391750553</string>
+    <string name="starting_player_activity_adUnit_Id">ca-app-pub-4504001719511985/8008607175</string>
+    <string name="round_summary_activity_adUnit_Id">ca-app-pub-4504001719511985/6503953818</string>
+    <string name="game_history_activity_adUnit_Id">ca-app-pub-4504001719511985/3877790470</string>
+    <string name="save_game_inter_adUnit_Id">ca-app-pub-4504001719511985/6093832229</string>
+    <string name="about_game_adunit_id">ca-app-pub-4504001719511985/8434523714</string>
+    <string name="icon_url">https://www.flaticon.com/</string>
+
+    <string name="hello_blank_fragment">Hello blank</string>
 
 </resources>

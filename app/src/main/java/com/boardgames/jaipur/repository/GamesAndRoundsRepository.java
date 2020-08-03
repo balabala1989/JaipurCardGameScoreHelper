@@ -13,6 +13,7 @@ import com.boardgames.jaipur.entities.Round;
 
 import java.util.List;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class GamesAndRoundsRepository {
 
@@ -22,6 +23,7 @@ public class GamesAndRoundsRepository {
     private long gameId = -1;
     private long roundId = -1;
     private List<Round> rounds;
+    private long totalGamesCompleted = -1;
 
     public GamesAndRoundsRepository(Application application) {
         GamesRoomDatabase gamesRoomDatabase = GamesRoomDatabase.getDabase(application);
@@ -63,7 +65,9 @@ public class GamesAndRoundsRepository {
 
     public LiveData<List<Game>> getPendingGame() {return gameDao.getPendingGame();}
 
-    //Implementing RounDao functions
+    public LiveData<List<Game>> getGamesForAPlayer(long playerId) {return  gameDao.getGamesForAPlayer(playerId);}
+
+    //Implementing RoundDao functions
 
     public LiveData<List<Round>> getAllRounds() {return roundDao.getAllRounds();}
 
@@ -103,6 +107,14 @@ public class GamesAndRoundsRepository {
             e.printStackTrace();
         }
         return rounds;
+    }
+
+    public long deleteAllRoundsForAGame(long gameId) {
+        AtomicLong count = new AtomicLong();
+        GamesRoomDatabase.databaseWriterExecutor.execute(() -> {
+            count.set(roundDao.deleteAllRoundsForAGame(gameId));
+        });
+        return count.get();
     }
 
 

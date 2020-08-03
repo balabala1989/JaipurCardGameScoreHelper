@@ -15,7 +15,7 @@ import com.boardgames.jaipur.utils.ApplicationConstants;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Player.class}, version = 1, exportSchema = false)
+@Database(entities = {Player.class}, version = 2, exportSchema = false)
 public abstract class PlayerRoomDatabase extends RoomDatabase {
 
     public abstract PlayerDao playerDao();
@@ -30,15 +30,14 @@ public abstract class PlayerRoomDatabase extends RoomDatabase {
                 PlayerDao playerDao = INSTANCE.playerDao();
                 playerDao.deleteAllPlayers();
 
-                for (int i = 0; i < 6; i++) {
+               /*for (int i = 0; i < 5; i++) {
                     Player player = new Player();
                     player.setPlayerName("Test player " + (i+1));
                     player.setPlayerAvatar("");
                     player.setTimeCreated(System.currentTimeMillis());
                     player.setTimeUpdated(System.currentTimeMillis());
                     playerDao.insertPlayer(player);
-                    player = null;
-                }
+                }*/
             });
         }
     };
@@ -48,11 +47,14 @@ public abstract class PlayerRoomDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (PlayerRoomDatabase.class) {
                 if (INSTANCE == null) {
-                    //TODO Need to delete the call back before publishing the app
                     /*INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            PlayerRoomDatabase.class, "player_database").addCallback(playerRoomDatabaseCallback).build();*/
+                            PlayerRoomDatabase.class, "player_database").addCallback(playerRoomDatabaseCallback)
+                            .fallbackToDestructiveMigration()
+                            .build();*/
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            PlayerRoomDatabase.class, "player_database").build();
+                            PlayerRoomDatabase.class, "player_database")
+                            .fallbackToDestructiveMigration()
+                            .build();
                 }
             }
 

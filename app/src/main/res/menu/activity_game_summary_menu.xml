@@ -7,6 +7,10 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_share_black_24dp"/>
     <item
+        android:id="@+id/displayPhotoButton"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_photo_camera_white_24dp"/>
+    <item
         android:id="@+id/attachPhotoButton"
         app:showAsAction="always"
         android:icon="@drawable/ic_add_a_photo_white_50dp"/>

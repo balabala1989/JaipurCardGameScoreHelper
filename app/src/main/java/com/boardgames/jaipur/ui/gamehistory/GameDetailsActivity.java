@@ -54,7 +54,7 @@ public class GameDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_details);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.string.color_activity_actionbar))));
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.appBarColor)));
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(getString(R.string.game_summary_activity_title));
 
@@ -97,7 +97,14 @@ public class GameDetailsActivity extends AppCompatActivity {
 
         findViewById(R.id.winnerAnnounceMentTextView).setVisibility(View.VISIBLE);
         ((TextView) findViewById(R.id.winnerAnnounceMentTextView)).setText(winnerMessage.append(ApplicationConstants.WON_MESSAGE).toString());
-        //TODO check on playername coming on top of image
+        //Toast.makeText(this, winnerMessage.append(ApplicationConstants.WON_MESSAGE).toString(),Toast.LENGTH_LONG).show();
+
+        if (gameDetails.getGame().getGamePhotoLocation() == null || gameDetails.getGame().getGamePhotoLocation().isEmpty())
+            gamePhotoStatusEnum = GamePhotoStatusEnum.EMPTY;
+        else
+            gamePhotoStatusEnum = GamePhotoStatusEnum.DISPLAYONLY;
+
+        invalidateOptionsMenu();
     }
 
     private void makeItemsVisibleAndInvisible() {
@@ -145,9 +152,9 @@ public class GameDetailsActivity extends AppCompatActivity {
             playerTwoScore = findViewById(R.id.roundOnePlayerTwoScoreTextView);
 
             playerOneScore.setText(String.valueOf(playerOneRound.getScore()));
-            playerOneScore.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp,0,0,0);
+            playerOneScore.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_open_in_new_black_24dp,0,0,0);
             playerTwoScore.setText(String.valueOf(playerTwoRound.getScore()));
-            playerTwoScore.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp,0,0,0);
+            playerTwoScore.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
 
             if (playerOneRound.getPlayerID() == playerOneRound.getWinner()) {
                 findViewById(R.id.roundOnePlayerOneSealOfExcellence).setVisibility(View.VISIBLE);
@@ -170,9 +177,9 @@ public class GameDetailsActivity extends AppCompatActivity {
             playerTwoScore = findViewById(R.id.roundTwoPlayerTwoScoreTextView);
 
             playerOneScore.setText(String.valueOf(playerOneRound.getScore()));
-            playerOneScore.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp,0,0,0);
+            playerOneScore.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_open_in_new_black_24dp,0,0,0);
             playerTwoScore.setText(String.valueOf(playerTwoRound.getScore()));
-            playerTwoScore.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp,0,0,0);
+            playerTwoScore.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
 
             if (playerOneRound.getPlayerID() == playerOneRound.getWinner()) {
                 findViewById(R.id.roundTwoPlayerOneSealOfExcellence).setVisibility(View.VISIBLE);
@@ -183,6 +190,7 @@ public class GameDetailsActivity extends AppCompatActivity {
                 findViewById(R.id.roundTwoPlayerTwoSealOfExcellence).setVisibility(View.VISIBLE);
             }
             enableClickForTextView(findViewById(R.id.roundTwoView), 2);
+            findViewById(R.id.roundThreeView).setVisibility(View.GONE);
         }
 
         //Round three
@@ -194,9 +202,9 @@ public class GameDetailsActivity extends AppCompatActivity {
             playerTwoScore = findViewById(R.id.roundThreePlayerTwoScoreTextView);
 
             playerOneScore.setText(String.valueOf(playerOneRound.getScore()));
-            playerOneScore.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp,0,0,0);
+            playerOneScore.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_open_in_new_black_24dp,0,0,0);
             playerTwoScore.setText(String.valueOf(playerTwoRound.getScore()));
-            playerTwoScore.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp,0,0,0);
+            playerTwoScore.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
 
             if (playerOneRound.getPlayerID() == playerOneRound.getWinner()) {
                 findViewById(R.id.roundThreePlayerOneSealOfExcellence).setVisibility(View.VISIBLE);
@@ -238,11 +246,13 @@ public class GameDetailsActivity extends AppCompatActivity {
             } catch (IOException e) {
                 Toast.makeText(this, getString(R.string.camera_error), Toast.LENGTH_LONG).show();
             }
+            invalidateOptionsMenu();
         }
         else if (resultCode == RESULT_OK && requestCode == ApplicationConstants.GAME_SUMMARY_CAMERA_EDIT_REQUEST_IMAGE) {
             Uri imageUri = GameUtils.getImageFile(getApplicationContext(), photoName);
             gamePhotoStatusEnum = GamePhotoStatusEnum.EDIT;
             displayImage(imageUri);
+            invalidateOptionsMenu();
         }
     }
 
@@ -256,8 +266,20 @@ public class GameDetailsActivity extends AppCompatActivity {
                     menuItem.setVisible(false);
                 if (menuItem.getItemId() == R.id.shareButton)
                     menuItem.setVisible(true);
-                if (menuItem.getItemId() == R.id.attachPhotoButton)
-                    menuItem.setVisible(true);
+                if (menuItem.getItemId() == R.id.attachPhotoButton) {
+                    if (gamePhotoStatusEnum == GamePhotoStatusEnum.EMPTY) {
+                        menuItem.setVisible(true);
+                    }
+                    else {
+                        menuItem.setVisible(false);
+                    }
+                }
+                if (menuItem.getItemId() == R.id.displayPhotoButton) {
+                    if (gamePhotoStatusEnum != GamePhotoStatusEnum.EMPTY)
+                        menuItem.setVisible(true);
+                    else
+                        menuItem.setVisible(false);
+                }
             }
         return super.onCreateOptionsMenu(menu);
     }
@@ -270,23 +292,27 @@ public class GameDetailsActivity extends AppCompatActivity {
         }
 
         else if (item.getItemId() == R.id.shareButton) {
-            enableDisableIconsOfTextView(false);
-            Uri shareUri = GameUtils.getUriFromViewForScreenshot(getWindow().getDecorView().getRootView().findViewById(R.id.screenViewLayout), this);
-            enableDisableIconsOfTextView(true);
-            GameUtils.initiateShareActivity(shareUri, this);
+            if (CheckForPermissionsState.requestStorageCameraPermissions(this)) {
+                enableDisableIconsOfTextView(false);
+                Uri shareUri = GameUtils.getUriFromViewForScreenshot(findViewById(R.id.screenScrollView), this);
+                enableDisableIconsOfTextView(true);
+                GameUtils.initiateShareActivity(shareUri, this);
+            }
+            else {
+                CheckForPermissionsState.deniedPermission(this);
+            }
         }
 
         else if (item.getItemId() == R.id.attachPhotoButton) {
-            if (gameDetails.getGame().getGamePhotoLocation() == null || gameDetails.getGame().getGamePhotoLocation().isEmpty()) {
-                gamePhotoStatusEnum = GamePhotoStatusEnum.EMPTY;
-                takePhotoUsingCamera();
-            }
-            else {
+            gamePhotoStatusEnum = GamePhotoStatusEnum.EMPTY;
+            takePhotoUsingCamera();
+        }
+
+        else if (item.getItemId() == R.id.displayPhotoButton) {
                 Uri imageIUri = Uri.fromFile(new File(gameDetails.getGame().getGamePhotoLocation()));
                 gamePhotoStatusEnum = GamePhotoStatusEnum.DISPLAYONLY;
                 displayImage(imageIUri);
             }
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -320,6 +346,9 @@ public class GameDetailsActivity extends AppCompatActivity {
             closeButton.setVisibility(View.VISIBLE);
             saveButton.setVisibility(View.INVISIBLE);
             cancelButton.setVisibility(View.INVISIBLE);
+            //Remove the below code to make the image editable
+            dialogView.findViewById(R.id.gameImageDescTextView).setVisibility(View.INVISIBLE);
+            dialogView.findViewById(R.id.gameImageDescTextView).setClickable(false);
         }
         else if (gamePhotoStatusEnum == GamePhotoStatusEnum.EDIT) {
             closeButton.setVisibility(View.INVISIBLE);
@@ -351,15 +380,16 @@ public class GameDetailsActivity extends AppCompatActivity {
             gamePhotoStatusEnum = GamePhotoStatusEnum.DISPLAYONLY;
         });
 
-        dialogImageView.setOnClickListener(v -> {
+        //Remove the below code to make the image editable
+        /*dialogImageView.setOnClickListener(v -> {
             dialog.dismiss();
             gamePhotoStatusEnum = GamePhotoStatusEnum.EDIT;
             takePhotoUsingCamera();
-        });
+        });*/
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.alertdialog_confirmation_title));
+        builder.setTitle("Image");
         builder.setView(dialogView);
 
         dialog = builder.create();
@@ -368,12 +398,12 @@ public class GameDetailsActivity extends AppCompatActivity {
 
     private void enableDisableIconsOfTextView(boolean enable) {
         if (enable) {
-            ((TextView) findViewById(R.id.roundOnePlayerOneScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp, 0, 0, 0);
-            ((TextView) findViewById(R.id.roundOnePlayerTwoScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp, 0, 0, 0);
-            ((TextView) findViewById(R.id.roundTwoPlayerOneScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp, 0, 0, 0);
-            ((TextView) findViewById(R.id.roundTwoPlayerTwoScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp, 0, 0, 0);
-            ((TextView) findViewById(R.id.roundThreePlayerOneScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp, 0, 0, 0);
-            ((TextView) findViewById(R.id.roundThreePlayerTwoScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pageview_black_24dp, 0, 0, 0);
+            ((TextView) findViewById(R.id.roundOnePlayerOneScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_open_in_new_black_24dp, 0, 0, 0);
+            ((TextView) findViewById(R.id.roundOnePlayerTwoScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            ((TextView) findViewById(R.id.roundTwoPlayerOneScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_open_in_new_black_24dp, 0, 0, 0);
+            ((TextView) findViewById(R.id.roundTwoPlayerTwoScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            ((TextView) findViewById(R.id.roundThreePlayerOneScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_open_in_new_black_24dp, 0, 0, 0);
+            ((TextView) findViewById(R.id.roundThreePlayerTwoScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
         else {
             ((TextView) findViewById(R.id.roundOnePlayerOneScoreTextView)).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);

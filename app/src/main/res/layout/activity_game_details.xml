@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_activity"
     tools:context=".ui.gamehistory.GameDetailsActivity">
 
     <include layout="@layout/activity_game_summary"

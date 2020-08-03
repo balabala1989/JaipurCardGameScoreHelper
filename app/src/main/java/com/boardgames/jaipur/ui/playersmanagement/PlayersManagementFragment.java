@@ -5,8 +5,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -17,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,18 +27,21 @@ import com.boardgames.jaipur.entities.Player;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.GameUtils;
 import com.boardgames.jaipur.utils.PlayerUtils;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
 public class PlayersManagementFragment extends Fragment {
 
     private PlayersManagementViewModel playersManagementViewModel;
-
+    private AdView mAdView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -47,7 +49,7 @@ public class PlayersManagementFragment extends Fragment {
         playersManagementViewModel =
                 new ViewModelProvider(this).get(PlayersManagementViewModel.class);
         View root = inflater.inflate(R.layout.fragment_players_management, container, false);
-        FloatingActionButton addPlayerButton = root.findViewById(R.id.addPlayerButton);
+       /* FloatingActionButton addPlayerButton = root.findViewById(R.id.addPlayerButton);
         addPlayerButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -58,7 +60,7 @@ public class PlayersManagementFragment extends Fragment {
                 intent.putExtra(ApplicationConstants.PLAYERACTIVITY_TITLE, getString(R.string.playeractivity_title_for_add_player));
                 startActivityForResult(intent,ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_CODE);
             }
-        });
+        });*/
         RecyclerView playerRecyclerView = root.findViewById(R.id.playersRecyclerView);
         final PlayerListAdapater adapater = new PlayerListAdapater(this, root);
         playerRecyclerView.setAdapter(adapater);
@@ -66,9 +68,18 @@ public class PlayersManagementFragment extends Fragment {
         playersManagementViewModel.getAllPlayers().observe(getViewLifecycleOwner(), new Observer<List<Player>>() {
             @Override
             public void onChanged(List<Player> players) {
+                players.add(PlayerUtils.defaultPlayer);
                 adapater.setPlayersList(players);
             }
         });
+        MobileAds.initialize(getActivity(), new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        mAdView = root.findViewById(R.id.managePlayermainActivityAdView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
         return root;
     }
 
@@ -110,7 +121,9 @@ public class PlayersManagementFragment extends Fragment {
         }
 
         try {
-            playersManagementViewModel.delete(player);
+            playersManagementViewModel.deleteAPlayerWithGamesRounds(player).observe(getViewLifecycleOwner(), deletedRowsCount ->  {
+                Log.e("Rows deleted - " + String.valueOf(deletedRowsCount), "DELETE_PLAYER");
+            });
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -167,5 +180,13 @@ public class PlayersManagementFragment extends Fragment {
         updateIntent.putExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_PLAYER_DETAILS, (Parcelable) player);
         updateIntent.putExtra(ApplicationConstants.PLAYERACTIVITY_TITLE, getString(R.string.playeractivity_title_for_edit_player));
         startActivityForResult(updateIntent, ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_CODE);
+    }
+
+    public void  startActivityForPlayerHandling() {
+        Intent intent = new Intent(getActivity(), PlayerActivity.class);
+        intent.putExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_TYPE,
+                ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_FOR_NEW_PLAYER);
+        intent.putExtra(ApplicationConstants.PLAYERACTIVITY_TITLE, getString(R.string.playeractivity_title_for_add_player));
+        startActivityForResult(intent,ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_CODE);
     }
 }

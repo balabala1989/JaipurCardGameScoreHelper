@@ -6,12 +6,15 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -417,6 +420,7 @@ public class GameUtils {
         Glide.with(context).load(gameDetails.getPlayersInAGame().getPlayerOneProfile()).override(width, width).into(playerOneImageView);
         playerOneTextView.setText(gameDetails.getPlayersInAGame().getPlayerOne().getPlayerName());
 
+
         TextView playerTwoTextView = activity.findViewById(R.id.playerTwoTextView);
         ImageView playerTwoImageView = activity.findViewById(R.id.playerTwoImageView);
 
@@ -438,15 +442,12 @@ public class GameUtils {
 
     }
 
-    public static Uri getUriFromViewForScreenshot(View screenView, Context context) {
-        if (!CheckForPermissionsState.requestStorageCameraPermissions(context)) {
-            CheckForPermissionsState.deniedPermission(context);
-            return null;
-        }
-
-        Bitmap screenBitMap = Bitmap.createBitmap(screenView.getWidth(), screenView.getHeight(), Bitmap.Config.ARGB_8888);
+    public static Uri getUriFromViewForScreenshot(ScrollView screenView, Context context) {
+        Bitmap screenBitMap = Bitmap.createBitmap(screenView.getChildAt(0).getWidth(), screenView.getChildAt(0).getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(screenBitMap);
-        canvas.drawColor(Color.WHITE);
+        /*Drawable backGround = context.getResources().getDrawable(R.drawable.background_activity);
+        backGround.draw(canvas);*/
+        canvas.drawColor(Color.parseColor("#c7a87e"));
         screenView.draw(canvas);
         Uri shareUri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", GameUtils.getAbsolutePathForImage(context, screenBitMap));
         return shareUri;

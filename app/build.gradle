@@ -9,7 +9,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 29
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -29,6 +30,7 @@ android {
 
 dependencies {
     def room_version = "2.2.5"
+    def lottieVersion = "3.4.1"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -38,9 +40,13 @@ dependencies {
     implementation "androidx.room:room-guava:$room_version"
     implementation 'com.github.yalantis:ucrop:2.2.5'
     implementation 'com.karumi:dexter:6.1.2'
-    implementation 'com.github.javiersantos:MaterialStyledDialogs:3.0.1'
 
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
+    implementation 'com.google.android.gms:play-services-ads:19.2.0'
+    implementation 'com.android.support:multidex:1.0.3'
+
+    implementation "com.airbnb.android:lottie:$lottieVersion"
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

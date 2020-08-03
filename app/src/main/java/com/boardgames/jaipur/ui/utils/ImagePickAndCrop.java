@@ -123,26 +123,26 @@ public class ImagePickAndCrop extends AppCompatActivity {
 
     private void takeCameraImage() {
         dialog.dismiss();
-        if (CheckForPermissionsState.requestStorageCameraPermissions(ImagePickAndCrop.this)) {
-            fileName = System.currentTimeMillis() + ".jpg";
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,getImageFile(fileName));
-            startActivityForResult(takePictureIntent,ApplicationConstants.PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_REQUEST_FOR_CAMERA_CAPTURE);
-        }
+        //if (CheckForPermissionsState.requestStorageCameraPermissions(ImagePickAndCrop.this)) {
+        fileName = System.currentTimeMillis() + ".jpg";
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,getImageFile(fileName));
+        startActivityForResult(takePictureIntent,ApplicationConstants.PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_REQUEST_FOR_CAMERA_CAPTURE);
+       /* }
         else {
             CheckForPermissionsState.deniedPermission(ImagePickAndCrop.this);
-        }
+        }*/
     }
 
     private void chooseImageFromGallery() {
         dialog.dismiss();
-        if (CheckForPermissionsState.requestStorageCameraPermissions(ImagePickAndCrop.this)) {
-            Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(galleryIntent, ApplicationConstants.PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_REQUEST_FOR_GALLERY_CAPTURE);
-        }
+        //if (CheckForPermissionsState.requestStorageCameraPermissions(ImagePickAndCrop.this)) {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, ApplicationConstants.PLAYERACTIVITY_TO_IMAGEPICKANDCROPACTIVITY_REQUEST_FOR_GALLERY_CAPTURE);
+        /*}
         else {
             CheckForPermissionsState.deniedPermission(ImagePickAndCrop.this);
-        }
+        }*/
     }
 
     @Override
@@ -217,20 +217,13 @@ public class ImagePickAndCrop extends AppCompatActivity {
             primaryStorageVolume.mkdir();
         Uri destinationUri = Uri.fromFile(new File(primaryStorageVolume, System.currentTimeMillis() + ".jpg"));
         UCrop.Options options = new UCrop.Options();
-        options.setCompressionQuality(80);
-        options.setToolbarColor(ContextCompat.getColor(this, R.color.colorAccent));
-        options.setStatusBarColor(ContextCompat.getColor(this, R.color.colorAccent));
-        options.setActiveControlsWidgetColor(ContextCompat.getColor(this, R.color.colorAccent));
+        options.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        options.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        options.setActiveControlsWidgetColor(Color.RED);
+        options.setToolbarWidgetColor(Color.WHITE);
         options.withAspectRatio(1, 1);
-        options.withMaxResultSize(100, 100);
         UCrop.of(sourceUri, destinationUri)
                 .withOptions(options)
                 .start(this);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        permissionsGranted = CheckForPermissionsState.requestStorageCameraPermissions(ImagePickAndCrop.this);
     }
 }

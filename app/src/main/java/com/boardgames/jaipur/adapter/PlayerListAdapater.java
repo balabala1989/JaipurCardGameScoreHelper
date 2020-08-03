@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,7 @@ public class PlayerListAdapater extends RecyclerView.Adapter<RecyclerView.ViewHo
     private final LayoutInflater inflater;
     private List<Player> playersList;
     private Context contextObj;
-    private boolean isPermissionGranted;
+    //private boolean isPermissionGranted;
     private Fragment parentFragment;
     public static final int EMPTY_VIEW = 10;
     private boolean isFloatingButtonVisible = true;
@@ -61,7 +62,7 @@ public class PlayerListAdapater extends RecyclerView.Adapter<RecyclerView.ViewHo
         parentFragment = fragment;
         contextObj = fragment.getContext();
         inflater = LayoutInflater.from(contextObj);
-        isPermissionGranted = CheckForPermissionsState.requestStorageCameraPermissions(contextObj);
+        //isPermissionGranted = CheckForPermissionsState.requestStorageCameraPermissions(contextObj);
         this.rootView = rootView;
 
     }
@@ -85,37 +86,53 @@ public class PlayerListAdapater extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof PlayerViewHolder) {
             if (playersList != null) {
-               if (!isFloatingButtonVisible) {
-                    FloatingActionButton addFloatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.addPlayerButton);
-                    addFloatingActionButton.setVisibility(View.VISIBLE);
-                    isFloatingButtonVisible = true;
-                }
                 PlayerViewHolder viewHolder = (PlayerViewHolder) holder;
                 Player player = playersList.get(position);
-
-
                 viewHolder.playerItemTextView.setText(player.getPlayerName());
-                viewHolder.playerItemImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (parentFragment instanceof PlayersManagementFragment) {
-                            PlayersManagementFragment playersManagementFragment = (PlayersManagementFragment) parentFragment;
-                            playersManagementFragment.handleProfileImageClick(player);
-                        }
-                        else if (parentFragment instanceof NewGameFragment) {
-                            NewGameFragment newGameFragment = (NewGameFragment) parentFragment;
-                            if (!(PlayerUtils.isPlayerOneSelected && PlayerUtils.isPlayerTwoSelected)) {
-                                newGameFragment.handleProfileImageClick(player);
+                if (player.getId() == PlayerUtils.DEFAULT_PLAYER_ID) {
+                    Glide.with(contextObj).load(R.drawable.add_player_icon).into(viewHolder.playerItemImageView);
+                    viewHolder.playerItemTextView.setTextColor(Color.parseColor("#F44336"));
+                    viewHolder.playerItemImageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (parentFragment instanceof NewGameFragment) {
+                                NewGameFragment newGameFragment = (NewGameFragment) parentFragment;
+                                newGameFragment.startActivityForPlayerHandling();
                             }
-
+                            else if (parentFragment instanceof PlayersManagementFragment) {
+                                PlayersManagementFragment playersManagementFragment = (PlayersManagementFragment) parentFragment;
+                                playersManagementFragment.startActivityForPlayerHandling();
+                            }
                         }
+                    });
+                }
+                else {
+                    viewHolder.playerItemTextView.setTextColor(Color.BLACK);
+                    viewHolder.playerItemImageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (parentFragment instanceof PlayersManagementFragment) {
+                                PlayersManagementFragment playersManagementFragment = (PlayersManagementFragment) parentFragment;
+                                playersManagementFragment.handleProfileImageClick(player);
+                            } else if (parentFragment instanceof NewGameFragment) {
+                                NewGameFragment newGameFragment = (NewGameFragment) parentFragment;
+                                if (!(PlayerUtils.isPlayerOneSelected && PlayerUtils.isPlayerTwoSelected)) {
+                                    newGameFragment.handleProfileImageClick(player);
+                                }
+
+                            }
+                        }
+                    });
+                   /* if (player.getPlayerAvatar() != null && player.getPlayerAvatar().equals("") || !isPermissionGranted) {
+                        Glide.with(contextObj).load(R.drawable.default_player_avatar).into(viewHolder.playerItemImageView);
+                    }*/
+                    if (player.getPlayerAvatar() != null && player.getPlayerAvatar().equals("")) {
+                        Glide.with(contextObj).load(R.drawable.default_player_avatar).into(viewHolder.playerItemImageView);
                     }
-                });
-                if (player.getPlayerAvatar() != null && player.getPlayerAvatar().equals("") || !isPermissionGranted) {
-                    Glide.with(contextObj).load(R.drawable.default_player_avatar).into(viewHolder.playerItemImageView);
-                } else {
-                    Bitmap imageMap = BitmapFactory.decodeFile(player.getPlayerAvatar());
-                    Glide.with(contextObj).load(imageMap).into(viewHolder.playerItemImageView);
+                    else {
+                        Bitmap imageMap = BitmapFactory.decodeFile(player.getPlayerAvatar());
+                        Glide.with(contextObj).load(imageMap).into(viewHolder.playerItemImageView);
+                    }
                 }
             }
         }
@@ -123,20 +140,23 @@ public class PlayerListAdapater extends RecyclerView.Adapter<RecyclerView.ViewHo
         else if (holder instanceof EmptyPlayerViewHolder) {
             EmptyPlayerViewHolder viewHolder = (EmptyPlayerViewHolder) holder;
             Glide.with(contextObj).load(R.drawable.add_player_icon).into(viewHolder.emptyPlayerImageView);
-            if (isFloatingButtonVisible) {
+           /* if (isFloatingButtonVisible) {
                 FloatingActionButton addFloatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.addPlayerButton);
                 addFloatingActionButton.setVisibility(View.INVISIBLE);
                 isFloatingButtonVisible = false;
-            }
+            }*/
 
             viewHolder.emptyPlayerImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(parentFragment.getContext(), PlayerActivity.class);
-                    intent.putExtra(ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_TYPE,
-                            ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_FOR_NEW_PLAYER);
-                    intent.putExtra(ApplicationConstants.PLAYERACTIVITY_TITLE, parentFragment.getString(R.string.playeractivity_title_for_add_player));
-                    parentFragment.startActivityForResult(intent,ApplicationConstants.PLAYERMANAGEMENTFRAGMENT_TO_PLAYERACTIVITY_REQUEST_CODE);
+                    if (parentFragment instanceof NewGameFragment) {
+                        NewGameFragment newGameFragment = (NewGameFragment) parentFragment;
+                        newGameFragment.startActivityForPlayerHandling();
+                    }
+                    else if (parentFragment instanceof PlayersManagementFragment) {
+                        PlayersManagementFragment playersManagementFragment = (PlayersManagementFragment) parentFragment;
+                        playersManagementFragment.startActivityForPlayerHandling();
+                    }
                 }
             });
         }

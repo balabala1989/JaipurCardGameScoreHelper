@@ -68,8 +68,8 @@ package com.boardgames.jaipur.utils;
         public static final String WIN_MESSAGE_PART_2_BY_BONUS = "in tie by more number of Bonus tokens.";
         public static final String WIN_MESSAGE_PART_2_BY_GOODS = "in tie by more number of Goods tokens.";
         public static final String SPACE = " ";
-        public static final String GAME_OVER = " Won the game. Game Over!!!!";
-        public static final String WON_MESSAGE = " Won the game!!!!";
+        public static final String GAME_OVER = " won the game.\n Game Over!!!!";
+        public static final String WON_MESSAGE = " won the game!!!!";
 
         public static final String ROUND_CALC_SUMM_TO_GAME_SUMM_WIN_MESSAGE = "com.boardgames.jaipur.ui.newgame.newgamefragment.WIN_MESSAGE";
 
@@ -79,4 +79,6 @@ package com.boardgames.jaipur.utils;
         public static final String GAME_SUMMARY_TO_ROUND_SUMMARY_NORMAL_MODE = "NORMAL_MODE";
         public static final String GAME_SUMM_TO_ROUND_SUMM_MODE = "com.boardgames.jaipur.ui.newgame.newgamefragment.MODE";
         public static final String GAME_SUMM_TO_ROUND_SUMM_ROUND_EDIT = "com.boardgames.jaipur.ui.newgame.newgamefragment.ROUND_IN_EDIT_MODE";
+
+        public static final String EMPTY_STATS_MESSAGE = "No Players found!!!!";
 }

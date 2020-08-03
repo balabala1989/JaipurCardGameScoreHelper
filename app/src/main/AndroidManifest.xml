@@ -11,6 +11,12 @@
     <uses-permission
         android:name="android.permission.CAMERA"
         android:required="true" />
+    <uses-permission
+        android:name="android.permission.INTERNET"
+        android:required="true"/>
+    <uses-permission
+        android:name="android.permission.ACCESS_NETWORK_STATE"
+        android:required="true"/>
 
     <application
         android:allowBackup="true"
@@ -19,7 +25,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.gamehistory.RoundDetailsActivity"></activity>
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-4504001719511985~1602803314"/>
+        <activity android:name=".ui.gamehistory.RoundDetailsActivity" />
         <activity android:name=".ui.gamehistory.GameDetailsActivity" />
         <activity android:name=".ui.rounds.RoundsCalculationSummaryActivity" />
         <activity android:name=".ui.rounds.ItemsDisplayActivity" />

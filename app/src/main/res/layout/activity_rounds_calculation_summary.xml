@@ -2,10 +2,12 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:id="@+id/roundScrollView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:scrollbars="vertical"
+    android:background="@drawable/background_activity"
     tools:context=".ui.rounds.RoundsCalculationSummaryActivity">
 
     <LinearLayout
@@ -14,128 +16,105 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/playersDisplay"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
 
             <View
                 android:id="@+id/centerMarker"
                 android:layout_width="5dp"
                 android:layout_height="75dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="50dp"
-                android:layout_marginEnd="0dp"
-                android:background="#000000" />
+                android:background="#000000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <RelativeLayout
-                android:id="@+id/playerOneLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignEnd="@id/centerMarker"
-                android:layout_alignRight="@id/centerMarker">
 
-                <ImageView
-                    android:id="@+id/playerOneImageView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="16dp"
-                    android:contentDescription="@string/imageview_content_description_text_for_player"
-                    android:cropToPadding="true"
-                    app:srcCompat="@drawable/default_player_avatar" />
+            <ImageView
+                android:id="@+id/playerOneImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/imageview_content_description_text_for_player"
+                android:cropToPadding="true"
+                app:layout_constraintEnd_toStartOf="@+id/centerMarker"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/default_player_avatar" />
 
-                <ImageView
-                    android:id="@+id/winnerPlayerOneSealOfExcellence"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_alignEnd="@id/playerOneImageView"
-                    android:layout_alignRight="@id/playerOneImageView"
-                    android:layout_alignBottom="@id/playerOneImageView"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="false"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:contentDescription="@string/imageview_content_description_text_for_player"
-                    android:scaleType="fitXY"
-                    android:visibility="invisible"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:srcCompat="@drawable/seal_of_excellence" />
 
-            </RelativeLayout>
+            <ImageView
+                android:id="@+id/winnerPlayerOneSealOfExcellence"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:contentDescription="@string/imageview_content_description_text_for_player"
+                android:scaleType="fitXY"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/playerOneImageView"
+                app:layout_constraintEnd_toStartOf="@+id/centerMarker"
+                app:srcCompat="@drawable/seal_of_excellence" />
+
+            <ImageView
+                android:id="@+id/playerTwoImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/imageview_content_description_text_for_player"
+                android:cropToPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/centerMarker"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/default_player_avatar" />
+
+            <ImageView
+                android:id="@+id/winnerPlayerTwoSealOfExcellence"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:contentDescription="@string/imageview_content_description_text_for_player"
+                android:scaleType="fitXY"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/playerTwoImageView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/seal_of_excellence" />
 
             <TextView
                 android:id="@+id/playerOneTextView"
-                android:layout_width="match_parent"
+                android:layout_width="175dp"
                 android:layout_height="wrap_content"
-                android:layout_alignEnd="@id/centerMarker"
-                android:layout_alignRight="@id/centerMarker"
-                android:layout_alignBottom="@id/playerOneLayout"
-                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
                 android:fontFamily="@font/biorhyme"
                 android:gravity="center"
                 android:textColor="#04289E"
-                android:textStyle="bold" />
-
-            <RelativeLayout
-                android:id="@+id/playerTwoLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignStart="@id/centerMarker"
-                android:layout_alignLeft="@id/centerMarker">
-
-                <ImageView
-                    android:id="@+id/playerTwoImageView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="16dp"
-                    android:contentDescription="@string/imageview_content_description_text_for_player"
-                    android:cropToPadding="true"
-                    app:srcCompat="@drawable/default_player_avatar" />
-
-                <ImageView
-                    android:id="@+id/winnerPlayerTwoSealOfExcellence"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_alignEnd="@id/playerTwoImageView"
-                    android:layout_alignRight="@id/playerTwoImageView"
-                    android:layout_alignBottom="@id/playerTwoImageView"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="false"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:contentDescription="@string/imageview_content_description_text_for_player"
-                    android:scaleType="fitXY"
-                    android:visibility="invisible"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:srcCompat="@drawable/seal_of_excellence" />
-
-            </RelativeLayout>
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/centerMarker"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/playerOneImageView" />
 
             <TextView
                 android:id="@+id/playerTwoTextView"
-                android:layout_width="match_parent"
+                android:layout_width="175dp"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@id/centerMarker"
-                android:layout_alignLeft="@id/centerMarker"
-                android:layout_alignBottom="@id/playerTwoLayout"
                 android:layout_gravity="center_horizontal"
                 android:fontFamily="@font/biorhyme"
                 android:gravity="center"
                 android:textColor="#04289E"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/centerMarker"
+                app:layout_constraintTop_toBottomOf="@+id/playerTwoImageView" />
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/diamondLayout"
@@ -164,6 +143,7 @@
                 android:gravity="center"
                 android:text="@string/default_score"
                 android:textSize="50sp"
+                android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/diamondDisplayImagview"
                 app:layout_constraintStart_toStartOf="parent"
@@ -177,6 +157,7 @@
                 android:gravity="center"
                 android:text="@string/default_score"
                 android:textSize="50sp"
+                android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/diamondDisplayImagview"
@@ -210,6 +191,7 @@
                 android:gravity="center"
                 android:text="@string/default_score"
                 android:textSize="50sp"
+                android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/goldDisplayImagview"
                 app:layout_constraintStart_toStartOf="parent"
@@ -223,6 +205,7 @@
                 android:gravity="center"
                 android:text="@string/default_score"
                 android:textSize="50sp"
+                android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/goldDisplayImagview"
@@ -255,6 +238,7 @@
                 android:fontFamily="@font/quando"
                 android:gravity="center"
                 android:text="@string/default_score"
+                android:textColor="#000000"
                 android:textSize="50sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/silverDisplayImagview"
@@ -269,6 +253,7 @@
                 android:gravity="center"
                 android:text="@string/default_score"
                 android:textSize="50sp"
+                android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/silverDisplayImagview"
@@ -301,6 +286,7 @@
                 android:fontFamily="@font/quando"
                 android:gravity="center"
                 android:text="@string/default_score"
+                android:textColor="#000000"
                 android:textSize="50sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/clothDisplayImagview"
@@ -314,6 +300,7 @@
                 android:fontFamily="@font/quando"
                 android:gravity="center"
                 android:text="@string/default_score"
+                android:textColor="#000000"
                 android:textSize="50sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -347,6 +334,7 @@
                 android:fontFamily="@font/quando"
                 android:gravity="center"
                 android:text="@string/default_score"
+                android:textColor="#000000"
                 android:textSize="50sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/spiceDisplayImagview"
@@ -360,6 +348,7 @@
                 android:fontFamily="@font/quando"
                 android:gravity="center"
                 android:text="@string/default_score"
+                android:textColor="#000000"
                 android:textSize="50sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -393,6 +382,7 @@
                 android:fontFamily="@font/quando"
                 android:gravity="center"
                 android:text="@string/default_score"
+                android:textColor="#000000"
                 android:textSize="50sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/leatherDisplayImagview"
@@ -406,6 +396,7 @@
                 android:fontFamily="@font/quando"
                 android:gravity="center"
                 android:text="@string/default_score"
+                android:textColor="#000000"
                 android:textSize="50sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -439,6 +430,7 @@
                 android:fontFamily="@font/quando"
                 android:gravity="center"
                 android:text="@string/default_score"
+                android:textColor="#000000"
                 android:textSize="50sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/threeTokenDisplayImagview"
@@ -452,6 +444,7 @@
                 android:fontFamily="@font/quando"
                 android:gravity="center"
                 android:text="@string/default_score"
+                android:textColor="#000000"
                 android:textSize="50sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -485,6 +478,7 @@
                 android:fontFamily="@font/quando"
                 android:gravity="center"
                 android:text="@string/default_score"
+                android:textColor="#000000"
                 android:textSize="50sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/fourTokenDisplayImagview"
@@ -499,6 +493,7 @@
                 android:gravity="center"
                 android:text="@string/default_score"
                 android:textSize="50sp"
+                android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/fourTokenDisplayImagview"
@@ -532,6 +527,7 @@
                 android:gravity="center"
                 android:text="@string/default_score"
                 android:textSize="50sp"
+                android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/fiveTokenDisplayImagview"
                 app:layout_constraintStart_toStartOf="parent"
@@ -545,6 +541,7 @@
                 android:gravity="center"
                 android:text="@string/default_score"
                 android:textSize="50sp"
+                android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/fiveTokenDisplayImagview"
@@ -578,6 +575,7 @@
                 android:gravity="center"
                 android:text="@string/default_score"
                 android:textSize="50sp"
+                android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/camelTokenDisplayImagview"
                 app:layout_constraintStart_toStartOf="parent"
@@ -591,6 +589,7 @@
                 android:gravity="center"
                 android:text="@string/default_score"
                 android:textSize="50sp"
+                android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/camelTokenDisplayImagview"
@@ -623,7 +622,9 @@
                 android:fontFamily="@font/quando"
                 android:gravity="center"
                 android:text="@string/default_score"
-                android:textSize="50sp"
+                android:textColor="#F44336"
+                android:textSize="60sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/sumDisplayImagview"
                 app:layout_constraintStart_toStartOf="parent"
@@ -636,11 +637,23 @@
                 android:fontFamily="@font/quando"
                 android:gravity="center"
                 android:text="@string/default_score"
-                android:textSize="50sp"
+                android:textColor="#F44336"
+                android:textSize="60sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/sumDisplayImagview"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/roundSummaryAdView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            ads:adSize="SMART_BANNER"
+            ads:adUnitId="@string/round_summary_activity_adUnit_Id"
+            android:layout_gravity="bottom|center_horizontal"/>
     </LinearLayout>
 </ScrollView>

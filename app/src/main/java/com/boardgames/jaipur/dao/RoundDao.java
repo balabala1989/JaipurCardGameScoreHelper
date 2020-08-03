@@ -37,4 +37,8 @@ public interface RoundDao {
 
     @Query("SELECT * FROM rounds where game_id = :gameId ORDER BY round_number ASC")
     public List<Round> getRoundsForAGame(long gameId);
+
+    @Transaction
+    @Query("DELETE FROM rounds WHERE game_id = :gameId")
+    public int deleteAllRoundsForAGame(long gameId);
 }

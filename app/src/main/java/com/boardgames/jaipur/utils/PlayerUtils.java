@@ -27,6 +27,16 @@ public class PlayerUtils {
 
     public static boolean isPlayerOneSelected = false;
     public static boolean isPlayerTwoSelected = false;
+    public static final Player defaultPlayer;
+    public static final long DEFAULT_PLAYER_ID = -111111;
+    private static final String DEFAULT_PLAYER_NAME = "Add Player";
+
+    static {
+        defaultPlayer = new Player();
+        defaultPlayer.setId(DEFAULT_PLAYER_ID);
+        defaultPlayer.setPlayerName(DEFAULT_PLAYER_NAME);
+        defaultPlayer.setPlayerAvatar("");
+    }
 
     public static void handleResultOKResponseForNewPlayer(Context context, AndroidViewModel androidViewModel, Intent dataIntent) {
         Uri uri = dataIntent.getParcelableExtra(ApplicationConstants.PLAYERACTIVITY_TO_PLAYERSMANAGEMENTFRAGMENT_ADD_PLAYER_PROFILE_IMAGE_URI_REPLY);
@@ -128,5 +138,12 @@ public class PlayerUtils {
                 + '/' + context.getResources().getResourceTypeName(drawableId)
                 + '/' + context.getResources().getResourceEntryName(drawableId) );
         return imageUri;
+    }
+
+    public static int getHeightOfScreenByHalf(Activity activity) {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return (size.x) > (size.y) ? size.x/2 : size.y/2;
     }
 }
