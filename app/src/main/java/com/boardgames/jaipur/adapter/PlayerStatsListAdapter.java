@@ -13,11 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.utils.ApplicationConstants;
-import com.boardgames.jaipur.utils.CheckForPermissionsState;
 import com.boardgames.jaipur.utils.PlayerStatistics;
 import com.bumptech.glide.Glide;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 public class PlayerStatsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

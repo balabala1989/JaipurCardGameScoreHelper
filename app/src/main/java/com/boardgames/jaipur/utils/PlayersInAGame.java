@@ -1,16 +1,10 @@
 package com.boardgames.jaipur.utils;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.entities.Player;
-
-import java.io.Serializable;
 
 public class PlayersInAGame implements Parcelable {
 

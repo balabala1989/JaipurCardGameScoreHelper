@@ -8,7 +8,6 @@ import androidx.lifecycle.MediatorLiveData;
 import com.boardgames.jaipur.entities.Game;
 import com.boardgames.jaipur.entities.Player;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class CustomPlayerGameLiveData extends MediatorLiveData<Pair<List<Player>, List<Game>>> {

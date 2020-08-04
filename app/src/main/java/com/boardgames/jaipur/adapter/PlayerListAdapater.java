@@ -1,7 +1,6 @@
 package com.boardgames.jaipur.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -18,13 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.entities.Player;
 import com.boardgames.jaipur.ui.newgame.NewGameFragment;
-import com.boardgames.jaipur.ui.playersmanagement.PlayerActivity;
 import com.boardgames.jaipur.ui.playersmanagement.PlayersManagementFragment;
-import com.boardgames.jaipur.utils.ApplicationConstants;
-import com.boardgames.jaipur.utils.CheckForPermissionsState;
 import com.boardgames.jaipur.utils.PlayerUtils;
 import com.bumptech.glide.Glide;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 

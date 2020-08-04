@@ -15,10 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.boardgames.jaipur.R;
-import com.boardgames.jaipur.entities.Game;
 import com.boardgames.jaipur.ui.gamehistory.GameDetailsActivity;
 import com.boardgames.jaipur.utils.ApplicationConstants;
-import com.boardgames.jaipur.utils.CheckForPermissionsState;
 import com.boardgames.jaipur.utils.GameDetails;
 import com.boardgames.jaipur.utils.GameUtils;
 import com.bumptech.glide.Glide;

@@ -1,19 +1,13 @@
 <resources>
     <string name="app_name">Jaipur: Card Game - Score Helper</string>
-    <string name="header_add_player_activity">New Player</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Jaipur: Card Game \n Score Helper</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
 
     <string name="menu_new_game">New Game</string>
     <string name="menu_players_management">Manage Players</string>
     <string name="menu_stats">Statistics</string>
     <string name="menu_game_history">Game History</string>
-    <string name="menu_feedback_support">Support</string>
     <string name="menu_rate_me">Rate Me</string>
-    <string name="menu_rules">Game Rule</string>
     <string name="menu_about">About</string>
 
     <string name="playeractivity_title_for_add_player">Add Player</string>
@@ -31,9 +25,7 @@
     <string name="alertdialog_confirmation_message">Deleting this player, will delete all game history associated with the player.\nAre you sure to delete this player?</string>
     <string name="alertdialog_confirmation_positive_button">Yes</string>
     <string name="alertdialog_confirmation_negative_button">No</string>
-    <string name="alertdialog_winner_title">Congrats!!!!</string>
 
-    <string name="home_second">Home Second</string>
     <string name="title_activity_add_player">New Player</string>
     <string name="title_activity_image_pick_crop">Image Picker</string>
     <string name="imageview_add_player_camera">Take Photo</string>
@@ -47,8 +39,6 @@
     <string name="edittext_playername_exists_error">Player Name already exists!!!</string>
     <string name="playeractivity_external_path">profileImages</string>
     <string name="gameactivity_external_path">gameImages</string>
-    <string name="imagepickandcropactivity_cache_path">jaipurImages</string>
-    <string name="empty_players_found">No Players Found!!!!</string>
 
     <string name="new_game_fragment_select_player_textView">Select Player</string>
     <string name="new_game_fragment_vs_textView">VS</string>
@@ -75,7 +65,6 @@
 
     <string name="imageview_content_description_text_for_player">Player Profile</string>
     <string name="imageview_content_description_text_for_coins">Coins</string>
-    <string name="round_calc_description">Drag &amp; Drop the coins to the player to add it\nClick the player to remove the coins</string>
     <string name="camera_error">Unable to take picture at the moment!!! Please try again.</string>
     <string name="camera_success">Picture saved successfully!!!</string>
     <string name="game_success">Game saved successfully!!!</string>
@@ -91,8 +80,6 @@
     <string name="reset_button_text">Reset</string>
     <string name="rematch_button_text">Rematch</string>
     <string name="save_button_text">Save</string>
-    <string name="share_button_text">Share</string>
-    <string name="ok_button_text">Ok</string>
 
     <string name="default_score">0</string>
 
@@ -110,6 +97,5 @@
     <string name="about_game_adunit_id">ca-app-pub-4504001719511985/8434523714</string>
     <string name="icon_url">https://www.flaticon.com/</string>
 
-    <string name="hello_blank_fragment">Hello blank</string>
 
 </resources>

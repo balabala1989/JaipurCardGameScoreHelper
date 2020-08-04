@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.Fragment;
 
 import android.text.Html;
@@ -26,7 +25,6 @@ import com.boardgames.jaipur.BuildConfig;
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.utils.PlayerUtils;
 import com.bumptech.glide.Glide;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
