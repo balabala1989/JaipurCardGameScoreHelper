@@ -14,7 +14,7 @@
     <string name="playeractivity_title_for_edit_player">Edit Player</string>
     <string name="editText_add_player_hint">Player Name</string>
     <string name="textView_add_player_avatar">Profile</string>
-    <string name="textView_add_player_notice">Click Image to change the profile</string>
+    <string name="textView_add_player_notice">Click Image to change the photo</string>
     <string name="success_player_added">New Player Added successfully!!!</string>
     <string name="success_player_updated">Player Updated successfully!!!</string>
     <string name="success_player_deleted">Player Removed successfully!!!</string>

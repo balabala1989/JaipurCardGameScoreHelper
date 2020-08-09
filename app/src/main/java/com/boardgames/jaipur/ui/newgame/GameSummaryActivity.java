@@ -367,17 +367,23 @@ public class GameSummaryActivity extends AppCompatActivity {
             }
             winMessage += ApplicationConstants.GAME_OVER;
             textMessage += ApplicationConstants.GAME_OVER;
-            displayWinnerAlert(gameDetails.getGame().getWinner(), winMessage);
         }
+        displayWinnerAlert(isGameOver);
         ((TextView)findViewById(R.id.winnerAnnounceMentTextView)).setText(textMessage);
         findViewById(R.id.winnerAnnounceMentTextView).setVisibility(View.VISIBLE);
         Toast.makeText(this, winMessage, Toast.LENGTH_LONG).show();
     }
 
-    private void displayWinnerAlert(long winnerPlayer, String winMessage) {
+    private void displayWinnerAlert(boolean start) {
         LottieAnimationView animationView = findViewById(R.id.winnerAnimation);
-        animationView.playAnimation();
-
+        if (start) {
+            animationView.setVisibility(View.VISIBLE);
+            animationView.playAnimation();
+        }
+        else {
+            animationView.setVisibility(View.INVISIBLE);
+            animationView.cancelAnimation();
+        }
     }
 
     private void displayRoundOneResults() {

@@ -291,6 +291,8 @@ public class GameUtils {
             case ApplicationConstants.ROUNDS_CALC_CAMEL_TOKEN:
                 if (score != 0)
                     round.setCamelReceived('Y');
+                else
+                    round.setCamelReceived('N');
                 break;
         }
     }
