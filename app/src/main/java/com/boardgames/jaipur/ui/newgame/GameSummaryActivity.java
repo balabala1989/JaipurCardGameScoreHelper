@@ -3,7 +3,6 @@ package com.boardgames.jaipur.ui.newgame;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -11,7 +10,6 @@ import com.boardgames.jaipur.MainActivity;
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.entities.Game;
 import com.boardgames.jaipur.entities.Player;
-import com.boardgames.jaipur.entities.Round;
 import com.boardgames.jaipur.ui.rounds.RoundsCalculationSummaryActivity;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.CheckForPermissionsState;
@@ -26,9 +24,6 @@ import com.google.android.gms.ads.InterstitialAd;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -38,21 +33,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TimeZone;
 
 public class GameSummaryActivity extends AppCompatActivity {
 
@@ -379,17 +367,23 @@ public class GameSummaryActivity extends AppCompatActivity {
             }
             winMessage += ApplicationConstants.GAME_OVER;
             textMessage += ApplicationConstants.GAME_OVER;
-            displayWinnerAlert(gameDetails.getGame().getWinner(), winMessage);
         }
+        displayWinnerAlert(isGameOver);
         ((TextView)findViewById(R.id.winnerAnnounceMentTextView)).setText(textMessage);
         findViewById(R.id.winnerAnnounceMentTextView).setVisibility(View.VISIBLE);
         Toast.makeText(this, winMessage, Toast.LENGTH_LONG).show();
     }
 
-    private void displayWinnerAlert(long winnerPlayer, String winMessage) {
+    private void displayWinnerAlert(boolean start) {
         LottieAnimationView animationView = findViewById(R.id.winnerAnimation);
-        animationView.playAnimation();
-
+        if (start) {
+            animationView.setVisibility(View.VISIBLE);
+            animationView.playAnimation();
+        }
+        else {
+            animationView.setVisibility(View.INVISIBLE);
+            animationView.cancelAnimation();
+        }
     }
 
     private void displayRoundOneResults() {

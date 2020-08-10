@@ -7,21 +7,17 @@ import androidx.core.content.FileProvider;
 
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.utils.ApplicationConstants;
-import com.boardgames.jaipur.utils.CheckForPermissionsState;
 import com.yalantis.ucrop.UCrop;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;

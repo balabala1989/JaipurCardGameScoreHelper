@@ -8,15 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.adapter.ItemListAdapter;
-import com.boardgames.jaipur.entities.Player;
-import com.boardgames.jaipur.entities.Round;
 import com.boardgames.jaipur.utils.ApplicationConstants;
 import com.boardgames.jaipur.utils.GameDetails;
 import com.boardgames.jaipur.utils.GameUtils;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Menu;

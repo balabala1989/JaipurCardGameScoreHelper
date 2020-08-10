@@ -1,12 +1,9 @@
 package com.boardgames.jaipur.ui.newgame;
 
 import android.app.Application;
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.boardgames.jaipur.entities.Game;
 import com.boardgames.jaipur.entities.Player;

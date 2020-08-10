@@ -13,7 +13,7 @@
         android:fontFamily="monospace"
         android:gravity="center"
         android:text="@string/empty_game_textview_message"
-        android:textColor="#E91E63"
+        android:textColor="#04289E"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

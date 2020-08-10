@@ -4,6 +4,5 @@
     <color name="colorPrimaryDark">#401001</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="errorColor">#FFFFFF</color>
-    <color name="defaultColor">#007869</color>
     <color name="appBarColor">#401001</color>
 </resources>

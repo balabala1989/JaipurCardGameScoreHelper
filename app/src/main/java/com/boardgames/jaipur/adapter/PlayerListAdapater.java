@@ -1,7 +1,6 @@
 package com.boardgames.jaipur.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -18,13 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.boardgames.jaipur.R;
 import com.boardgames.jaipur.entities.Player;
 import com.boardgames.jaipur.ui.newgame.NewGameFragment;
-import com.boardgames.jaipur.ui.playersmanagement.PlayerActivity;
 import com.boardgames.jaipur.ui.playersmanagement.PlayersManagementFragment;
-import com.boardgames.jaipur.utils.ApplicationConstants;
-import com.boardgames.jaipur.utils.CheckForPermissionsState;
 import com.boardgames.jaipur.utils.PlayerUtils;
 import com.bumptech.glide.Glide;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -91,7 +86,7 @@ public class PlayerListAdapater extends RecyclerView.Adapter<RecyclerView.ViewHo
                 viewHolder.playerItemTextView.setText(player.getPlayerName());
                 if (player.getId() == PlayerUtils.DEFAULT_PLAYER_ID) {
                     Glide.with(contextObj).load(R.drawable.add_player_icon).into(viewHolder.playerItemImageView);
-                    viewHolder.playerItemTextView.setTextColor(Color.parseColor("#F44336"));
+                    viewHolder.playerItemTextView.setTextColor(Color.parseColor("#04289E"));
                     viewHolder.playerItemImageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -123,9 +118,7 @@ public class PlayerListAdapater extends RecyclerView.Adapter<RecyclerView.ViewHo
                             }
                         }
                     });
-                   /* if (player.getPlayerAvatar() != null && player.getPlayerAvatar().equals("") || !isPermissionGranted) {
-                        Glide.with(contextObj).load(R.drawable.default_player_avatar).into(viewHolder.playerItemImageView);
-                    }*/
+
                     if (player.getPlayerAvatar() != null && player.getPlayerAvatar().equals("")) {
                         Glide.with(contextObj).load(R.drawable.default_player_avatar).into(viewHolder.playerItemImageView);
                     }
@@ -140,11 +133,6 @@ public class PlayerListAdapater extends RecyclerView.Adapter<RecyclerView.ViewHo
         else if (holder instanceof EmptyPlayerViewHolder) {
             EmptyPlayerViewHolder viewHolder = (EmptyPlayerViewHolder) holder;
             Glide.with(contextObj).load(R.drawable.add_player_icon).into(viewHolder.emptyPlayerImageView);
-           /* if (isFloatingButtonVisible) {
-                FloatingActionButton addFloatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.addPlayerButton);
-                addFloatingActionButton.setVisibility(View.INVISIBLE);
-                isFloatingButtonVisible = false;
-            }*/
 
             viewHolder.emptyPlayerImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
